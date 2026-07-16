@@ -1,6 +1,8 @@
 # Atlaspec 0.1 generation reference
 
-Return one YAML document and no Markdown fence. Unknown keys are errors.
+Return one YAML document and no Markdown fence. The first bytes must be
+`version:`; do not add prose, backticks, or a `---` document marker. Unknown
+keys are errors.
 
 Required top-level keys are `version: "0.1"`, slug-form `map`, `title`,
 `family`, `intent`, `data`, and `encoding`.
@@ -65,3 +67,9 @@ Nominal categories require a unique string `domain`. Counts and capacity use
 Optional zoom rules contain `min_zoom` or `max_zoom`, a target (`fill`,
 `symbols`, `labels`, `heatmap`), and an action (`show`, `hide`, `cluster`,
 `show-labels`). Basemap style is `minimal-light`, `minimal-dark`, or `none`.
+
+The structure above is exhaustive for the keys used by this benchmark. There
+is no `legend` key at the document root or inside an encoding. When the request
+asks for a legend, declare the correct encoding field plus its `semantic_type`,
+`unit`, `range`, or `domain`. The compiler derives the legend descriptor in
+MapLibre `metadata["atlaspec:legend"]`; do not author that metadata yourself.

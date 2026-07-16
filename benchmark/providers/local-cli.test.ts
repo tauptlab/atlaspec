@@ -100,6 +100,19 @@ describe('local agent CLI adapters', () => {
     expect(prompt).toContain('Do not use tools');
     expect(prompt).toContain('role="data"');
     expect(prompt).toContain('FeatureCollection');
+    expect(prompt).toContain('The response must begin with version:');
+    expect(prompt.endsWith('--- marker.')).toBe(true);
+  });
+
+  it('puts a fence-free JSON contract after all inputs for direct formats', () => {
+    const request = fixtureRequest('claude-cli', 'opus', 'version');
+    request.condition = 'direct-maplibre';
+    const prompt = formatCliPrompt(request);
+    expect(prompt).toContain('The first character of the response must be {');
+    expect(prompt.endsWith('prose, or headings.')).toBe(true);
+    expect(prompt.lastIndexOf('FINAL OUTPUT CONTRACT')).toBeGreaterThan(
+      prompt.lastIndexOf('</atlasbench-input>'),
+    );
   });
 });
 

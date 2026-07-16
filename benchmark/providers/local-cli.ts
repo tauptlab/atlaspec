@@ -246,7 +246,25 @@ export function formatCliPrompt(request: GenerationRequest): string {
         '</atlasbench-input>',
       ].join('\n'),
     ),
+    artifactOutputContract(request.condition),
   ].join('\n\n');
+}
+
+function artifactOutputContract(condition: GenerationRequest['condition']): string {
+  if (condition === 'direct-maplibre' || condition === 'direct-vega-lite') {
+    return [
+      'FINAL OUTPUT CONTRACT (mandatory):',
+      '- Emit exactly one JSON document.',
+      '- The first character of the response must be { and the last character must be }.',
+      '- Do not use Markdown fences, backticks, prose, or headings.',
+    ].join('\n');
+  }
+  return [
+    'FINAL OUTPUT CONTRACT (mandatory):',
+    '- Emit exactly one Atlaspec YAML document.',
+    '- The response must begin with version: and contain no text after the document.',
+    '- Do not use Markdown fences, backticks, prose, headings, or a --- marker.',
+  ].join('\n');
 }
 
 export async function runProcess(

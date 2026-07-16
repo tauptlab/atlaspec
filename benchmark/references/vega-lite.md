@@ -1,8 +1,9 @@
 # Vega-Lite v6 generation reference
 
-Return one JSON Vega-Lite specification and no Markdown fence. Acceptance
-compiles the document with the installed Vega-Lite v6 package and parses the
-result with the installed Vega runtime.
+Return one JSON Vega-Lite specification and no Markdown fence. The response
+must begin with `{` and end with `}` with no prose or backticks outside the
+JSON. Acceptance compiles the document with the installed Vega-Lite v6 package
+and parses the result with the installed Vega runtime.
 
 Use `$schema: "https://vega.github.io/schema/vega-lite/v6.json"`. GeoJSON may
 be loaded with `data.url` and `data.format: {"property":"features"}` or used

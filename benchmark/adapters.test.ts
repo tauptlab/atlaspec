@@ -39,7 +39,7 @@ describe('AtlasBench generation adapters', () => {
       "    resolved_model: request.model, output: '{}', finish_reason: 'stop',",
       '    usage: { input_tokens: 10, output_tokens: 2 },',
       "    pricing: { currency: 'USD', input_usd_per_million: 0, cached_input_usd_per_million: 0, output_usd_per_million: 0, source: 'fixture' },",
-      '    latency_ms: 3, charge_usd: 0, tool_calls: 0',
+      "    latency_ms: 3, cost_observed: true, charge_source: 'fixture', charge_usd: 0, tool_calls: 0",
       '  }));',
       '});',
     ].join('\n');
@@ -113,6 +113,8 @@ function validResponse(): GenerationResponse {
       output_usd_per_million: 2,
       source: 'test fixture',
     },
+    cost_observed: true,
+    charge_source: 'test fixture',
     charge_usd: 0.0001,
     tool_calls: 0,
   };

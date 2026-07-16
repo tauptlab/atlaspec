@@ -134,7 +134,7 @@ export function analyzeComparison(
   if (!completeCost) {
     costGate = 'insufficient';
     reasons.push(
-      'At least one paired run has a transport error, so provider cost may be unobserved.',
+      'At least one paired run has a transport error or an adapter that does not report monetary cost.',
     );
   } else if (point.costReduction === null || costCi === null) {
     costGate = 'insufficient';
@@ -208,7 +208,11 @@ function pairRuns(
       atlaspecAccepted: atlaspecRun.first_attempt_accepted,
       baselineCost: runCost(baselineRun),
       atlaspecCost: runCost(atlaspecRun),
-      completeCost: !hasTransportError(baselineRun) && !hasTransportError(atlaspecRun),
+      completeCost:
+        !hasTransportError(baselineRun) &&
+        !hasTransportError(atlaspecRun) &&
+        hasCompleteCost(baselineRun) &&
+        hasCompleteCost(atlaspecRun),
     });
   }
   return pairs;
@@ -297,6 +301,13 @@ function runCost(run: RunRecord): number {
 
 function hasTransportError(run: RunRecord): boolean {
   return run.attempts.some((attempt) => attempt.transport_error !== undefined);
+}
+
+function hasCompleteCost(run: RunRecord): boolean {
+  return run.attempts.every(
+    (attempt) =>
+      attempt.response !== undefined && attempt.response.cost_observed,
+  );
 }
 
 function insufficient(

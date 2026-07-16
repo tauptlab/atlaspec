@@ -1,0 +1,65 @@
+{
+  "version": "0.1",
+  "suite": "local-cli-choropleth-pilot",
+  "repetitions": 1,
+  "model": {
+    "provider": "replace-with-provider",
+    "model": "replace-with-model",
+    "version": "replace-with-provider-resolved-version"
+  },
+  "sampling": {
+    "temperature": 0,
+    "max_output_tokens": 8000
+  },
+  "tasks": [
+    {
+      "id": "local-choropleth-canonical",
+      "family": "choropleth",
+      "data_files": ["corpus/data/choropleth-canonical.geojson"],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate, label each region with name, use a 960 by 640 viewport and a light low-contrast background, and include a clear legend. Use the supplied GeoJSON path. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": ["references/maplibre.md"],
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate, label each region with name, use a 960 by 640 viewport and a light low-contrast background, and include a clear legend. Use the supplied GeoJSON path. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": ["references/vega-lite.md"],
+          "requirements": {
+            "vega_lite_mark_types": ["geoshape", "text"]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate, label each region with name, use a 960 by 640 viewport and a light low-contrast background, and include a clear legend. Use the supplied GeoJSON path. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": ["references/atlaspec.md"],
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate, label each region with name, use a 960 by 640 viewport and a light low-contrast background, and include a clear legend. Use the supplied GeoJSON path. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": ["references/atlaspec.md"],
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

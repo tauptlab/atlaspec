@@ -22,6 +22,8 @@
     "LICENSE"
   ],
   "scripts": {
+    "adapter:claude-cli": "tsx benchmark/providers/claude-cli-stdio.ts",
+    "adapter:codex-cli": "tsx benchmark/providers/codex-cli-stdio.ts",
     "adapter:openai": "tsx benchmark/providers/openai-stdio.ts",
     "atlaspec": "tsx src/cli.ts",
     "atlasbench": "tsx benchmark/compare.ts",

@@ -71,6 +71,22 @@ describe('AtlasBench paired analysis', () => {
     expect(analysis.cost_gate).toBe('insufficient');
     expect(analysis.status).toBe('insufficient');
   });
+
+  it('does not treat an agent CLI with unreported cost as free', () => {
+    const baseline = run('direct-maplibre', 1, true, 0.01);
+    const atlaspec = run('atlaspec', 1, true, 0);
+    atlaspec.attempts[0]!.response!.cost_observed = false;
+    atlaspec.attempts[0]!.response!.charge_source = 'unavailable';
+
+    const analysis = analyzeComparison(report([baseline, atlaspec]), {
+      ...LOCKED_THRESHOLDS,
+      bootstrap_iterations: 100,
+    });
+    expect(analysis.cost_gate).toBe('insufficient');
+    expect(analysis.reasons).toContain(
+      'At least one paired run has a transport error or an adapter that does not report monetary cost.',
+    );
+  });
 });
 
 function report(runs: RunRecord[]): ExperimentReport {
@@ -108,6 +124,8 @@ function run(
       output_usd_per_million: 0,
       source: 'fixture override',
     },
+    cost_observed: true,
+    charge_source: 'fixture override',
     charge_usd: cost,
     tool_calls: 0,
   };

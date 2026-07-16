@@ -100,6 +100,8 @@ export const GenerationResponseSchema = Type.Object(
     usage: TokenUsageSchema,
     latency_ms: Type.Number({ minimum: 0 }),
     pricing: PricingSchema,
+    cost_observed: Type.Boolean(),
+    charge_source: Type.String({ minLength: 1 }),
     charge_usd: Type.Number({ minimum: 0 }),
     tool_calls: Type.Integer({ minimum: 0 }),
   },

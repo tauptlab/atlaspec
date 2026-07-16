@@ -104,6 +104,8 @@ function validResponse() {
       output_usd_per_million: 2,
       source: 'test fixture',
     },
+    cost_observed: true,
+    charge_source: 'test fixture',
     charge_usd: 0.0001,
     tool_calls: 0,
   };

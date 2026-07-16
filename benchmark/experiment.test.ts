@@ -201,6 +201,8 @@ function response(
       output_usd_per_million: 0,
       source: 'fixture override',
     },
+    cost_observed: true,
+    charge_source: 'fixture override',
     charge_usd: charge,
     tool_calls: 0,
   };

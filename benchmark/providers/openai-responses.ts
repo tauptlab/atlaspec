@@ -121,6 +121,8 @@ export async function generateOpenAIResponse(
     },
     latency_ms: latencyMs,
     pricing,
+    cost_observed: true,
+    charge_source: 'calculated from locked per-million-token rates',
     charge_usd: charge,
     tool_calls: countToolCalls(body.output),
   };

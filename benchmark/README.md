@@ -58,3 +58,8 @@ should fail a CI job.
 An automated pass is intentionally labeled separately from the full benchmark.
 It does not satisfy the human accuracy, expert review, edit-survival, repair-
 count, held-out corpus, or multi-model-stratum requirements.
+
+For a one-task directional check with locally authenticated Codex or Claude
+Code, use `local-cli-pilot.manifest.json` and the adapters documented in
+`ADAPTER.md`. Local agent results include large provider-specific system
+contexts and are reported separately from raw API benchmark evidence.

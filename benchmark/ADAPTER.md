@@ -13,6 +13,11 @@ input/cached/output rates used to calculate the USD charge, latency, tool-call
 count, and finish reason. Unknown fields, negative measurements, missing
 accounting, and a mismatched request identifier fail closed.
 
+Adapters that cannot observe monetary cost must set `cost_observed: false`, use
+zero only as a numeric placeholder, and explain the limitation in
+`charge_source` and `pricing.source`. AtlasBench then marks the cost gate
+insufficient instead of treating the run as free.
+
 AtlasBench starts the executable directly without a command shell. Repeat
 arguments when needed:
 
@@ -77,3 +82,18 @@ npm run atlasbench -- `
 Use an immutable model snapshot in `model.version`. The adapter treats `seed`
 as unsupported and fails rather than silently ignoring it. Sampling controls
 that are actually sent are retained in the manifest and every request record.
+
+## Local Codex and Claude exploratory adapters
+
+`codex-cli-stdio.ts` and `claude-cli-stdio.ts` invoke locally authenticated
+coding-agent CLIs with persistence and write-capable tools disabled. They are
+useful for a cheap directional pilot, but they are not interchangeable with
+raw model API calls: each CLI injects its own agent system context.
+
+Codex CLI JSONL currently exposes token usage but not the resolved model or a
+monetary charge. Its adapter therefore records the CLI version with
+`model=unreported`, sets `cost_observed: false`, and forces the cost gate to
+remain insufficient. Claude Code JSON exposes the actual model and
+`total_cost_usd`; the adapter records both. The one-task manifest
+`local-cli-pilot.manifest.json` exists only for exploratory comparison and must
+not be counted toward the pre-committed 48-task claim.

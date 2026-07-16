@@ -41,6 +41,8 @@
     "@types/node": "24.10.1",
     "tsx": "4.23.1",
     "typescript": "7.0.2",
+    "vega": "^6.2.0",
+    "vega-lite": "^6.4.3",
     "vitest": "4.1.10"
   },
   "overrides": {

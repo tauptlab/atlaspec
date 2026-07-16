@@ -1,0 +1,36 @@
+{
+  "version": "0.1",
+  "benchmark_id": "atlasbench-official-2026",
+  "models": [
+    {
+      "id": "small-model",
+      "stratum": "small-or-local",
+      "provider": "replace-with-raw-provider",
+      "model": "replace-with-model-id",
+      "version": "replace-with-immutable-version",
+      "api_mode": "raw-model-api",
+      "cost_observed": true,
+      "pricing_source": "replace-with-dated-price-card"
+    },
+    {
+      "id": "mid-model",
+      "stratum": "mid-tier-hosted",
+      "provider": "replace-with-raw-provider",
+      "model": "replace-with-model-id",
+      "version": "replace-with-immutable-version",
+      "api_mode": "raw-model-api",
+      "cost_observed": true,
+      "pricing_source": "replace-with-dated-price-card"
+    },
+    {
+      "id": "frontier-model",
+      "stratum": "frontier-hosted",
+      "provider": "replace-with-raw-provider",
+      "model": "replace-with-model-id",
+      "version": "replace-with-immutable-version",
+      "api_mode": "raw-model-api",
+      "cost_observed": true,
+      "pricing_source": "replace-with-dated-price-card"
+    }
+  ]
+}

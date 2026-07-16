@@ -9,6 +9,22 @@ import { runExperiment } from './experiment.js';
 import type { GenerationResponse } from './protocol.js';
 
 describe('AtlasBench comparison runner', () => {
+  it('keeps the checked-in comparison manifest executable', async () => {
+    const report = await runExperiment(
+      resolve('benchmark', 'comparison.example.json'),
+      new ReplayGenerationAdapter([]),
+    );
+
+    expect(report.runs).toHaveLength(20);
+    expect(report.runs.every((run) => !run.final_accepted)).toBe(true);
+    expect(report.summaries.map((summary) => summary.condition)).toEqual([
+      'direct-maplibre',
+      'direct-vega-lite',
+      'atlaspec',
+      'atlaspec-repair',
+    ]);
+  });
+
   it('preserves first failures, performs one declared repair, and accounts cost', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'atlasbench-'));
     const manifestPath = join(directory, 'manifest.json');

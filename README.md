@@ -77,6 +77,21 @@ the process if any schema, semantic, MapLibre, layer, or decision-trace check
 regresses. It is infrastructure for the full model comparison, not a substitute
 for the pre-committed 48-task benchmark.
 
+Run provider-neutral comparative experiments with:
+
+```powershell
+npm run atlasbench -- `
+  --manifest benchmark/comparison.example.json `
+  --adapter node `
+  --adapter-arg=path/to/provider-adapter.mjs `
+  --report work/comparison-report.json
+```
+
+See [the AtlasBench harness](benchmark/README.md) and
+[generation adapter contract](benchmark/ADAPTER.md). Comparative reports keep
+failed attempts in the denominator and distinguish automated gates from the
+still-required human and multi-model evidence.
+
 ## License
 
 MIT

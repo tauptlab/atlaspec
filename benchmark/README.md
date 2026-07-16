@@ -25,11 +25,35 @@ causes a non-zero process exit.
 
 ## Full benchmark boundary
 
-The complete benchmark will add adapters for direct MapLibre authoring, direct
-Vega-Lite authoring, Atlaspec generation, and Atlaspec repair. Model adapters
-must record the full prompt, model identifier, sampling parameters, token use,
+The comparative harness supports direct MapLibre authoring, direct Vega-Lite
+authoring, Atlaspec generation, and Atlaspec repair. Provider adapters must
+record the full prompt, model identifier, sampling parameters, token use,
 latency, price, tool calls, and every failed output. The smoke suite does not
 invent zero values for metrics it has not measured.
 
 Pilot fixtures are development-visible and therefore cannot be counted as the
 held-out portion of the eventual benchmark.
+
+## Comparative runner
+
+The provider-neutral comparison runner is now executable. Start from
+`comparison.example.json`, implement the JSON standard-stream contract in
+`ADAPTER.md`, and run:
+
+```powershell
+npm run atlasbench -- `
+  --manifest benchmark/comparison.example.json `
+  --adapter node `
+  --adapter-arg=path/to/provider-adapter.mjs `
+  --report work/comparison-report.json
+```
+
+The report includes every prompt, input and prompt digest, raw response,
+transport failure, validation check, token count, charge, latency, tool call,
+repair attempt, condition aggregate, and paired automated analysis. Use
+`--require-automated-pass` only when a failing or insufficient automated gate
+should fail a CI job.
+
+An automated pass is intentionally labeled separately from the full benchmark.
+It does not satisfy the human accuracy, expert review, edit-survival, repair-
+count, held-out corpus, or multi-model-stratum requirements.

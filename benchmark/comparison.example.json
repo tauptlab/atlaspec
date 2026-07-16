@@ -1,0 +1,61 @@
+{
+  "version": "0.1",
+  "suite": "choropleth-comparison-example",
+  "repetitions": 5,
+  "model": {
+    "provider": "replace-with-provider",
+    "model": "replace-with-model",
+    "version": "replace-with-immutable-version"
+  },
+  "sampling": {
+    "temperature": 0,
+    "seed": 42
+  },
+  "tasks": [
+    {
+      "id": "flood-risk-choropleth",
+      "family": "choropleth",
+      "data_files": ["../examples/data/districts.geojson"],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Create a MapLibre Style Specification JSON document for the supplied GeoJSON. Encode risk as polygon fill color, display district names as labels, include an explicit style for missing risk values, and return only JSON.",
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Create a Vega-Lite v6 JSON specification for the supplied GeoJSON. Encode risk as polygon color, display district names, include an explicit representation for missing risk values, and return only JSON.",
+          "requirements": {
+            "vega_lite_mark_types": ["geoshape", "text"]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Create an Atlaspec 0.1 YAML document for the supplied GeoJSON. Use a choropleth to encode risk as polygon color, display district names as labels, require explicit missing-data treatment, and return only YAML.",
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Create an Atlaspec 0.1 YAML document for the supplied GeoJSON. Use a choropleth to encode risk as polygon color, display district names as labels, require explicit missing-data treatment, and return only YAML.",
+          "requirements": {
+            "maplibre_layer_types": ["fill", "symbol"],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

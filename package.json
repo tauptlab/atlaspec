@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "atlaspec": "tsx src/cli.ts",
+    "atlasbench": "tsx benchmark/compare.ts",
     "benchmark:smoke": "tsx benchmark/run.ts --manifest benchmark/pilot.manifest.json --json",
     "build": "tsc -p tsconfig.build.json",
     "check": "npm run typecheck && npm test",

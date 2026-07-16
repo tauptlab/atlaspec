@@ -20,6 +20,7 @@
         {
           "condition": "direct-maplibre",
           "prompt": "Create a MapLibre Style Specification JSON document for the supplied GeoJSON. Encode risk as polygon fill color, display district names as labels, include an explicit style for missing risk values, and return only JSON.",
+          "reference_files": ["references/maplibre.md"],
           "requirements": {
             "maplibre_layer_types": ["fill", "symbol"]
           }
@@ -27,6 +28,7 @@
         {
           "condition": "direct-vega-lite",
           "prompt": "Create a Vega-Lite v6 JSON specification for the supplied GeoJSON. Encode risk as polygon color, display district names, include an explicit representation for missing risk values, and return only JSON.",
+          "reference_files": ["references/vega-lite.md"],
           "requirements": {
             "vega_lite_mark_types": ["geoshape", "text"]
           }
@@ -34,6 +36,7 @@
         {
           "condition": "atlaspec",
           "prompt": "Create an Atlaspec 0.1 YAML document for the supplied GeoJSON. Use a choropleth to encode risk as polygon color, display district names as labels, require explicit missing-data treatment, and return only YAML.",
+          "reference_files": ["references/atlaspec.md"],
           "requirements": {
             "maplibre_layer_types": ["fill", "symbol"],
             "atlaspec_decisions": [
@@ -46,6 +49,7 @@
         {
           "condition": "atlaspec-repair",
           "prompt": "Create an Atlaspec 0.1 YAML document for the supplied GeoJSON. Use a choropleth to encode risk as polygon color, display district names as labels, require explicit missing-data treatment, and return only YAML.",
+          "reference_files": ["references/atlaspec.md"],
           "requirements": {
             "maplibre_layer_types": ["fill", "symbol"],
             "atlaspec_decisions": [

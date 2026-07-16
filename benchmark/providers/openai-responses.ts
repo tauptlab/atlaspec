@@ -162,7 +162,7 @@ function requestBody(request: GenerationRequest): Record<string, unknown> {
 
 function formatInput(input: GenerationRequest['inputs'][number]): string {
   return [
-    `<atlasbench-input path=${JSON.stringify(input.path)} media-type=${JSON.stringify(input.media_type)} sha256=${JSON.stringify(input.sha256)}>` ,
+    `<atlasbench-input role=${JSON.stringify(input.role)} path=${JSON.stringify(input.path)} media-type=${JSON.stringify(input.media_type)} sha256=${JSON.stringify(input.sha256)}>`,
     input.content,
     '</atlasbench-input>',
   ].join('\n');

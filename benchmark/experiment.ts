@@ -50,6 +50,9 @@ const ConditionConfigSchema = Type.Object(
   {
     condition: BenchmarkConditionSchema,
     prompt: Type.String({ minLength: 1 }),
+    reference_files: Type.Optional(
+      Type.Array(Type.String({ minLength: 1 }), { uniqueItems: true }),
+    ),
     requirements: RequirementsSchema,
   },
   Strict,
@@ -133,8 +136,19 @@ export async function runExperiment(
   const compilerCommit = await readCommit();
   const runs: RunRecord[] = [];
   for (const task of value.tasks) {
-    const inputs = await loadInputs(dirname(absoluteManifest), task.data_files);
+    const dataInputs = await loadInputs(
+      dirname(absoluteManifest),
+      task.data_files,
+      'data',
+    );
     for (const condition of task.conditions) {
+      const referenceInputs = await loadInputs(
+        dirname(absoluteManifest),
+        condition.reference_files ?? [],
+        'reference',
+      );
+      const inputs = [...dataInputs, ...referenceInputs];
+      assertUniqueInputPaths(task.id, condition.condition, inputs);
       for (let repetition = 1; repetition <= value.repetitions; repetition += 1) {
         runs.push(
           await runCondition({
@@ -381,18 +395,36 @@ export function summarizeRuns(runs: readonly RunRecord[]): ConditionSummary[] {
 async function loadInputs(
   manifestDirectory: string,
   paths: readonly string[],
+  role: InputArtifact['role'],
 ): Promise<InputArtifact[]> {
   const inputs: InputArtifact[] = [];
   for (const path of paths) {
     const content = await readFile(resolve(manifestDirectory, path), 'utf8');
     inputs.push({
       path,
+      role,
       media_type: mediaType(path),
       content,
       sha256: sha256(content),
     });
   }
   return inputs;
+}
+
+function assertUniqueInputPaths(
+  taskId: string,
+  condition: BenchmarkCondition,
+  inputs: readonly InputArtifact[],
+): void {
+  const paths = new Set<string>();
+  for (const input of inputs) {
+    if (paths.has(input.path)) {
+      throw new Error(
+        `Duplicate input path for task ${taskId} condition ${condition}: ${input.path}`,
+      );
+    }
+    paths.add(input.path);
+  }
 }
 
 function assertUniqueManifestEntries(manifest: ExperimentManifest): void {

@@ -23,6 +23,9 @@ describe('AtlasBench comparison runner', () => {
       'atlaspec',
       'atlaspec-repair',
     ]);
+    expect(
+      report.runs[0]?.attempts[0]?.request.inputs.map((input) => input.role),
+    ).toEqual(['data', 'reference']);
   });
 
   it('preserves first failures, performs one declared repair, and accounts cost', async () => {
@@ -121,6 +124,7 @@ describe('AtlasBench comparison runner', () => {
     );
     expect(report.runs[0]?.attempts[0]?.request.inputs[0]).toEqual(
       expect.objectContaining({
+        role: 'data',
         media_type: 'application/geo+json',
         sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
       }),

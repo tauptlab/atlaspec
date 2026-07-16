@@ -162,6 +162,7 @@ function request(): GenerationRequest {
     inputs: [
       {
         path: 'districts.geojson',
+        role: 'data',
         media_type: 'application/geo+json',
         content: '{"type":"FeatureCollection","features":[]}',
         sha256:

@@ -42,6 +42,7 @@ export const SamplingSchema = Type.Object(
 export const InputArtifactSchema = Type.Object(
   {
     path: Type.String({ minLength: 1 }),
+    role: Type.Union([Type.Literal('data'), Type.Literal('reference')]),
     media_type: Type.String({ minLength: 1 }),
     content: Type.String(),
     sha256: Type.String({ pattern: '^[a-f0-9]{64}$' }),

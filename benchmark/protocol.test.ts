@@ -78,6 +78,7 @@ function validRequest() {
     inputs: [
       {
         path: 'data.geojson',
+        role: 'data',
         media_type: 'application/geo+json',
         content: '{"type":"FeatureCollection","features":[]}',
         sha256:

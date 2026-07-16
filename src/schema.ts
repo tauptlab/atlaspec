@@ -86,6 +86,12 @@ export const FieldSchema = Type.Object(
     range: Type.Optional(
       Type.Tuple([Type.Number(), Type.Number()]),
     ),
+    domain: Type.Optional(
+      Type.Array(Type.String({ minLength: 1 }), {
+        minItems: 1,
+        uniqueItems: true,
+      }),
+    ),
   },
   Strict,
 );
@@ -159,7 +165,12 @@ const ZoomRuleSchema = Type.Object(
   {
     min_zoom: Type.Optional(Type.Number({ minimum: 0, maximum: 24 })),
     max_zoom: Type.Optional(Type.Number({ minimum: 0, maximum: 24 })),
-    target: Type.String({ minLength: 1 }),
+    target: Type.Union([
+      Type.Literal('fill'),
+      Type.Literal('symbols'),
+      Type.Literal('labels'),
+      Type.Literal('heatmap'),
+    ]),
     action: Type.Union([
       Type.Literal('show'),
       Type.Literal('hide'),
@@ -204,7 +215,11 @@ const ConstraintsSchema = Type.Object(
 
 const BasemapSchema = Type.Object(
   {
-    style: Type.String({ minLength: 1 }),
+    style: Type.Union([
+      Type.Literal('minimal-light'),
+      Type.Literal('minimal-dark'),
+      Type.Literal('none'),
+    ]),
     contrast: Type.Optional(
       Type.Union([
         Type.Literal('light'),

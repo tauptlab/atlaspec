@@ -247,6 +247,13 @@ function lintFamily(
           message: 'Categorical point symbols must use a nominal field.',
           path: '/encoding/category/field',
         });
+      } else if (categoryField !== undefined && categoryField.domain === undefined) {
+        diagnostics.push({
+          code: 'categorical-point.domain-required',
+          severity: 'error',
+          message: 'Categorical point compilation requires an explicit field domain.',
+          path: `/data/fields/${escapePointer(document.encoding.category.field)}/domain`,
+        });
       }
       break;
     }

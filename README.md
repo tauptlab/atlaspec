@@ -54,11 +54,17 @@ npm install
 npm run check
 npm run atlaspec -- validate examples/flood-risk.atlas.yaml
 npm run atlaspec -- validate examples/shelter-capacity.atlas.yaml --json
+npm run atlaspec -- compile examples/flood-risk.atlas.yaml
+npm run atlaspec -- compile examples/shelter-capacity.atlas.yaml --output shelter-style.json
 ```
 
 Validation has two stages: strict schema validation followed by deterministic
 cartographic linting. Diagnostics have stable, grep-friendly codes so agents can
 repair a document without parsing prose or relying on a visual judge.
+
+Compilation emits a MapLibre v8 style with Atlaspec intent, legend metadata, and
+a deterministic decision trace. The trace records every inferred palette,
+domain, scale, basemap, and clustering decision together with its reason.
 
 ## License
 

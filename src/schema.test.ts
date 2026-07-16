@@ -20,7 +20,12 @@ async function readExample(name: string): Promise<unknown> {
 }
 
 describe('AtlaspecSchema', () => {
-  it.each(['flood-risk.atlas.yaml', 'shelter-capacity.atlas.yaml'])(
+  it.each([
+    'flood-risk.atlas.yaml',
+    'shelter-capacity.atlas.yaml',
+    'facility-types.atlas.yaml',
+    'incident-density.atlas.yaml',
+  ])(
     'accepts canonical example %s',
     async (name) => {
       const document = await readExample(name);

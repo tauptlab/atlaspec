@@ -1,15 +1,21 @@
 #!/usr/bin/env node
 
+import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import { Command } from 'commander';
 
 import type { Diagnostic, ValidationReport } from './diagnostics.js';
 import { loadDocument } from './load.js';
+import { compileMapLibre } from './maplibre.js';
 import { validateAtlaspec } from './validate.js';
 
 interface OutputOptions {
   json?: boolean;
+}
+
+interface CompileOptions {
+  output?: string;
 }
 
 const program = new Command()
@@ -46,6 +52,39 @@ program
         ],
       };
       printReport(resolve(file), report, options.json === true);
+      process.exitCode = 1;
+    }
+  });
+
+program
+  .command('compile')
+  .description('Compile a valid Atlaspec document to a MapLibre style.')
+  .argument('<file>', 'Atlaspec YAML or JSON document')
+  .option('-o, --output <file>', 'write the MapLibre style to a file')
+  .action(async (file: string, options: CompileOptions) => {
+    try {
+      const absolutePath = resolve(file);
+      const value = await loadDocument(absolutePath);
+      const result = compileMapLibre(value);
+      if (!result.ok) {
+        for (const diagnostic of result.diagnostics) {
+          console.error(formatDiagnostic(diagnostic));
+        }
+        process.exitCode = 1;
+        return;
+      }
+
+      const output = `${JSON.stringify(result.style, null, 2)}\n`;
+      if (options.output === undefined) {
+        process.stdout.write(output);
+      } else {
+        const outputPath = resolve(options.output);
+        await writeFile(outputPath, output, 'utf8');
+        console.log(`WROTE ${outputPath}`);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`ERROR document.load-failed / ${message}`);
       process.exitCode = 1;
     }
   });

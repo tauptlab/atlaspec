@@ -1,0 +1,41 @@
+version: "0.1"
+map: incident-density
+title: Weighted incident density
+description: Show concentrations of severe incidents.
+family: heatmap
+
+intent:
+  task: distribution
+  audience: analyst
+  primary_message: Identify clusters with a high concentration of severe incidents.
+
+data:
+  sources:
+    - id: incidents
+      type: geojson
+      url: ./data/incidents.geojson
+  fields:
+    severity:
+      source: incidents
+      path: severity
+      measurement: quantitative
+      semantic_type: rank
+      range: [1, 5]
+
+encoding:
+  geometry:
+    source: incidents
+    support: point
+  weight:
+    field: severity
+
+constraints:
+  colorblind_safe: true
+  missing_data: error
+  viewport:
+    width: 960
+    height: 640
+
+basemap:
+  style: minimal-dark
+  contrast: dark

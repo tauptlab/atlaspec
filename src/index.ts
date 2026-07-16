@@ -21,6 +21,7 @@ export type {
 
 export { lintAtlaspec } from './lint.js';
 export { loadDocument, parseDocument } from './load.js';
+export { compileMapLibre } from './maplibre.js';
 export { validateAtlaspec } from './validate.js';
 
 export type {
@@ -28,3 +29,9 @@ export type {
   DiagnosticSeverity,
   ValidationReport,
 } from './diagnostics.js';
+
+export type {
+  CompilationDecision,
+  CompilationResult,
+  MapLibreStyle,
+} from './maplibre.js';

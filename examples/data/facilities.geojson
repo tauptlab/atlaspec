@@ -1,0 +1,20 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Central School", "type": "shelter" },
+      "geometry": { "type": "Point", "coordinates": [126.93, 37.56] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "City Hospital", "type": "hospital" },
+      "geometry": { "type": "Point", "coordinates": [126.95, 37.54] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "West Logistics Center", "type": "supply-depot" },
+      "geometry": { "type": "Point", "coordinates": [126.90, 37.53] }
+    }
+  ]
+}

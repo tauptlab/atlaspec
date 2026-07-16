@@ -1,0 +1,48 @@
+version: "0.1"
+map: facility-types
+title: Emergency facility types
+description: Distinguish emergency facilities by operational role.
+family: categorical-point
+
+intent:
+  task: distinguish
+  audience: operations
+  primary_message: Distinguish shelters, hospitals, and supply depots.
+
+data:
+  sources:
+    - id: facilities
+      type: geojson
+      url: ./data/facilities.geojson
+  fields:
+    facility_type:
+      source: facilities
+      path: type
+      measurement: nominal
+      semantic_type: category
+      domain: [shelter, hospital, supply-depot]
+    facility_name:
+      source: facilities
+      path: name
+      measurement: nominal
+      semantic_type: label
+
+encoding:
+  geometry:
+    source: facilities
+    support: point
+  category:
+    field: facility_type
+  label:
+    field: facility_name
+
+constraints:
+  colorblind_safe: true
+  missing_data: error
+  viewport:
+    width: 960
+    height: 640
+
+basemap:
+  style: minimal-light
+  contrast: light

@@ -42,7 +42,7 @@ constraints:
   colorblind_safe: true
   missing_data: error
   protected_layers:
-    - shelter-symbols
+    - symbols
   label_priority:
     - shelter_name
   viewport:
@@ -52,10 +52,10 @@ constraints:
 behavior:
   zoom_rules:
     - max_zoom: 9
-      target: shelter-symbols
+      target: symbols
       action: cluster
     - min_zoom: 12
-      target: shelter-labels
+      target: labels
       action: show-labels
 
 basemap:

@@ -16,6 +16,8 @@ describe('validateAtlaspec', () => {
     for (const name of [
       'flood-risk.atlas.yaml',
       'shelter-capacity.atlas.yaml',
+      'facility-types.atlas.yaml',
+      'incident-density.atlas.yaml',
     ]) {
       expect(validateAtlaspec(await example(name))).toEqual({
         valid: true,

@@ -75,7 +75,15 @@ function validRequest() {
     prompt: 'Create the requested map.',
     prompt_sha256:
       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    inputs: [],
+    inputs: [
+      {
+        path: 'data.geojson',
+        media_type: 'application/geo+json',
+        content: '{"type":"FeatureCollection","features":[]}',
+        sha256:
+          'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      },
+    ],
   };
 }
 

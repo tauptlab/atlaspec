@@ -30,6 +30,8 @@ export const SamplingSchema = Type.Object(
 export const InputArtifactSchema = Type.Object(
   {
     path: Type.String({ minLength: 1 }),
+    media_type: Type.String({ minLength: 1 }),
+    content: Type.String(),
     sha256: Type.String({ pattern: '^[a-f0-9]{64}$' }),
   },
   Strict,

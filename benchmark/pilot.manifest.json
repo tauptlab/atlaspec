@@ -1,0 +1,48 @@
+{
+  "version": "0.1",
+  "suite": "atlaspec-compiler-pilot",
+  "tasks": [
+    {
+      "id": "pilot-choropleth-probability",
+      "family": "choropleth",
+      "artifact": "../examples/flood-risk.atlas.yaml",
+      "required_layer_types": ["fill", "symbol"],
+      "required_decisions": [
+        "basemap.background-selected",
+        "color.palette-inferred",
+        "color.domain-selected"
+      ]
+    },
+    {
+      "id": "pilot-proportional-capacity",
+      "family": "proportional-symbol",
+      "artifact": "../examples/shelter-capacity.atlas.yaml",
+      "required_layer_types": ["circle", "symbol"],
+      "required_decisions": [
+        "basemap.background-selected",
+        "source.cluster-enabled",
+        "size.area-proportional-scale"
+      ]
+    },
+    {
+      "id": "pilot-categorical-facilities",
+      "family": "categorical-point",
+      "artifact": "../examples/facility-types.atlas.yaml",
+      "required_layer_types": ["circle", "symbol"],
+      "required_decisions": [
+        "basemap.background-selected",
+        "color.categorical-domain"
+      ]
+    },
+    {
+      "id": "pilot-weighted-heatmap",
+      "family": "heatmap",
+      "artifact": "../examples/incident-density.atlas.yaml",
+      "required_layer_types": ["heatmap"],
+      "required_decisions": [
+        "basemap.background-selected",
+        "heatmap.kernel-defaults"
+      ]
+    }
+  ]
+}

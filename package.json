@@ -23,9 +23,10 @@
   ],
   "scripts": {
     "atlaspec": "tsx src/cli.ts",
+    "benchmark:smoke": "tsx benchmark/run.ts --manifest benchmark/pilot.manifest.json --json",
     "build": "tsc -p tsconfig.build.json",
     "check": "npm run typecheck && npm test",
-    "test": "vitest run src",
+    "test": "vitest run src benchmark",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

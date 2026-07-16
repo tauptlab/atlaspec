@@ -66,6 +66,17 @@ Compilation emits a MapLibre v8 style with Atlaspec intent, legend metadata, and
 a deterministic decision trace. The trace records every inferred palette,
 domain, scale, basemap, and clustering decision together with its reason.
 
+Run the executable compiler pilot benchmark with:
+
+```powershell
+npm run benchmark:smoke
+```
+
+The pilot reports Reliable Map Yield for all four supported families and fails
+the process if any schema, semantic, MapLibre, layer, or decision-trace check
+regresses. It is infrastructure for the full model comparison, not a substitute
+for the pre-committed 48-task benchmark.
+
 ## License
 
 MIT

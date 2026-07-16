@@ -79,6 +79,9 @@ export function verifyOfficialJob(
   } catch (error) {
     return invalidStatus(job, `manifest JSON: ${errorMessage(error)}`);
   }
+  if (sha256(manifestRaw) !== job.manifest_sha256) {
+    diagnostics.push('shard manifest digest does not match the official ledger');
+  }
   if (!isRecord(reportValue) || !isRecord(reportValue['experiment'])) {
     return invalidStatus(job, 'report must contain an experiment object');
   }
@@ -120,7 +123,26 @@ export function verifyOfficialJob(
       ) {
         diagnostics.push(`run ${run.run_id} request model mismatch`);
       }
-      if (attempt.response !== undefined) charge += attempt.response.charge_usd;
+      if (attempt.response !== undefined) {
+        charge += attempt.response.charge_usd;
+        const model = ledger.models.find((candidate) => candidate.id === job.model_id);
+        if (model === undefined) {
+          diagnostics.push(`official model is missing from ledger: ${job.model_id}`);
+        } else {
+          if (!attempt.response.cost_observed) {
+            diagnostics.push(`run ${run.run_id} did not observe monetary cost`);
+          }
+          if (attempt.response.pricing.source !== model.pricing_source) {
+            diagnostics.push(`run ${run.run_id} pricing source mismatch`);
+          }
+          if (
+            attempt.response.resolved_model.provider !== model.provider ||
+            attempt.response.resolved_model.version !== model.version
+          ) {
+            diagnostics.push(`run ${run.run_id} resolved model mismatch`);
+          }
+        }
+      }
     }
   }
   for (const expected of expectedIds) {

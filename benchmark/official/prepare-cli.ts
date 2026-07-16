@@ -6,7 +6,10 @@ import { promisify } from 'node:util';
 import { Command } from 'commander';
 
 import type { ExperimentManifest } from '../experiment.js';
-import { buildOfficialDevelopmentBundle } from './plan.js';
+import {
+  buildOfficialDevelopmentBundle,
+  serializeOfficialManifest,
+} from './plan.js';
 
 interface Options {
   plan: string;
@@ -51,7 +54,7 @@ program.action(async (options: Options) => {
     for (const [relativePath, manifest] of bundle.manifests) {
       const target = resolve(outputDirectory, relativePath);
       await mkdir(dirname(target), { recursive: true });
-      await writeFile(target, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+      await writeFile(target, serializeOfficialManifest(manifest), 'utf8');
     }
     await mkdir(outputDirectory, { recursive: true });
     await writeFile(

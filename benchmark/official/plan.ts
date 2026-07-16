@@ -47,6 +47,7 @@ export interface OfficialJob {
   model_id: string;
   stratum: OfficialModel['stratum'];
   manifest: string;
+  manifest_sha256: string;
   report: string;
   expected_runs: number;
   base_generation_calls: number;
@@ -125,6 +126,7 @@ export function buildOfficialDevelopmentBundle(
         manifestDirectory,
       );
       manifests.set(relativeManifest, shard);
+      const manifestSha256 = sha256(serializeOfficialManifest(shard));
 
       const expectedRuns = shard.repetitions * task.conditions.length;
       const repairCalls = task.conditions.some(
@@ -138,6 +140,7 @@ export function buildOfficialDevelopmentBundle(
         model_id: model.id,
         stratum: model.stratum,
         manifest: relativeManifest,
+        manifest_sha256: manifestSha256,
         report: relativeReport,
         expected_runs: expectedRuns,
         base_generation_calls: expectedRuns,
@@ -176,6 +179,10 @@ export function buildOfficialDevelopmentBundle(
     },
     manifests,
   };
+}
+
+export function serializeOfficialManifest(manifest: ExperimentManifest): string {
+  return `${JSON.stringify(manifest, null, 2)}\n`;
 }
 
 function assertOfficialPlan(plan: OfficialPlan): void {

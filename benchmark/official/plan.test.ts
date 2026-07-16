@@ -28,6 +28,7 @@ describe('official benchmark development bundle', () => {
     );
     expect(shard?.tasks).toHaveLength(1);
     expect(shard?.repetitions).toBe(5);
+    expect(bundle.ledger.jobs[0]?.manifest_sha256).toMatch(/^[a-f0-9]{64}$/);
     expect(shard?.tasks[0]?.data_files[0]).toMatch(
       /^\.\.\/\.\.\/\.\.\/\.\.\/benchmark\/corpus\/data\//,
     );

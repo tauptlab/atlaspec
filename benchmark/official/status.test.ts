@@ -100,6 +100,7 @@ function fixtureLedger(): OfficialLedger {
     model_id: 'model',
     stratum: 'small-or-local',
     manifest: 'manifest.json',
+    manifest_sha256: sha256(`${JSON.stringify(shardManifest(), null, 2)}\n`),
     report: 'report.json',
     expected_runs: 2,
     base_generation_calls: 2,
@@ -119,7 +120,18 @@ function fixtureLedger(): OfficialLedger {
       task_count: 1,
       repetitions: 2,
     },
-    models: [],
+    models: [
+      {
+        id: 'model',
+        stratum: 'small-or-local',
+        provider: 'provider',
+        model: 'model',
+        version: 'snapshot',
+        api_mode: 'raw-model-api',
+        cost_observed: true,
+        pricing_source: 'price',
+      },
+    ],
     jobs: [job],
     totals: {
       jobs: 1,

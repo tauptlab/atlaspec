@@ -31,8 +31,9 @@ record the full prompt, model identifier, sampling parameters, token use,
 latency, price, tool calls, and every failed output. The smoke suite does not
 invent zero values for metrics it has not measured.
 
-Pilot fixtures are development-visible and therefore cannot be counted as the
-held-out portion of the eventual benchmark.
+Pilot fixtures are development-visible and are not counted as holdout. The
+frozen 48-task development/holdout matrix and its integrity rules live in
+`corpus/`.
 
 ## Comparative runner
 

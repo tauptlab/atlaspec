@@ -26,6 +26,25 @@ npm run corpus:check
 against the generator output. CI and release verification should use the check
 command, not regenerate files silently.
 
+## Prepare a model run
+
+Frozen manifests contain model placeholders and must never be edited in place.
+Materialize a development run outside this directory:
+
+```powershell
+npm run corpus:prepare -- `
+  --input benchmark/corpus/development.manifest.json `
+  --output work/development.openai.json `
+  --provider openai `
+  --model '<model ID sent to the API>' `
+  --version '<exact model ID expected in the response>'
+```
+
+The OpenAI adapter rejects the run if the provider-resolved model differs from
+`--version`. Preparing `holdout.manifest.json` additionally requires
+`--acknowledge-holdout-exposure`; using that flag means the frozen holdout has
+been consumed for the stated model and compiler version.
+
 ## Data variants
 
 - `canonical`: well-formed moderate values;

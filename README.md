@@ -92,6 +92,11 @@ See [the AtlasBench harness](benchmark/README.md) and
 failed attempts in the denominator and distinguish automated gates from the
 still-required human and multi-model evidence.
 
+The frozen benchmark corpus contains 48 cells, split into 36 development and 12
+holdout tasks. Validate it with `npm run corpus:check` and create model-specific
+run manifests with `npm run corpus:prepare`; frozen manifests should not be
+edited directly.
+
 ## License
 
 MIT

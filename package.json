@@ -30,6 +30,7 @@
     "check": "npm run typecheck && npm test",
     "corpus:check": "tsx benchmark/corpus/generate.ts --check",
     "corpus:generate": "tsx benchmark/corpus/generate.ts",
+    "corpus:prepare": "tsx benchmark/corpus/prepare-cli.ts",
     "test": "vitest run src benchmark",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"

@@ -1,0 +1,52 @@
+version: "0.1"
+map: flood-risk
+title: Flood risk by district
+description: Compare district flood probability while keeping missing values visible.
+family: choropleth
+
+intent:
+  task: compare
+  audience: general-public
+  primary_message: Identify districts with the highest flood probability.
+
+data:
+  sources:
+    - id: districts
+      type: geojson
+      url: ./data/districts.geojson
+  fields:
+    flood_probability:
+      source: districts
+      path: flood_probability
+      measurement: quantitative
+      semantic_type: probability
+      unit: ratio
+      normalization: ratio
+      range: [0, 1]
+    district_name:
+      source: districts
+      path: name
+      measurement: nominal
+      semantic_type: label
+
+encoding:
+  geometry:
+    source: districts
+    support: polygon
+  color:
+    field: flood_probability
+    classification: continuous
+  label:
+    field: district_name
+
+constraints:
+  colorblind_safe: true
+  missing_data: explicit
+  raw_count_choropleth: reject
+  viewport:
+    width: 960
+    height: 640
+
+basemap:
+  style: minimal-light
+  contrast: light

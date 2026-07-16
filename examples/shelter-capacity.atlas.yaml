@@ -1,0 +1,63 @@
+version: "0.1"
+map: shelter-capacity
+title: Emergency shelter capacity
+description: Locate shelters and compare their available capacity.
+family: proportional-symbol
+
+intent:
+  task: compare
+  audience: operations
+  primary_message: Find high-capacity shelters near affected districts.
+
+data:
+  sources:
+    - id: shelters
+      type: geojson
+      url: ./data/shelters.geojson
+  fields:
+    capacity:
+      source: shelters
+      path: capacity
+      measurement: quantitative
+      semantic_type: capacity
+      unit: people
+      normalization: none
+      range: [0, 1000]
+    shelter_name:
+      source: shelters
+      path: name
+      measurement: nominal
+      semantic_type: label
+
+encoding:
+  geometry:
+    source: shelters
+    support: point
+  size:
+    field: capacity
+  label:
+    field: shelter_name
+
+constraints:
+  colorblind_safe: true
+  missing_data: error
+  protected_layers:
+    - shelter-symbols
+  label_priority:
+    - shelter_name
+  viewport:
+    width: 960
+    height: 640
+
+behavior:
+  zoom_rules:
+    - max_zoom: 9
+      target: shelter-symbols
+      action: cluster
+    - min_zoom: 12
+      target: shelter-labels
+      action: show-labels
+
+basemap:
+  style: minimal-light
+  contrast: light

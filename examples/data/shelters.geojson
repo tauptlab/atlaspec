@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Central School Shelter",
+        "capacity": 820
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [126.93, 37.56]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Riverside Community Hall",
+        "capacity": 340
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [126.95, 37.52]
+      }
+    }
+  ]
+}

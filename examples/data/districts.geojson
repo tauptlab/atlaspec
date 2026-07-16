@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "North District",
+        "flood_probability": 0.72
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[126.90, 37.55], [126.96, 37.55], [126.96, 37.61], [126.90, 37.61], [126.90, 37.55]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "South District",
+        "flood_probability": 0.28
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[126.90, 37.49], [126.96, 37.49], [126.96, 37.55], [126.90, 37.55], [126.90, 37.49]]]
+      }
+    }
+  ]
+}

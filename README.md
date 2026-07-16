@@ -47,6 +47,19 @@ MapLibre style document
 These documents are steering constraints. Changes to them must be explicit and
 must not be made merely to accommodate observed benchmark results.
 
+## Development usage
+
+```powershell
+npm install
+npm run check
+npm run atlaspec -- validate examples/flood-risk.atlas.yaml
+npm run atlaspec -- validate examples/shelter-capacity.atlas.yaml --json
+```
+
+Validation has two stages: strict schema validation followed by deterministic
+cartographic linting. Diagnostics have stable, grep-friendly codes so agents can
+repair a document without parsing prose or relying on a visual judge.
+
 ## License
 
 MIT

@@ -13,12 +13,16 @@
       "import": "./dist/index.js"
     }
   },
+  "bin": {
+    "atlaspec": "./dist/cli.js"
+  },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
+    "atlaspec": "tsx src/cli.ts",
     "build": "tsc -p tsconfig.build.json",
     "check": "npm run typecheck && npm test",
     "test": "vitest run src",
@@ -28,6 +32,7 @@
   "dependencies": {
     "@sinclair/typebox": "0.34.52",
     "ajv": "8.20.0",
+    "commander": "^14.0.2",
     "yaml": "2.9.0"
   },
   "devDependencies": {

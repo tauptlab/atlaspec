@@ -18,3 +18,13 @@ export type {
   SemanticType,
   SpatialSupport,
 } from './schema.js';
+
+export { lintAtlaspec } from './lint.js';
+export { loadDocument, parseDocument } from './load.js';
+export { validateAtlaspec } from './validate.js';
+
+export type {
+  Diagnostic,
+  DiagnosticSeverity,
+  ValidationReport,
+} from './diagnostics.js';

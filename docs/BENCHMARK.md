@@ -129,8 +129,9 @@ Atlaspec 0.1 is successful only if all of these gates pass:
 - the 95 percent confidence interval for the primary improvement excludes zero.
 
 If a baseline already has less than a 10 percent failure rate, the primary gate
-for that slice becomes a non-inferiority test plus the cost gate. This exception
-is applied per pre-declared slice and not retroactively to the aggregate result.
+for that slice becomes a non-inferiority test with a maximum three-percentage-
+point Reliable Map Yield margin plus the cost gate. This exception is applied
+per pre-declared slice and not retroactively to the aggregate result.
 
 ## Statistical analysis
 
@@ -143,6 +144,13 @@ is applied per pre-declared slice and not retroactively to the aggregate result.
 No single LLM judge is accepted as ground truth. Any learned evaluator is
 reported separately and calibrated against deterministic checks and blinded
 human labels.
+
+The automated AtlasBench report uses 10,000 paired bootstrap resamples, a fixed
+seed of `20260716`, and a 95 percent percentile interval. These parameters and
+the low-failure non-inferiority margin are locked before comparative model
+results are collected. An automated pass is not a full benchmark pass: human
+task accuracy, blind expert review, edit survival, repair count, and model-
+stratum reproduction remain separately required.
 
 ## Ablations
 

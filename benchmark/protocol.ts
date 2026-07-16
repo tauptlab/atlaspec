@@ -65,15 +65,28 @@ export const TokenUsageSchema = Type.Object(
   Strict,
 );
 
+export const PricingSchema = Type.Object(
+  {
+    currency: Type.Literal('USD'),
+    input_usd_per_million: Type.Number({ minimum: 0 }),
+    cached_input_usd_per_million: Type.Number({ minimum: 0 }),
+    output_usd_per_million: Type.Number({ minimum: 0 }),
+    source: Type.String({ minLength: 1 }),
+  },
+  Strict,
+);
+
 export const GenerationResponseSchema = Type.Object(
   {
     schema_version: Type.Literal('0.1'),
     request_id: Type.String({ minLength: 1 }),
     provider_request_id: Type.Optional(Type.String({ minLength: 1 })),
+    resolved_model: ModelIdentitySchema,
     output: Type.String(),
     finish_reason: Type.String({ minLength: 1 }),
     usage: TokenUsageSchema,
     latency_ms: Type.Number({ minimum: 0 }),
+    pricing: PricingSchema,
     charge_usd: Type.Number({ minimum: 0 }),
     tool_calls: Type.Integer({ minimum: 0 }),
   },
@@ -121,6 +134,7 @@ export type Sampling = Static<typeof SamplingSchema>;
 export type InputArtifact = Static<typeof InputArtifactSchema>;
 export type GenerationRequest = Static<typeof GenerationRequestSchema>;
 export type GenerationResponse = Static<typeof GenerationResponseSchema>;
+export type Pricing = Static<typeof PricingSchema>;
 export type EvaluationCheck = Static<typeof EvaluationCheckSchema>;
 export type AttemptRecord = Static<typeof AttemptRecordSchema>;
 export type RunRecord = Static<typeof RunRecordSchema>;

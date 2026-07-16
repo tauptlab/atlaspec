@@ -185,10 +185,18 @@ function response(
   return {
     schema_version: '0.1',
     request_id: requestId,
+    resolved_model: { provider: 'fixture', model: 'replay', version: '1' },
     output,
     finish_reason: 'stop',
     usage: { input_tokens: 100, output_tokens: 50 },
     latency_ms: 20,
+    pricing: {
+      currency: 'USD',
+      input_usd_per_million: 0,
+      cached_input_usd_per_million: 0,
+      output_usd_per_million: 0,
+      source: 'fixture override',
+    },
     charge_usd: charge,
     tool_calls: 0,
   };

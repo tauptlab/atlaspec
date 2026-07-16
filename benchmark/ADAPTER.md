@@ -7,10 +7,11 @@ output. Provider logs belong on standard error.
 
 The authoritative strict schemas are in `benchmark/protocol.ts`. The request
 contains the complete prompt, model identity, sampling settings, source data,
-and SHA-256 digests. The response must contain the raw generated artifact plus
-uncached token usage, provider charge in USD, latency, tool-call count, and
-finish reason. Unknown fields, negative measurements, missing accounting, and a
-mismatched request identifier fail closed.
+and SHA-256 digests. The response must contain the raw generated artifact, the
+provider-resolved model identity, uncached and cached token usage, the locked
+input/cached/output rates used to calculate the USD charge, latency, tool-call
+count, and finish reason. Unknown fields, negative measurements, missing
+accounting, and a mismatched request identifier fail closed.
 
 AtlasBench starts the executable directly without a command shell. Repeat
 arguments when needed:

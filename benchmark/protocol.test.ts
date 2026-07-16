@@ -91,10 +91,18 @@ function validResponse() {
   return {
     schema_version: '0.1',
     request_id: 'task-a:atlaspec:1:1',
+    resolved_model: { provider: 'fixture', model: 'replay', version: '1' },
     output: 'version: "0.1"',
     finish_reason: 'stop',
     usage: { input_tokens: 12, output_tokens: 6 },
     latency_ms: 25,
+    pricing: {
+      currency: 'USD',
+      input_usd_per_million: 1,
+      cached_input_usd_per_million: 0.1,
+      output_usd_per_million: 2,
+      source: 'test fixture',
+    },
     charge_usd: 0.0001,
     tool_calls: 0,
   };

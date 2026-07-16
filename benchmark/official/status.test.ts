@@ -114,6 +114,9 @@ function fixtureLedger(): OfficialLedger {
     compiler_commit: 'commit',
     lockfile_sha256: 'lock',
     holdout_exposed: false,
+    claim_scope: 'automated-generation-and-renderer-depth-validation',
+    full_product_claim_ready: false,
+    unevaluated_gates: [],
     source: {
       suite: 'atlasbench-48-development',
       manifest_sha256: 'source',

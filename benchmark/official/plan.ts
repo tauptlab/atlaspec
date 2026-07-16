@@ -62,6 +62,9 @@ export interface OfficialLedger {
   compiler_commit: string;
   lockfile_sha256: string;
   holdout_exposed: false;
+  claim_scope: 'automated-generation-and-renderer-depth-validation';
+  full_product_claim_ready: false;
+  unevaluated_gates: string[];
   source: {
     suite: string;
     manifest_sha256: string;
@@ -158,6 +161,18 @@ export function buildOfficialDevelopmentBundle(
       compiler_commit: options.compiler_commit,
       lockfile_sha256: sha256(options.lockfile_raw),
       holdout_exposed: false,
+      claim_scope: 'automated-generation-and-renderer-depth-validation',
+      full_product_claim_ready: false,
+      unevaluated_gates: [
+        'rendered-screenshot-quality',
+        'legend-expression-concordance',
+        'label-overlap-and-contrast',
+        'viewport-and-projection-coverage',
+        'edit-survival',
+        'human-task-effectiveness',
+        'blind-expert-review',
+        'cross-model-statistical-gates',
+      ],
       source: {
         suite: source.suite,
         manifest_sha256: sha256(options.source_manifest_raw),

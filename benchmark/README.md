@@ -63,3 +63,9 @@ For a one-task directional check with locally authenticated Codex or Claude
 Code, use `local-cli-pilot.manifest.json` and the adapters documented in
 `ADAPTER.md`. Local agent results include large provider-specific system
 contexts and are reported separately from raw API benchmark evidence.
+
+The official development generation workflow is documented in
+`../docs/OFFICIAL_BENCHMARK_RUNBOOK.md`. It prepares independently restartable
+model-by-task shards, pins every provenance digest, rejects local agent wrappers
+from official evidence, and verifies missing or invalid reports without
+dropping failed generations.

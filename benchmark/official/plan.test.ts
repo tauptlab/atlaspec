@@ -16,6 +16,8 @@ describe('official benchmark development bundle', () => {
     });
 
     expect(bundle.ledger.holdout_exposed).toBe(false);
+    expect(bundle.ledger.full_product_claim_ready).toBe(false);
+    expect(bundle.ledger.unevaluated_gates).toContain('human-task-effectiveness');
     expect(bundle.ledger.totals).toEqual({
       jobs: 108,
       expected_runs: 2025,

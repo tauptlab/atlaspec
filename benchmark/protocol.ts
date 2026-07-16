@@ -23,6 +23,18 @@ export const SamplingSchema = Type.Object(
   {
     temperature: Type.Number({ minimum: 0 }),
     seed: Type.Optional(Type.Integer()),
+    top_p: Type.Optional(Type.Number({ exclusiveMinimum: 0, maximum: 1 })),
+    max_output_tokens: Type.Optional(Type.Integer({ minimum: 1 })),
+    reasoning_effort: Type.Optional(
+      Type.Union([
+        Type.Literal('none'),
+        Type.Literal('minimal'),
+        Type.Literal('low'),
+        Type.Literal('medium'),
+        Type.Literal('high'),
+        Type.Literal('xhigh'),
+      ]),
+    ),
   },
   Strict,
 );

@@ -48,3 +48,32 @@ The experiment report always retains rejected attempts and transport errors.
 For `atlaspec-repair`, the runner sends at most one additional request containing
 the prior artifact and deterministic diagnostics. Other conditions are never
 given an undeclared retry.
+
+## OpenAI Responses reference adapter
+
+The checked-in reference adapter uses the Responses API without storing API
+responses server-side. It selects `message` output items and their
+`output_text` content instead of assuming the first output item is text. It
+also rejects a provider-resolved model that differs from the manifest's locked
+`model.version`.
+
+Configure authentication and a price card in the process environment:
+
+```powershell
+$env:OPENAI_API_KEY = '<not committed>'
+$env:ATLASBENCH_OPENAI_INPUT_USD_PER_1M = '<locked rate>'
+$env:ATLASBENCH_OPENAI_CACHED_INPUT_USD_PER_1M = '<locked rate>'
+$env:ATLASBENCH_OPENAI_OUTPUT_USD_PER_1M = '<locked rate>'
+$env:ATLASBENCH_OPENAI_PRICING_SOURCE = '<URL or dated price-card digest>'
+
+npm run atlasbench -- `
+  --manifest benchmark/comparison.example.json `
+  --adapter node `
+  --adapter-arg=node_modules/tsx/dist/cli.mjs `
+  --adapter-arg=benchmark/providers/openai-stdio.ts `
+  --report work/openai-comparison.json
+```
+
+Use an immutable model snapshot in `model.version`. The adapter treats `seed`
+as unsupported and fails rather than silently ignoring it. Sampling controls
+that are actually sent are retained in the manifest and every request record.

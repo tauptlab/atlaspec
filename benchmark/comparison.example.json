@@ -9,7 +9,7 @@
   },
   "sampling": {
     "temperature": 0,
-    "seed": 42
+    "max_output_tokens": 8000
   },
   "tasks": [
     {

@@ -1,0 +1,88 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Facility 1",
+        "category": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Facility 2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Facility 3",
+        "category": "depot"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9,
+          37.3
+        ]
+      },
+      "properties": {
+        "name": "Facility 4",
+        "category": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.2,
+          37.3
+        ]
+      },
+      "properties": {
+        "name": "Facility 5",
+        "category": "shelter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.5,
+          37.3
+        ]
+      },
+      "properties": {
+        "name": "Facility 6",
+        "category": "depot"
+      }
+    }
+  ]
+}

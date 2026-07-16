@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Shelter 1",
+        "capacity": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Shelter 2",
+        "capacity": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.001
+        ]
+      },
+      "properties": {
+        "name": "Shelter 3",
+        "capacity": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37.001
+        ]
+      },
+      "properties": {
+        "name": "Shelter 4",
+        "capacity": 9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.002
+        ]
+      },
+      "properties": {
+        "name": "Shelter 5",
+        "capacity": 120
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37.002
+        ]
+      },
+      "properties": {
+        "name": "Shelter 6",
+        "capacity": 2000
+      }
+    }
+  ]
+}

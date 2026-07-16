@@ -1,0 +1,2374 @@
+{
+  "version": "0.1",
+  "suite": "atlasbench-48-development",
+  "repetitions": 5,
+  "model": {
+    "provider": "replace-with-provider",
+    "model": "replace-with-model-or-snapshot",
+    "version": "replace-with-provider-resolved-version"
+  },
+  "sampling": {
+    "temperature": 0,
+    "max_output_tokens": 8000
+  },
+  "tasks": [
+    {
+      "id": "choropleth-basic-missing-values",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-basic-distribution-stress",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-basic-geographic-stress",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-intermediate-canonical",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-intermediate-distribution-stress",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/choropleth-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-intermediate-geographic-stress",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-adversarial-canonical",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/choropleth-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-adversarial-missing-values",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/choropleth-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "choropleth-adversarial-geographic-stress",
+      "family": "choropleth",
+      "data_files": [
+        "data/choropleth-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "geoshape",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Polygon property risk_rate is a normalized probability in [0,1]; name is the label. Create a polygon choropleth of risk_rate and label each region with name. Never treat risk_rate as a raw count. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/choropleth-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "fill",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.palette-inferred",
+              "color.domain-selected"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-basic-canonical",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-basic-distribution-stress",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-basic-geographic-stress",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-intermediate-canonical",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-intermediate-missing-values",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-intermediate-geographic-stress",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/proportional-symbol-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-adversarial-canonical",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/proportional-symbol-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-adversarial-missing-values",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/proportional-symbol-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "proportional-symbol-adversarial-distribution-stress",
+      "family": "proportional-symbol",
+      "data_files": [
+        "data/proportional-symbol-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property capacity is a nonnegative count of people; name is the label. Create proportional point symbols for capacity and label each location with name. Symbol area, not radius, must be proportional to capacity. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/proportional-symbol-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "size.area-proportional-scale"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-basic-canonical",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-basic-missing-values",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-basic-geographic-stress",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-intermediate-canonical",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/categorical-point-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-intermediate-missing-values",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-intermediate-distribution-stress",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-adversarial-missing-values",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/categorical-point-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-adversarial-distribution-stress",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/categorical-point-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "categorical-point-adversarial-geographic-stress",
+      "family": "categorical-point",
+      "data_files": [
+        "data/categorical-point-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "condition": "direct-vega-lite",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Vega-Lite v6 JSON document.",
+          "reference_files": [
+            "../references/vega-lite.md"
+          ],
+          "requirements": {
+            "vega_lite_mark_types": [
+              "circle",
+              "text"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property category is nominal with domain clinic, shelter, depot; name is the label. Create categorical point symbols for category and label each location with name. Use a colorblind-safe categorical palette. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/categorical-point-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "circle",
+              "symbol"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "color.categorical-domain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-basic-canonical",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-basic-missing-values",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-basic-distribution-stress",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, a light low-contrast background, and a clear legend. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-intermediate-missing-values",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-missing-values.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Some features omit the encoded property; show these features explicitly instead of coercing them to zero. Use the supplied GeoJSON input data/heatmap-missing-values.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-intermediate-distribution-stress",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-intermediate-geographic-stress",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 960 by 640 viewport, preserve readable labels, make missing values explicit, and add sensible semantic zoom behavior. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-adversarial-canonical",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-canonical.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The data are well formed and moderately distributed. Use the supplied GeoJSON input data/heatmap-canonical.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-adversarial-distribution-stress",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-distribution-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. The encoded values are highly skewed and include repeated or tightly clustered observations; keep the main pattern legible without hiding the extreme values. Use the supplied GeoJSON input data/heatmap-distribution-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heatmap-adversarial-geographic-stress",
+      "family": "heatmap",
+      "data_files": [
+        "data/heatmap-geographic-stress.geojson"
+      ],
+      "conditions": [
+        {
+          "condition": "direct-maplibre",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete MapLibre Style Specification v8 JSON document.",
+          "reference_files": [
+            "../references/maplibre.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        },
+        {
+          "condition": "atlaspec-repair",
+          "prompt": "Point property severity is an ordinal weight from 1 through 5; name is an identifier. Create a weighted geographic heatmap using severity. The result must communicate concentration rather than individual point magnitude. Use a 360 by 640 mobile viewport, preserve multilingual labels, use colorblind-safe encodings, and avoid misleading treatment of missing or extreme values. Features include high latitudes, antimeridian-adjacent coordinates, and long Korean and English labels; do not drop or rename them. Use the supplied GeoJSON input data/heatmap-geographic-stress.geojson. Return only a complete Atlaspec 0.1 YAML document.",
+          "reference_files": [
+            "../references/atlaspec.md"
+          ],
+          "requirements": {
+            "maplibre_layer_types": [
+              "heatmap"
+            ],
+            "atlaspec_decisions": [
+              "basemap.background-selected",
+              "heatmap.kernel-defaults"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

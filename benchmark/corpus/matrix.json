@@ -1,0 +1,391 @@
+{
+  "version": "0.1",
+  "corpus": "atlasbench-48",
+  "split_policy": "One rotated variant per family-difficulty cell is held out; each variant appears three times in holdout.",
+  "tasks": [
+    {
+      "id": "choropleth-basic-canonical",
+      "family": "choropleth",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "holdout",
+      "data_file": "data/choropleth-canonical.geojson"
+    },
+    {
+      "id": "choropleth-basic-missing-values",
+      "family": "choropleth",
+      "difficulty": "basic",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/choropleth-missing-values.geojson"
+    },
+    {
+      "id": "choropleth-basic-distribution-stress",
+      "family": "choropleth",
+      "difficulty": "basic",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/choropleth-distribution-stress.geojson"
+    },
+    {
+      "id": "choropleth-basic-geographic-stress",
+      "family": "choropleth",
+      "difficulty": "basic",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/choropleth-geographic-stress.geojson"
+    },
+    {
+      "id": "choropleth-intermediate-canonical",
+      "family": "choropleth",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/choropleth-canonical.geojson"
+    },
+    {
+      "id": "choropleth-intermediate-missing-values",
+      "family": "choropleth",
+      "difficulty": "intermediate",
+      "variant": "missing-values",
+      "split": "holdout",
+      "data_file": "data/choropleth-missing-values.geojson"
+    },
+    {
+      "id": "choropleth-intermediate-distribution-stress",
+      "family": "choropleth",
+      "difficulty": "intermediate",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/choropleth-distribution-stress.geojson"
+    },
+    {
+      "id": "choropleth-intermediate-geographic-stress",
+      "family": "choropleth",
+      "difficulty": "intermediate",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/choropleth-geographic-stress.geojson"
+    },
+    {
+      "id": "choropleth-adversarial-canonical",
+      "family": "choropleth",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/choropleth-canonical.geojson"
+    },
+    {
+      "id": "choropleth-adversarial-missing-values",
+      "family": "choropleth",
+      "difficulty": "adversarial",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/choropleth-missing-values.geojson"
+    },
+    {
+      "id": "choropleth-adversarial-distribution-stress",
+      "family": "choropleth",
+      "difficulty": "adversarial",
+      "variant": "distribution-stress",
+      "split": "holdout",
+      "data_file": "data/choropleth-distribution-stress.geojson"
+    },
+    {
+      "id": "choropleth-adversarial-geographic-stress",
+      "family": "choropleth",
+      "difficulty": "adversarial",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/choropleth-geographic-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-basic-canonical",
+      "family": "proportional-symbol",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/proportional-symbol-canonical.geojson"
+    },
+    {
+      "id": "proportional-symbol-basic-missing-values",
+      "family": "proportional-symbol",
+      "difficulty": "basic",
+      "variant": "missing-values",
+      "split": "holdout",
+      "data_file": "data/proportional-symbol-missing-values.geojson"
+    },
+    {
+      "id": "proportional-symbol-basic-distribution-stress",
+      "family": "proportional-symbol",
+      "difficulty": "basic",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/proportional-symbol-distribution-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-basic-geographic-stress",
+      "family": "proportional-symbol",
+      "difficulty": "basic",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/proportional-symbol-geographic-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-intermediate-canonical",
+      "family": "proportional-symbol",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/proportional-symbol-canonical.geojson"
+    },
+    {
+      "id": "proportional-symbol-intermediate-missing-values",
+      "family": "proportional-symbol",
+      "difficulty": "intermediate",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/proportional-symbol-missing-values.geojson"
+    },
+    {
+      "id": "proportional-symbol-intermediate-distribution-stress",
+      "family": "proportional-symbol",
+      "difficulty": "intermediate",
+      "variant": "distribution-stress",
+      "split": "holdout",
+      "data_file": "data/proportional-symbol-distribution-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-intermediate-geographic-stress",
+      "family": "proportional-symbol",
+      "difficulty": "intermediate",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/proportional-symbol-geographic-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-adversarial-canonical",
+      "family": "proportional-symbol",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/proportional-symbol-canonical.geojson"
+    },
+    {
+      "id": "proportional-symbol-adversarial-missing-values",
+      "family": "proportional-symbol",
+      "difficulty": "adversarial",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/proportional-symbol-missing-values.geojson"
+    },
+    {
+      "id": "proportional-symbol-adversarial-distribution-stress",
+      "family": "proportional-symbol",
+      "difficulty": "adversarial",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/proportional-symbol-distribution-stress.geojson"
+    },
+    {
+      "id": "proportional-symbol-adversarial-geographic-stress",
+      "family": "proportional-symbol",
+      "difficulty": "adversarial",
+      "variant": "geographic-stress",
+      "split": "holdout",
+      "data_file": "data/proportional-symbol-geographic-stress.geojson"
+    },
+    {
+      "id": "categorical-point-basic-canonical",
+      "family": "categorical-point",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/categorical-point-canonical.geojson"
+    },
+    {
+      "id": "categorical-point-basic-missing-values",
+      "family": "categorical-point",
+      "difficulty": "basic",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/categorical-point-missing-values.geojson"
+    },
+    {
+      "id": "categorical-point-basic-distribution-stress",
+      "family": "categorical-point",
+      "difficulty": "basic",
+      "variant": "distribution-stress",
+      "split": "holdout",
+      "data_file": "data/categorical-point-distribution-stress.geojson"
+    },
+    {
+      "id": "categorical-point-basic-geographic-stress",
+      "family": "categorical-point",
+      "difficulty": "basic",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/categorical-point-geographic-stress.geojson"
+    },
+    {
+      "id": "categorical-point-intermediate-canonical",
+      "family": "categorical-point",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/categorical-point-canonical.geojson"
+    },
+    {
+      "id": "categorical-point-intermediate-missing-values",
+      "family": "categorical-point",
+      "difficulty": "intermediate",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/categorical-point-missing-values.geojson"
+    },
+    {
+      "id": "categorical-point-intermediate-distribution-stress",
+      "family": "categorical-point",
+      "difficulty": "intermediate",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/categorical-point-distribution-stress.geojson"
+    },
+    {
+      "id": "categorical-point-intermediate-geographic-stress",
+      "family": "categorical-point",
+      "difficulty": "intermediate",
+      "variant": "geographic-stress",
+      "split": "holdout",
+      "data_file": "data/categorical-point-geographic-stress.geojson"
+    },
+    {
+      "id": "categorical-point-adversarial-canonical",
+      "family": "categorical-point",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "holdout",
+      "data_file": "data/categorical-point-canonical.geojson"
+    },
+    {
+      "id": "categorical-point-adversarial-missing-values",
+      "family": "categorical-point",
+      "difficulty": "adversarial",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/categorical-point-missing-values.geojson"
+    },
+    {
+      "id": "categorical-point-adversarial-distribution-stress",
+      "family": "categorical-point",
+      "difficulty": "adversarial",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/categorical-point-distribution-stress.geojson"
+    },
+    {
+      "id": "categorical-point-adversarial-geographic-stress",
+      "family": "categorical-point",
+      "difficulty": "adversarial",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/categorical-point-geographic-stress.geojson"
+    },
+    {
+      "id": "heatmap-basic-canonical",
+      "family": "heatmap",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/heatmap-canonical.geojson"
+    },
+    {
+      "id": "heatmap-basic-missing-values",
+      "family": "heatmap",
+      "difficulty": "basic",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/heatmap-missing-values.geojson"
+    },
+    {
+      "id": "heatmap-basic-distribution-stress",
+      "family": "heatmap",
+      "difficulty": "basic",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/heatmap-distribution-stress.geojson"
+    },
+    {
+      "id": "heatmap-basic-geographic-stress",
+      "family": "heatmap",
+      "difficulty": "basic",
+      "variant": "geographic-stress",
+      "split": "holdout",
+      "data_file": "data/heatmap-geographic-stress.geojson"
+    },
+    {
+      "id": "heatmap-intermediate-canonical",
+      "family": "heatmap",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "holdout",
+      "data_file": "data/heatmap-canonical.geojson"
+    },
+    {
+      "id": "heatmap-intermediate-missing-values",
+      "family": "heatmap",
+      "difficulty": "intermediate",
+      "variant": "missing-values",
+      "split": "development",
+      "data_file": "data/heatmap-missing-values.geojson"
+    },
+    {
+      "id": "heatmap-intermediate-distribution-stress",
+      "family": "heatmap",
+      "difficulty": "intermediate",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/heatmap-distribution-stress.geojson"
+    },
+    {
+      "id": "heatmap-intermediate-geographic-stress",
+      "family": "heatmap",
+      "difficulty": "intermediate",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/heatmap-geographic-stress.geojson"
+    },
+    {
+      "id": "heatmap-adversarial-canonical",
+      "family": "heatmap",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "data_file": "data/heatmap-canonical.geojson"
+    },
+    {
+      "id": "heatmap-adversarial-missing-values",
+      "family": "heatmap",
+      "difficulty": "adversarial",
+      "variant": "missing-values",
+      "split": "holdout",
+      "data_file": "data/heatmap-missing-values.geojson"
+    },
+    {
+      "id": "heatmap-adversarial-distribution-stress",
+      "family": "heatmap",
+      "difficulty": "adversarial",
+      "variant": "distribution-stress",
+      "split": "development",
+      "data_file": "data/heatmap-distribution-stress.geojson"
+    },
+    {
+      "id": "heatmap-adversarial-geographic-stress",
+      "family": "heatmap",
+      "difficulty": "adversarial",
+      "variant": "geographic-stress",
+      "split": "development",
+      "data_file": "data/heatmap-geographic-stress.geojson"
+    }
+  ]
+}

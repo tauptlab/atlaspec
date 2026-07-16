@@ -28,6 +28,8 @@
     "benchmark:smoke": "tsx benchmark/run.ts --manifest benchmark/pilot.manifest.json --json",
     "build": "tsc -p tsconfig.build.json",
     "check": "npm run typecheck && npm test",
+    "corpus:check": "tsx benchmark/corpus/generate.ts --check",
+    "corpus:generate": "tsx benchmark/corpus/generate.ts",
     "test": "vitest run src benchmark",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"

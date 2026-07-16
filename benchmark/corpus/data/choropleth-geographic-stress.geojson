@@ -1,0 +1,209 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              178.2,
+              78
+            ],
+            [
+              178.7,
+              78
+            ],
+            [
+              178.7,
+              78.5
+            ],
+            [
+              178.2,
+              78.5
+            ],
+            [
+              178.2,
+              78
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "동쪽 경계 지역 1",
+        "risk_rate": 0.12
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              179.2,
+              78
+            ],
+            [
+              -179.6,
+              78
+            ],
+            [
+              -179.6,
+              78.5
+            ],
+            [
+              179.2,
+              78.5
+            ],
+            [
+              179.2,
+              78
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Western antimeridian district 2",
+        "risk_rate": 0.25
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -179.8,
+              78
+            ],
+            [
+              -179.3,
+              78
+            ],
+            [
+              -179.3,
+              78.5
+            ],
+            [
+              -179.8,
+              78.5
+            ],
+            [
+              -179.8,
+              78
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "동쪽 경계 지역 3",
+        "risk_rate": 0.38
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -178.8,
+              79.2
+            ],
+            [
+              -178.3,
+              79.2
+            ],
+            [
+              -178.3,
+              79.7
+            ],
+            [
+              -178.8,
+              79.7
+            ],
+            [
+              -178.8,
+              79.2
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Western antimeridian district 4",
+        "risk_rate": 0.51
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              170,
+              79.2
+            ],
+            [
+              170.5,
+              79.2
+            ],
+            [
+              170.5,
+              79.7
+            ],
+            [
+              170,
+              79.7
+            ],
+            [
+              170,
+              79.2
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "동쪽 경계 지역 5",
+        "risk_rate": 0.67
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              172,
+              79.2
+            ],
+            [
+              172.5,
+              79.2
+            ],
+            [
+              172.5,
+              79.7
+            ],
+            [
+              172,
+              79.7
+            ],
+            [
+              172,
+              79.2
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Western antimeridian district 6",
+        "risk_rate": 0.82
+      }
+    }
+  ]
+}

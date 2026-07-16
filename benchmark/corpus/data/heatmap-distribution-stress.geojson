@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Incident 1",
+        "severity": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37
+        ]
+      },
+      "properties": {
+        "name": "Incident 2",
+        "severity": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.001
+        ]
+      },
+      "properties": {
+        "name": "Incident 3",
+        "severity": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37.001
+        ]
+      },
+      "properties": {
+        "name": "Incident 4",
+        "severity": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.002
+        ]
+      },
+      "properties": {
+        "name": "Incident 5",
+        "severity": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37.002
+        ]
+      },
+      "properties": {
+        "name": "Incident 6",
+        "severity": 5
+      }
+    }
+  ]
+}

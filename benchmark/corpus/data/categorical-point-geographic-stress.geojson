@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179,
+          77
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 1",
+        "category": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -178.9,
+          77.5
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 2",
+        "category": "shelter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          178.8,
+          78
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 3",
+        "category": "depot"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -178.7,
+          78.5
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 4",
+        "category": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          178.6,
+          79
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 5",
+        "category": "shelter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -178.5,
+          79.5
+        ]
+      },
+      "properties": {
+        "name": "재난 대응 시설 Emergency coordination facility 6",
+        "category": "depot"
+      }
+    }
+  ]
+}

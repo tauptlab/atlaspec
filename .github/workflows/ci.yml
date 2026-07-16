@@ -38,5 +38,8 @@ jobs:
       - name: Run AtlasBench compiler pilot
         run: npm run benchmark:smoke
 
+      - name: Verify frozen AtlasBench corpus
+        run: npm run corpus:check
+
       - name: Verify package contents
         run: npm pack --dry-run

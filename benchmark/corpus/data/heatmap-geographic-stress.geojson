@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.5,
+          80
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 1",
+        "severity": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -179.5,
+          80.2
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 2",
+        "severity": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          170,
+          78
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 3",
+        "severity": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -170,
+          79
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 4",
+        "severity": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175,
+          81
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 5",
+        "severity": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -175,
+          81.2
+        ]
+      },
+      "properties": {
+        "name": "북극권 국제 대응 거점 International response site 6",
+        "severity": 3
+      }
+    }
+  ]
+}

@@ -46,6 +46,12 @@ The first complete benchmark contains at least 48 tasks: four map families by
 three difficulty levels by four data variants. At least 25 percent of tasks are
 held out from compiler development.
 
+The checked-in `atlasbench-48` matrix instantiates this as 36 development tasks
+and 12 holdout tasks. Exactly one rotated variant is held out for every family-
+difficulty pair, and each of the four variants appears three times in holdout.
+The split is generated deterministically and checked byte-for-byte; observed
+holdout results must not be used to retune the same frozen evaluation.
+
 Required adversarial variants include:
 
 - missing and non-finite values;

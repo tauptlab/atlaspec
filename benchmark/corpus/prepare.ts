@@ -1,4 +1,5 @@
 import { Ajv } from 'ajv';
+import { isAbsolute, relative, resolve } from 'node:path';
 
 import {
   ExperimentManifestSchema,
@@ -45,6 +46,37 @@ export function prepareManifest(
     ...structuredClone(value),
     model: { provider, model, version },
   };
+}
+
+export function rebaseManifestPaths(
+  manifest: ExperimentManifest,
+  sourceDirectory: string,
+  outputDirectory: string,
+): ExperimentManifest {
+  const rebased = structuredClone(manifest);
+  for (const task of rebased.tasks) {
+    task.data_files = task.data_files.map((path) =>
+      rebasePath(path, sourceDirectory, outputDirectory),
+    );
+    for (const condition of task.conditions) {
+      if (condition.reference_files !== undefined) {
+        condition.reference_files = condition.reference_files.map((path) =>
+          rebasePath(path, sourceDirectory, outputDirectory),
+        );
+      }
+    }
+  }
+  return rebased;
+}
+
+function rebasePath(
+  path: string,
+  sourceDirectory: string,
+  outputDirectory: string,
+): string {
+  if (isAbsolute(path)) return path;
+  const rebased = relative(outputDirectory, resolve(sourceDirectory, path));
+  return rebased.replaceAll('\\', '/');
 }
 
 function required(value: string, name: string): string {

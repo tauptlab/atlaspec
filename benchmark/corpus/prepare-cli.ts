@@ -3,7 +3,7 @@ import { dirname, isAbsolute, relative, resolve } from 'node:path';
 
 import { Command } from 'commander';
 
-import { prepareManifest } from './prepare.js';
+import { prepareManifest, rebaseManifestPaths } from './prepare.js';
 
 interface Options {
   input: string;
@@ -51,8 +51,9 @@ program.action(async (options: Options) => {
         ? { acknowledge_holdout_exposure: true }
         : {}),
     });
+    const rebased = rebaseManifestPaths(prepared, dirname(input), dirname(output));
     await mkdir(dirname(output), { recursive: true });
-    await writeFile(output, `${JSON.stringify(prepared, null, 2)}\n`, 'utf8');
+    await writeFile(output, `${JSON.stringify(rebased, null, 2)}\n`, 'utf8');
     console.log(`WROTE ${output}`);
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));

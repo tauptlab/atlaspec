@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildCorpusArtifacts } from './corpus.js';
-import { prepareManifest } from './prepare.js';
+import { prepareManifest, rebaseManifestPaths } from './prepare.js';
 
 describe('AtlasBench corpus run preparation', () => {
   it('materializes a development run without mutating the frozen source', () => {
@@ -56,5 +56,22 @@ describe('AtlasBench corpus run preparation', () => {
         version: 'snapshot',
       }),
     ).toThrow('provider must not be empty');
+  });
+
+  it('rebases data and reference paths when the run manifest moves', () => {
+    const source = buildCorpusArtifacts().development;
+    const rebased = rebaseManifestPaths(
+      source,
+      'C:/repo/benchmark/corpus',
+      'C:/repo/work',
+    );
+
+    expect(rebased.tasks[0]?.data_files[0]).toBe(
+      `../benchmark/corpus/${source.tasks[0]?.data_files[0]}`,
+    );
+    expect(rebased.tasks[0]?.conditions[0]?.reference_files?.[0]).toBe(
+      '../benchmark/references/maplibre.md',
+    );
+    expect(source.tasks[0]?.data_files[0]).toMatch(/^data\//);
   });
 });

@@ -24,17 +24,21 @@ export function validateDirectMapLibreSemantics(
   const diagnostics: string[] = [];
   const order: number[] = [];
   for (const requirement of task.layers) {
-    const source = style.sources[requirement.source];
-    if (source === undefined) {
-      diagnostics.push(`maplibre.source-missing ${requirement.source}`);
-    } else if (!sourceUrlMatches(source['data'], requirement.source_file)) {
-      diagnostics.push(`maplibre.source-data-mismatch ${requirement.source}`);
+    const sourceMatches = Object.entries(style.sources).filter(([, source]) =>
+      sourceUrlMatches(source['data'], requirement.source_file),
+    );
+    const sourceId = sourceMatches.length === 1 ? sourceMatches[0]![0] : undefined;
+    if (sourceMatches.length === 0) {
+      diagnostics.push(`maplibre.source-file-missing ${requirement.source_file}`);
+    } else if (sourceMatches.length > 1) {
+      diagnostics.push(`maplibre.source-file-ambiguous ${requirement.source_file}`);
     }
     const matching = style.layers
       .map((layer, index) => ({ layer, index }))
       .filter(
         ({ layer }) =>
-          layer['source'] === requirement.source &&
+          sourceId !== undefined &&
+          layer['source'] === sourceId &&
           requirement.maplibre_types.includes(String(layer['type'])),
       );
     for (const type of requirement.maplibre_types) {
@@ -58,7 +62,12 @@ export function validateDirectMapLibreSemantics(
   const capability = task.capability_requirement;
   if (capability?.kind === 'unsupported-behavior') {
     const layer = task.layers.find((candidate) => candidate.id === capability.layer_id);
-    const source = layer === undefined ? undefined : style.sources[layer.source];
+    const source =
+      layer === undefined
+        ? undefined
+        : Object.values(style.sources).find((candidate) =>
+            sourceUrlMatches(candidate['data'], layer.source_file),
+          );
     if (
       source?.['cluster'] !== true ||
       source['clusterMaxZoom'] !== capability.max_zoom

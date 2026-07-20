@@ -129,6 +129,17 @@ describe('AtlasBench 0.2 semantic normalization', () => {
       accepted: true,
       diagnostics: [],
     });
+    (maplibre as unknown as { sources: Record<string, unknown> }).sources = {
+      'renamed-areas': maplibre.sources.areas,
+      'renamed-points': maplibre.sources.points,
+    };
+    for (const layer of maplibre.layers) {
+      layer.source = layer.source === 'areas' ? 'renamed-areas' : 'renamed-points';
+    }
+    expect(validateDirectMapLibreSemantics(maplibre, task)).toEqual({
+      accepted: true,
+      diagnostics: [],
+    });
     (maplibre.layers[1]!.paint as Record<string, unknown>)['circle-radius'] = 7;
     expect(validateDirectMapLibreSemantics(maplibre, task)).toEqual(
       expect.objectContaining({

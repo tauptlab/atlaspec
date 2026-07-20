@@ -160,9 +160,15 @@ function evaluateVegaLite(
   }
 
   let compiled: ReturnType<typeof compileVegaLite>;
+  let compilerWarnings: string[] = [];
   try {
-    compiled = compileVegaLite(value as unknown as TopLevelSpec);
-    parseVega(compiled.spec);
+    const captured = captureConsoleWarnings(() => {
+      const result = compileVegaLite(value as unknown as TopLevelSpec);
+      parseVega(result.spec);
+      return result;
+    });
+    compiled = captured.value;
+    compilerWarnings = captured.warnings;
   } catch (error) {
     return completed([
       check('vega-lite.parse', true, 'parsed JSON'),
@@ -174,6 +180,13 @@ function evaluateVegaLite(
   const checks = [
     check('vega-lite.parse', true, 'parsed JSON'),
     check('vega-lite.compile', true, 'compiled and parsed as Vega runtime'),
+    check(
+      'vega-lite.warnings',
+      compilerWarnings.length === 0,
+      compilerWarnings.length === 0
+        ? 'compiler emitted no warnings'
+        : compilerWarnings.join('; '),
+    ),
   ];
   appendRequiredChecks(
     checks,
@@ -182,6 +195,22 @@ function evaluateVegaLite(
     markTypes,
   );
   return completed(checks);
+}
+
+function captureConsoleWarnings<T>(run: () => T): {
+  value: T;
+  warnings: string[];
+} {
+  const originalWarn = console.warn;
+  const warnings: string[] = [];
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(errorMessage).join(' '));
+  };
+  try {
+    return { value: run(), warnings };
+  } finally {
+    console.warn = originalWarn;
+  }
 }
 
 function collectVegaLiteMarks(value: unknown, result = new Set<string>()): Set<string> {

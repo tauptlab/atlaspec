@@ -78,6 +78,37 @@ describe('generated map evaluation', () => {
     );
   });
 
+  it('rejects Vega-Lite when compilation silently drops an encoding', () => {
+    const output = JSON.stringify({
+      data: {
+        values: {
+          type: 'FeatureCollection',
+          features: [],
+        },
+      },
+      mark: 'geoshape',
+      encoding: {
+        x: { field: 'risk', type: 'quantitative' },
+        color: { field: 'risk', type: 'quantitative' },
+      },
+    });
+
+    const result = evaluateGeneratedOutput(
+      'direct-vega-lite',
+      output,
+      requirements,
+    );
+
+    expect(result.accepted).toBe(false);
+    expect(result.checks).toContainEqual(
+      expect.objectContaining({
+        code: 'vega-lite.warnings',
+        passed: false,
+        detail: expect.stringContaining('x dropped'),
+      }),
+    );
+  });
+
   it('keeps malformed and semantically incomplete outputs in failure', () => {
     expect(
       evaluateGeneratedOutput('direct-maplibre', '{}', requirements).accepted,

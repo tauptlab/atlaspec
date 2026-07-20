@@ -1,106 +1,400 @@
+<div align="center">
+
 # Atlaspec
 
-Atlaspec is an intent-first cartographic intermediate representation for agents
-and humans. It turns compact, semantic map specifications into deterministic
-renderer-native output while keeping data correctness, accessibility, and
-cartographic constraints testable.
+### Intent-first map specifications for reliable AI-generated cartography
 
-The project is benchmark-first. Its primary claim is not that Atlaspec is a
-shorter syntax; it is that an agent can produce an accepted map more reliably
-and at lower total cost than when it writes renderer configuration directly.
+Atlaspec lets an agent describe **what a map should communicate** while a
+deterministic compiler decides **how the renderer should implement it**.
 
-## Status
+[![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-f59e0b)](#project-status)
+[![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](package.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?logo=typescript&logoColor=white)](src)
+[![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
 
-Atlaspec is in pre-alpha development. Version 0.1 is limited to two-dimensional
-thematic maps and a MapLibre Style Specification compilation target.
+**Semantic YAML in. Valid MapLibre Style Specification out.**
 
-The initial map families are:
+</div>
 
-- choropleth maps;
-- proportional-symbol maps;
-- categorical point maps;
-- density and heat maps.
+> [!IMPORTANT]
+> Atlaspec is pre-alpha research software. Version 0.1 supports four kinds of
+> two-dimensional thematic maps and compiles to MapLibre Style Specification
+> v8. The package has not been published to a registry yet.
 
-Navigation, 3D scenes, raster analysis, and general-purpose GIS processing are
-explicitly out of scope for version 0.1.
+## Why Atlaspec exists
 
-## Planned pipeline
+Modern coding agents can write MapLibre or Vega-Lite, but renderer-native map
+configuration has a large and brittle generation surface. A model must get
+layer types, expressions, sources, scales, legends, missing-value behavior,
+zoom rules, and accessibility choices right at the same time. A syntactically
+plausible output can still be invalid or cartographically misleading.
 
-```text
-natural language or UI
-        |
-        v
-Atlaspec CIR document
-        |
-        +--> schema validation
-        +--> cartographic linting
-        +--> deterministic decision trace
-        v
-MapLibre style document
+Atlaspec moves those decisions across a trust boundary:
+
+| The agent specifies | Atlaspec verifies or derives |
+|---|---|
+| map-reading intent and audience | strict document structure |
+| field measurement and semantic types | valid field/source relationships |
+| geometry and visual channel intent | renderer expressions and layer types |
+| mandatory constraints | palettes, domains, symbol-area scales, and legends |
+| semantic zoom behavior | MapLibre sources, filters, and zoom configuration |
+
+This is more than a shorter syntax. It reduces the amount of renderer-specific
+code an agent must invent and replaces it with versioned validation and
+deterministic compilation.
+
+During the frozen local holdout, direct MapLibre outputs failed because they
+embedded source objects where source IDs were required, nested `zoom`
+expressions illegally, used data expressions in unsupported properties, or
+produced invalid text offsets. Atlaspec exposed none of those authoring
+surfaces to the model, and all Atlaspec outputs compiled successfully.
+
+## Evidence so far
+
+Atlaspec was evaluated once on a frozen holdout containing 12 tasks across four
+map families and three difficulty levels. Each task-condition-agent tuple was
+run five times with balanced condition order.
+
+| Local agent | Direct MapLibre | Atlaspec | Yield delta | Output-token reduction |
+|---|---:|---:|---:|---:|
+| Codex CLI 0.144.4 | 54/60 (90%) | **60/60 (100%)** | **+10 pp** | **77.3% lower** |
+| Claude Code 2.1.17 | 54/60 (90%) | **60/60 (100%)** | **+10 pp** | **59.4% lower** |
+
+- 450/450 planned runs completed across six independently verified shards.
+- The 95% confidence interval for the yield delta was **+3.3 to +18.3
+  percentage points** for each agent.
+- The output-token reduction intervals were **74.1–80.5%** for Codex and
+  **51.2–66.9%** for Claude.
+- Atlaspec and Atlaspec-repair both achieved 60/60 first-attempt acceptance for
+  each agent; no repair call was needed.
+- Claude's reported charge per accepted map was 38.0% lower and latency per
+  accepted map was 51.6% lower. Codex latency was 63.9% lower, but its monetary
+  charge was unavailable.
+
+These are strong local-agent results, not a completed universal claim. Codex
+uncached tokens per accepted map were 0.9% worse despite its much smaller
+output. Hosted model strata, human map-reading accuracy, blind cartographer
+review, edit survival, and comprehensive visual checks remain outstanding.
+Absolute token counts are not compared between Codex and Claude because their
+CLI accounting and cache semantics differ.
+
+Read the immutable evidence and limitations in the
+[holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md), its
+[pre-execution lock](docs/LOCAL_HOLDOUT_LOCK_2026-07-20.md), and the
+[benchmark contract](docs/BENCHMARK.md). The holdout is consumed and must not
+be used to tune Atlaspec 0.1 or run a second confirmation.
+
+## How it works
+
+```mermaid
+flowchart LR
+    U["Natural-language map request"] --> A["AI agent or human author"]
+    R["Schema-derived generation reference"] --> A
+    A --> D["Atlaspec 0.1 document"]
+    D --> V["Strict schema validation"]
+    V --> L["Cartographic semantic linting"]
+    L --> C["Deterministic compiler"]
+    C --> M["MapLibre Style v8"]
+    C --> T["Decision trace and legend metadata"]
+    V -.->|stable diagnostics| A
+    L -.->|stable diagnostics| A
 ```
 
-## Project contracts
+The compiler records every inferred decision—such as palette, domain, symbol
+scale, basemap, or clustering—in `metadata["atlaspec:decisions"]`. Generated
+styles also retain the original intent and a machine-readable legend
+descriptor. Identical Atlaspec input and compiler versions produce identical
+renderer decisions.
 
-- [Version 0.1 scope](docs/SCOPE.md)
-- [Benchmark and success criteria](docs/BENCHMARK.md)
-- [Failed initial local qualification](docs/LOCAL_QUALIFICATION_2026-07-20.md)
-- [Post-fix local R&D and closure probe](docs/LOCAL_POSTFIX_RND_2026-07-20.md)
-- [One-time local holdout lock](docs/LOCAL_HOLDOUT_LOCK_2026-07-20.md)
-- [One-time local holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md)
+## Quick start
 
-These documents are steering constraints. Changes to them must be explicit and
-must not be made merely to accommodate observed benchmark results.
-
-## Development usage
+Atlaspec currently runs from a source checkout and requires Node.js 20 or
+newer.
 
 ```powershell
 npm install
 npm run check
-npm run atlaspec -- validate examples/flood-risk.atlas.yaml
-npm run atlaspec -- validate examples/shelter-capacity.atlas.yaml --json
-npm run atlaspec -- compile examples/flood-risk.atlas.yaml
-npm run atlaspec -- compile examples/shelter-capacity.atlas.yaml --output shelter-style.json
 ```
 
-Validation has two stages: strict schema validation followed by deterministic
-cartographic linting. Diagnostics have stable, grep-friendly codes so agents can
-repair a document without parsing prose or relying on a visual judge.
+Validate an example:
 
-Compilation emits a MapLibre v8 style with Atlaspec intent, legend metadata, and
-a deterministic decision trace. The trace records every inferred palette,
-domain, scale, basemap, and clustering decision together with its reason.
+```powershell
+npm run atlaspec -- validate examples/flood-risk.atlas.yaml
+```
 
-Run the executable compiler pilot benchmark with:
+```text
+VALID .../examples/flood-risk.atlas.yaml
+```
+
+Compile it to a MapLibre style:
+
+```powershell
+npm run atlaspec -- compile examples/flood-risk.atlas.yaml `
+  --output flood-risk.style.json
+```
+
+The resulting JSON is a MapLibre Style Specification v8 document that can be
+passed to a MapLibre map as its `style`.
+
+## An Atlaspec document
+
+The following is a shortened but valid choropleth specification. The agent
+declares that `flood_probability` is a normalized probability; it does not
+write a MapLibre color expression, palette array, legend object, or missing-
+value filter.
+
+```yaml
+version: "0.1"
+map: flood-risk
+title: Flood risk by district
+family: choropleth
+
+intent:
+  task: compare
+  audience: general-public
+  primary_message: Identify districts with the highest flood probability.
+
+data:
+  sources:
+    - id: districts
+      type: geojson
+      url: ./data/districts.geojson
+  fields:
+    flood_probability:
+      source: districts
+      path: flood_probability
+      measurement: quantitative
+      semantic_type: probability
+      unit: ratio
+      normalization: ratio
+      range: [0, 1]
+
+encoding:
+  geometry: {source: districts, support: polygon}
+  color: {field: flood_probability, classification: continuous}
+
+constraints:
+  colorblind_safe: true
+  missing_data: explicit
+  raw_count_choropleth: reject
+  viewport: {width: 960, height: 640}
+
+basemap: {style: minimal-light, contrast: light}
+```
+
+The compiled style includes an auditable explanation of inferred renderer
+choices:
+
+```json
+{
+  "atlaspec:legend": {
+    "field": "flood_probability",
+    "semantic_type": "probability",
+    "unit": "ratio",
+    "range": [0, 1]
+  },
+  "atlaspec:decisions": [
+    {
+      "code": "color.palette-inferred",
+      "path": "/encoding/color",
+      "reason": "probability semantics determine the default palette family."
+    }
+  ]
+}
+```
+
+Complete runnable examples:
+
+- [Flood-risk choropleth](examples/flood-risk.atlas.yaml)
+- [Emergency-shelter proportional symbols](examples/shelter-capacity.atlas.yaml)
+
+## Supported in version 0.1
+
+| Family | Geometry | Required encoding | Key semantic protection |
+|---|---|---|---|
+| Choropleth | polygon | ordered `color` field | raw counts rejected by default |
+| Proportional symbol | point | quantitative `size` field | symbol area is proportional to value |
+| Categorical point | point | nominal `category` field | explicit domain and safe palette |
+| Heatmap | point or grid | optional ordered `weight` field | concentration remains distinct from magnitude |
+
+Supported intent includes locate, compare, rank, distribution, and distinguish.
+Fields declare a measurement level—nominal, ordinal, quantitative, or
+temporal—and a semantic type such as category, count, rate, probability,
+delta, rank, capacity, uncertainty, identifier, or label.
+
+See the complete [0.1 scope](docs/SCOPE.md). Routing, spatial analysis, tile
+production, raster processing, navigation, 3D terrain, and application UI are
+deliberate non-goals. Atlaspec complements GeoJSON and MapLibre; it does not
+replace them.
+
+## Validation and diagnostics
+
+Validation is fail-closed and has two stages:
+
+1. strict schema validation rejects unknown keys, invalid types, and unsupported
+   enum values;
+2. semantic linting rejects misleading or inconsistent cartography.
+
+Diagnostics have stable, grep-friendly codes and JSON Pointer paths. Examples
+include:
+
+- `choropleth.raw-count` for an unnormalized raw-count choropleth;
+- `field.probability-range` for a probability outside `[0, 1]`;
+- `encoding.cross-source-field` for an encoding bound to another source;
+- `behavior.invalid-zoom-range` for contradictory semantic zoom bounds;
+- `family.geometry-mismatch` for a family/geometry incompatibility.
+
+Machine-readable validation is available for agents and CI:
+
+```powershell
+npm run atlaspec -- validate examples/shelter-capacity.atlas.yaml --json
+```
+
+A non-valid document exits non-zero. Compilation also refuses to emit a style
+when any error diagnostic remains.
+
+## CLI reference
+
+| Command | Purpose |
+|---|---|
+| `npm run atlaspec -- validate <file>` | validate YAML or JSON and print diagnostics |
+| `npm run atlaspec -- validate <file> --json` | emit a machine-readable validation report |
+| `npm run atlaspec -- compile <file>` | write the compiled MapLibre style to stdout |
+| `npm run atlaspec -- compile <file> -o <style.json>` | write the style to a file |
+| `npm run atlaspec -- --help` | show all available commands |
+
+After `npm run build`, the compiled CLI entry point is `dist/cli.js`. The
+`atlaspec` binary declaration is already present for a future package release.
+
+## Programmatic API
+
+```ts
+import { writeFile } from 'node:fs/promises';
+import { compileMapLibre, loadDocument } from 'atlaspec';
+
+const document = await loadDocument('maps/flood-risk.atlas.yaml');
+const result = compileMapLibre(document);
+
+if (!result.ok) {
+  for (const diagnostic of result.diagnostics) {
+    console.error(diagnostic.code, diagnostic.path, diagnostic.message);
+  }
+  process.exitCode = 1;
+} else {
+  await writeFile(
+    'maps/flood-risk.style.json',
+    `${JSON.stringify(result.style, null, 2)}\n`,
+  );
+  console.log(result.decisions);
+}
+```
+
+The package exports the TypeBox schemas, inferred TypeScript types, document
+loader/parser, validator, linter, MapLibre compiler, diagnostics, decision
+records, and compiled style types from [src/index.ts](src/index.ts).
+
+## Using Atlaspec with an AI agent
+
+The benchmark generation reference is produced from the live schema rather
+than maintained as a separate handwritten grammar:
+
+```powershell
+npm run reference:atlaspec:generate
+npm run reference:atlaspec:check
+```
+
+Give [benchmark/references/atlaspec.md](benchmark/references/atlaspec.md) to the
+agent alongside the map request and GeoJSON. Ask for exactly one Atlaspec YAML
+document. Validate the response, return stable diagnostics if it fails, and
+compile only after validation succeeds.
+
+This reference-driven workflow matters: early development measurements exposed
+agent-specific failures caused by omitted enum and collection-shape details.
+Generating the reference from the actual schema closed that drift and led to
+120/120 accepted Atlaspec holdout generations across the two local agents.
+
+## Benchmarking and reproducibility
+
+Atlaspec is benchmark-first. Failed generations remain in the denominator, and
+automated checks validate real renderer output rather than accepting a model's
+description of its own success.
+
+Run the deterministic compiler smoke benchmark:
 
 ```powershell
 npm run benchmark:smoke
 ```
 
-The pilot reports Reliable Map Yield for all four supported families and fails
-the process if any schema, semantic, MapLibre, layer, or decision-trace check
-regresses. It is infrastructure for the full model comparison, not a substitute
-for the pre-committed 48-task benchmark.
-
-Run provider-neutral comparative experiments with:
+Verify the frozen 48-task corpus and generated agent reference:
 
 ```powershell
-npm run atlasbench -- `
-  --manifest benchmark/comparison.example.json `
-  --adapter node `
-  --adapter-arg=path/to/provider-adapter.mjs `
-  --report work/comparison-report.json
+npm run corpus:check
+npm run reference:atlaspec:check
 ```
 
-See [the AtlasBench harness](benchmark/README.md) and
-[generation adapter contract](benchmark/ADAPTER.md). Comparative reports keep
-failed attempts in the denominator and distinguish automated gates from the
-still-required human and multi-model evidence.
+The comparative harness supports direct MapLibre, direct Vega-Lite, Atlaspec,
+and Atlaspec with one repair opportunity. It records prompts, raw outputs,
+digests, resolved model identities, tokens, charges when available, latency,
+tool calls, validation checks, compiler commits, and every failed attempt.
 
-The frozen benchmark corpus contains 48 cells, split into 36 development and 12
-holdout tasks. Validate it with `npm run corpus:check` and create model-specific
-run manifests with `npm run corpus:prepare`; frozen manifests should not be
-edited directly.
+Start with:
+
+- [AtlasBench harness](benchmark/README.md)
+- [Generation adapter contract](benchmark/ADAPTER.md)
+- [Benchmark and success gates](docs/BENCHMARK.md)
+- [Official raw-API runbook](docs/OFFICIAL_BENCHMARK_RUNBOOK.md)
+- [Initial failed local qualification](docs/LOCAL_QUALIFICATION_2026-07-20.md)
+- [Post-fix R&D](docs/LOCAL_POSTFIX_RND_2026-07-20.md)
+- [One-time local holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md)
+
+The local automated pass is intentionally narrower than the complete benchmark
+contract. It does not substitute for human accuracy, expert review, edit
+survival, hosted-model reproduction, or comprehensive visual evaluation.
+
+## Repository map
+
+```text
+src/                    schema, validation, linting, and MapLibre compiler
+examples/               runnable Atlaspec documents and local GeoJSON
+benchmark/              AtlasBench harness, adapters, references, and corpus
+benchmark/corpus/       frozen 36-development / 12-holdout task matrix
+docs/                   scope, benchmark contracts, runbooks, and evidence
+```
+
+## Project status
+
+Atlaspec 0.1 is pre-alpha. The schema, compiler, diagnostics, four initial map
+families, MapLibre backend, benchmark harness, and frozen corpus are executable.
+The strongest current evidence is the completed local-agent holdout above.
+
+Work still required before a stable release includes:
+
+- hosted raw-API reproduction across pre-committed model strata;
+- rendered screenshot and viewport-level quality validation;
+- blind human map-reading and cartographer review;
+- edit-survival and ablation studies;
+- package publication, compatibility policy, and migration tooling;
+- evaluation of additional map families and compiler backends.
+
+## Contributing
+
+Atlaspec welcomes focused issues and pull requests, especially around semantic
+validation, cartographic failure cases, compiler determinism, renderer-valid
+output, and reproducible evaluation.
+
+Before submitting a change:
+
+```powershell
+npm install
+npm run check
+npm run build
+```
+
+`npm run check` runs TypeScript checking, all tests, frozen corpus integrity,
+and generated-reference freshness. Benchmark thresholds and holdout results are
+project contracts: changes must be explicit and must never be made merely to
+fit an observed result.
 
 ## License
 
-MIT
+[MIT](LICENSE) © 2026 Atlaspec contributors

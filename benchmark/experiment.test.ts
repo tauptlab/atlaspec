@@ -179,6 +179,50 @@ describe('AtlasBench comparison runner', () => {
       }),
     );
   });
+
+  it('counterbalances conditions across tasks and repetitions when declared', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'atlasbench-balanced-'));
+    const manifestPath = join(directory, 'manifest.json');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        version: '0.1',
+        suite: 'balanced-pilot',
+        repetitions: 2,
+        execution_order: 'balanced',
+        model: { provider: 'fixture', model: 'missing', version: '1' },
+        sampling: { temperature: 0 },
+        tasks: ['first', 'second'].map((id) => ({
+          id,
+          family: 'choropleth',
+          data_files: [resolve('examples', 'data', 'districts.geojson')],
+          conditions: ['direct-maplibre', 'atlaspec'].map((condition) => ({
+            condition,
+            prompt: `Return ${condition}.`,
+            requirements: {},
+          })),
+        })),
+      }),
+      'utf8',
+    );
+
+    const report = await runExperiment(
+      manifestPath,
+      new ReplayGenerationAdapter([]),
+    );
+    expect(
+      report.runs.map((run) => run.attempts[0]!.request.condition),
+    ).toEqual([
+      'direct-maplibre',
+      'atlaspec',
+      'atlaspec',
+      'direct-maplibre',
+      'atlaspec',
+      'direct-maplibre',
+      'direct-maplibre',
+      'atlaspec',
+    ]);
+  });
 });
 
 function response(

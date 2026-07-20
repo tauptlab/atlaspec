@@ -76,6 +76,12 @@ export const ExperimentManifestSchema = Type.Object(
     version: Type.Literal('0.1'),
     suite: Type.String({ minLength: 1 }),
     repetitions: Type.Integer({ minimum: 1 }),
+    execution_order: Type.Optional(
+      Type.Union([
+        Type.Literal('condition-major'),
+        Type.Literal('balanced'),
+      ]),
+    ),
     model: ModelIdentitySchema,
     sampling: SamplingSchema,
     tasks: Type.Array(ExperimentTaskSchema, { minItems: 1 }),
@@ -135,12 +141,14 @@ export async function runExperiment(
 
   const compilerCommit = await readCommit();
   const runs: RunRecord[] = [];
+  const preparedTasks: PreparedTask[] = [];
   for (const task of value.tasks) {
     const dataInputs = await loadInputs(
       dirname(absoluteManifest),
       task.data_files,
       'data',
     );
+    const conditions: PreparedCondition[] = [];
     for (const condition of task.conditions) {
       const referenceInputs = await loadInputs(
         dirname(absoluteManifest),
@@ -149,22 +157,29 @@ export async function runExperiment(
       );
       const inputs = [...dataInputs, ...referenceInputs];
       assertUniqueInputPaths(task.id, condition.condition, inputs);
-      for (let repetition = 1; repetition <= value.repetitions; repetition += 1) {
-        runs.push(
-          await runCondition({
-            suite: value.suite,
-            task,
-            condition,
-            repetition,
-            model: value.model,
-            sampling: value.sampling,
-            inputs,
-            compilerCommit,
-            adapter,
-          }),
-        );
-      }
+      conditions.push({ condition, inputs });
     }
+    preparedTasks.push({ task, conditions });
+  }
+
+  for (const item of executionSchedule(
+    preparedTasks,
+    value.repetitions,
+    value.execution_order ?? 'condition-major',
+  )) {
+    runs.push(
+      await runCondition({
+        suite: value.suite,
+        task: item.task,
+        condition: item.condition,
+        repetition: item.repetition,
+        model: value.model,
+        sampling: value.sampling,
+        inputs: item.inputs,
+        compilerCommit,
+        adapter,
+      }),
+    );
   }
 
   return {
@@ -176,6 +191,51 @@ export async function runExperiment(
     runs,
     summaries: summarizeRuns(runs),
   };
+}
+
+interface PreparedCondition {
+  condition: ConditionConfig;
+  inputs: InputArtifact[];
+}
+
+interface PreparedTask {
+  task: ExperimentTask;
+  conditions: PreparedCondition[];
+}
+
+interface ScheduledCondition extends PreparedCondition {
+  task: ExperimentTask;
+  repetition: number;
+}
+
+function executionSchedule(
+  tasks: readonly PreparedTask[],
+  repetitions: number,
+  order: 'condition-major' | 'balanced',
+): ScheduledCondition[] {
+  const schedule: ScheduledCondition[] = [];
+  if (order === 'condition-major') {
+    for (const prepared of tasks) {
+      for (const condition of prepared.conditions) {
+        for (let repetition = 1; repetition <= repetitions; repetition += 1) {
+          schedule.push({ ...condition, task: prepared.task, repetition });
+        }
+      }
+    }
+    return schedule;
+  }
+
+  for (let repetition = 1; repetition <= repetitions; repetition += 1) {
+    for (const [taskIndex, prepared] of tasks.entries()) {
+      const count = prepared.conditions.length;
+      const offset = (taskIndex + repetition - 1) % count;
+      for (let index = 0; index < count; index += 1) {
+        const condition = prepared.conditions[(index + offset) % count]!;
+        schedule.push({ ...condition, task: prepared.task, repetition });
+      }
+    }
+  }
+  return schedule;
 }
 
 interface RunConditionOptions {

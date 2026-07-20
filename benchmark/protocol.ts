@@ -10,6 +10,13 @@ export const BenchmarkConditionSchema = Type.Union([
   Type.Literal('atlaspec-repair'),
 ]);
 
+export const GenerationConditionSchema = Type.Union([
+  BenchmarkConditionSchema,
+  Type.Literal('atlaspec-maplibre'),
+  Type.Literal('atlaspec-vega-lite'),
+  Type.Literal('vega-capability-negative'),
+]);
+
 export const ModelIdentitySchema = Type.Object(
   {
     provider: Type.String({ minLength: 1 }),
@@ -56,9 +63,9 @@ export const GenerationRequestSchema = Type.Object(
     request_id: Type.String({ minLength: 1 }),
     suite: Type.String({ minLength: 1 }),
     task_id: Type.String({ minLength: 1 }),
-    condition: BenchmarkConditionSchema,
+    condition: GenerationConditionSchema,
     repetition: Type.Integer({ minimum: 1 }),
-    attempt: Type.Integer({ minimum: 1, maximum: 2 }),
+    attempt: Type.Integer({ minimum: 1, maximum: 3 }),
     model: ModelIdentitySchema,
     sampling: SamplingSchema,
     prompt: Type.String({ minLength: 1 }),
@@ -144,6 +151,7 @@ export const RunRecordSchema = Type.Object(
 );
 
 export type BenchmarkCondition = Static<typeof BenchmarkConditionSchema>;
+export type GenerationCondition = Static<typeof GenerationConditionSchema>;
 export type ModelIdentity = Static<typeof ModelIdentitySchema>;
 export type Sampling = Static<typeof SamplingSchema>;
 export type InputArtifact = Static<typeof InputArtifactSchema>;

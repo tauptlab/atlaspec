@@ -59,7 +59,7 @@ export interface V02EvaluationManifest {
   version: '0.2';
   suite: string;
   repetitions: 5;
-  status: 'contract-locked-runner-pending';
+  status: 'runner-ready-model-runs-pending';
   tasks: V02ManifestTask[];
 }
 
@@ -208,7 +208,7 @@ function manifest(
     version: '0.2',
     suite,
     repetitions: 5,
-    status: 'contract-locked-runner-pending',
+    status: 'runner-ready-model-runs-pending',
     tasks,
   };
 }

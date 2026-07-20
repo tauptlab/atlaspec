@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { renderAtlaspecReference } from './generate-atlaspec.js';
+import {
+  renderAtlaspecReference,
+  renderAtlaspecV02Reference,
+} from './generate-atlaspec.js';
 
 describe('schema-derived Atlaspec generation reference', () => {
   it('exposes exhaustive enums and forbids observed invented keys', () => {
@@ -17,5 +20,14 @@ describe('schema-derived Atlaspec generation reference', () => {
     expect(reference).toContain('label_priority: array of strings');
     expect(reference).toContain('never a string or boolean');
     expect(reference).toContain('Do not put arrays or nested objects in metadata.');
+  });
+
+  it('derives the ordered multi-layer 0.2 grammar separately from 0.1', () => {
+    const reference = renderAtlaspecV02Reference();
+    expect(reference).toContain('# Atlaspec 0.2 generation reference');
+    expect(reference).toContain('ordered `layers` array');
+    expect(reference).toContain('purpose: `primary`, `supporting`, `reference`');
+    expect(reference).toContain('Put `missing_data` and `raw_count_choropleth` on');
+    expect(reference).toContain('version: "0.2"');
   });
 });

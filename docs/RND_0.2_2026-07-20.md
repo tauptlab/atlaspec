@@ -83,8 +83,9 @@ and compiler-produced artifacts now share a verified renderer-neutral semantic
 record. Metadata-free direct renderer outputs are checked against locked
 source, role, order, and field contracts, and development/holdout manifests are
 generated. A deterministic 48-task, 214-condition evaluator dry-run passes with
-zero model calls. The model-generation runner, complete two-turn edit-survival
-evaluator, and model runs remain pending.
+zero model calls. The auditable local model runner and complete localized
+second-turn evaluator are now implemented, but neither development nor holdout
+model calls have been made with them yet.
 
 ## Current conclusion
 

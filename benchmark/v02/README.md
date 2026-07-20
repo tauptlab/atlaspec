@@ -24,6 +24,7 @@ Regenerate and verify the matrix with:
 npm run corpus:v02:generate
 npm run corpus:v02:check
 npm run benchmark:v02:dry-run
+npm run benchmark:v02:run -- --help
 ```
 
 The deterministic dry-run currently replays all 48 tasks and 214 declared
@@ -38,11 +39,31 @@ sets, and development/holdout manifests are locked. Compiler-produced MapLibre a
 Vega-Lite artifacts now carry and verify a common semantic record, including
 an unrelated-layer edit-survival comparison. Metadata-free direct MapLibre and
 Vega-Lite artifacts are checked for source files, authored order, renderer
-roles, and field bindings against the locked task contracts. The model-generation
-runner, complete two-turn edit evaluator, development model runs, and one-time
-holdout runs are still pending. `status: contracts-locked-runner-pending` is
-part of the generated artifact so the corpus cannot be mistaken for an
-executable or completed benchmark.
+roles, and field bindings against the locked task contracts. The model runner
+now preserves prompts, inputs, raw responses, token/charge/latency records,
+validation failures, one diagnostic repair, and localized second-turn edits.
+It refuses to overwrite a report. `status: runner-ready-model-runs-pending`
+means the executable contract is ready, but no v0.2 performance evidence has
+yet been produced.
+
+Run a small development qualification before any full matrix:
+
+```powershell
+$codex = (codex --version).Trim()
+npm run benchmark:v02:run -- `
+  --manifest benchmark/v02/development.manifest.json `
+  --output .atlasbench/v02/codex-qualification.json `
+  --provider codex-cli `
+  --model default `
+  --version "$codex;model=unreported" `
+  --repetitions 1 `
+  --task-id choropleth-proportional-symbols-basic-missing-and-skew
+```
+
+For Claude, use `--provider claude-cli`, pass the CLI selector with `--model`,
+and pass the exact resolved model ID reported by Claude Code with `--version`.
+Development repetition overrides are qualification-only. The one-time holdout
+must use the committed five repetitions and must never be used for tuning.
 
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked

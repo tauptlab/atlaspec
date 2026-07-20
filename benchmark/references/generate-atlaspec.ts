@@ -2,11 +2,14 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import {
+  AtlaspecLayerSchema,
   AtlaspecV01Schema,
+  AtlaspecV02Schema,
   DataSourceSchema,
   EncodingSchema,
   FieldSchema,
   MapFamilySchema,
+  LayerPurposeSchema,
   SpatialSupportSchema,
 } from '../../src/schema.js';
 
@@ -174,20 +177,129 @@ derives MapLibre \`metadata["atlaspec:legend"]\`.
 `;
 }
 
-const target = resolve('benchmark', 'references', 'atlaspec.md');
+export function renderAtlaspecV02Reference(): string {
+  const root = node(AtlaspecV02Schema);
+  const layer = node(AtlaspecLayerSchema);
+  const encoding = property(layer, 'encoding');
+  const layerConstraints = property(layer, 'constraints');
+  const behavior = property(layer, 'behavior');
+  const zoomRule = property(behavior, 'zoom_rules').items!;
+  const globalConstraints = property(root, 'constraints');
+  const sourceAlternatives = node(DataSourceSchema).anyOf ?? [];
+
+  return `# Atlaspec 0.2 generation reference
+
+Return exactly one YAML document beginning with \`version:\`. Do not emit prose,
+Markdown fences, backticks, headings, or a \`---\` marker. Unknown keys are
+rejected. Atlaspec 0.2 represents one ordered map as an ordered \`layers\` array.
+
+Key notation: \`*\` means required; all unmarked keys are optional.
+
+- document: ${keyList(root)}
+  - version: \`0.2\`
+- intent: ${keyList(property(root, 'intent'))}
+- data: ${keyList(property(root, 'data'))}
+- each source, exactly one shape:
+${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enumValues(property(schema, 'type')))}`).join('\n')}
+- each field: ${keyList(node(FieldSchema))}
+  - measurement: ${values(enumValues(property(node(FieldSchema), 'measurement')))}
+  - semantic_type: ${values(enumValues(property(node(FieldSchema), 'semantic_type')))}
+  - normalization: ${values(enumValues(property(node(FieldSchema), 'normalization')))}
+  - range is exactly two numbers; domain is an array of unique strings
+- each layer: ${keyList(layer)}
+  - purpose: ${values(enumValues(node(LayerPurposeSchema)))}
+  - family: ${values(enumValues(node(MapFamilySchema)))}
+  - encoding: ${keyList(encoding)}
+  - geometry: ${keyList(property(encoding, 'geometry'))}
+  - color: ${keyList(property(encoding, 'color'))}
+  - size, category, label, and weight contain only \`field\`
+  - constraints: ${keyList(layerConstraints)}
+  - missing_data: ${values(enumValues(property(layerConstraints, 'missing_data')))}
+  - behavior: ${keyList(behavior)}
+  - each zoom rule: ${keyList(zoomRule)}
+  - zoom target: ${values(enumValues(property(zoomRule, 'target')))}
+  - zoom action: ${values(enumValues(property(zoomRule, 'action')))}
+- global constraints: ${keyList(globalConstraints)}
+  - viewport: ${keyList(property(globalConstraints, 'viewport'))}
+- basemap: ${keyList(property(root, 'basemap'))}
+
+Every field reference in a layer must name a key in \`data.fields\`; that field's
+\`source\` must match the layer geometry source. Keep layer IDs stable and keep
+the authored layer order. Put \`missing_data\` and \`raw_count_choropleth\` on
+the layer, while viewport and colorblind safety are global constraints. Put
+semantic zoom only in the relevant layer's \`behavior.zoom_rules\`.
+
+Family requirements:
+
+- choropleth: polygon geometry plus ordered color; raw counts need normalization
+  or \`raw_count_choropleth: allow\`;
+- proportional-symbol: point geometry plus quantitative size;
+- categorical-point: point geometry plus nominal category with a string domain;
+- heatmap: point or grid geometry and optional ordinal or quantitative weight.
+
+There is no authored legend key. Legends, scales, palettes, symbol radii, and
+heatmap kernels are compiler-derived from field semantics and encodings.
+
+Complete two-layer shape:
+
+\`\`\`yaml
+version: "0.2"
+map: stable-map
+title: Stable map
+intent:
+  task: compare
+  audience: operations
+  primary_message: Compare regional risk and facility capacity.
+data:
+  sources:
+    - {id: areas, type: geojson, url: data/areas.geojson}
+    - {id: sites, type: geojson, url: data/sites.geojson}
+  fields:
+    risk:
+      {source: areas, path: risk_rate, measurement: quantitative, semantic_type: probability, normalization: ratio, range: [0, 1]}
+    capacity:
+      {source: sites, path: capacity, measurement: quantitative, semantic_type: capacity, unit: people, normalization: none, range: [0, 10000]}
+layers:
+  - id: risk
+    purpose: primary
+    family: choropleth
+    encoding:
+      geometry: {source: areas, support: polygon}
+      color: {field: risk}
+    constraints: {missing_data: explicit, raw_count_choropleth: reject}
+  - id: sites
+    purpose: supporting
+    family: proportional-symbol
+    encoding:
+      geometry: {source: sites, support: point}
+      size: {field: capacity}
+    constraints: {missing_data: error}
+constraints: {colorblind_safe: true, viewport: {width: 960, height: 640}}
+basemap: {style: minimal-light, contrast: light}
+\`\`\`
+`;
+}
+
+const targets = [
+  [resolve('benchmark', 'references', 'atlaspec.md'), renderAtlaspecReference()],
+  [resolve('benchmark', 'references', 'atlaspec-v02.md'), renderAtlaspecV02Reference()],
+] as const;
 if (process.argv[1]?.endsWith('generate-atlaspec.ts')) {
-  const expected = renderAtlaspecReference();
   if (process.argv.includes('--check')) {
-    const actual = await readFile(target, 'utf8');
-    if (actual !== expected) {
-      console.error('Atlaspec generation reference is stale.');
-      process.exitCode = 1;
-    } else {
-      console.log('VERIFIED Atlaspec generation reference');
+    for (const [target, expected] of targets) {
+      const actual = await readFile(target, 'utf8');
+      if (actual !== expected) {
+        console.error(`Atlaspec generation reference is stale: ${target}`);
+        process.exitCode = 1;
+      } else {
+        console.log(`VERIFIED Atlaspec generation reference: ${target}`);
+      }
     }
   } else {
-    await writeFile(target, expected, 'utf8');
-    console.log(`WROTE ${target}`);
+    for (const [target, expected] of targets) {
+      await writeFile(target, expected, 'utf8');
+      console.log(`WROTE ${target}`);
+    }
   }
 }
 

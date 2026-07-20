@@ -2,7 +2,7 @@
   "version": "0.2",
   "suite": "atlasbench-v02-48-holdout",
   "repetitions": 5,
-  "status": "contract-locked-runner-pending",
+  "status": "runner-ready-model-runs-pending",
   "tasks": [
     {
       "id": "choropleth-proportional-symbols-basic-canonical",

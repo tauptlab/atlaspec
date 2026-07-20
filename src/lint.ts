@@ -336,7 +336,8 @@ function lintZoomRules(
   document: AtlaspecV01Document,
   diagnostics: Diagnostic[],
 ): void {
-  for (const [index, rule] of (document.behavior?.zoom_rules ?? []).entries()) {
+  const rules = document.behavior?.zoom_rules ?? [];
+  for (const [index, rule] of rules.entries()) {
     const root = `/behavior/zoom_rules/${index}`;
     if (
       rule.min_zoom !== undefined &&
@@ -394,6 +395,20 @@ function lintZoomRules(
         path: `${root}/target`,
       });
     }
+  }
+
+  const clusterRules = rules
+    .map((rule, index) => ({ rule, index }))
+    .filter(
+      ({ rule }) => rule.target === 'symbols' && rule.action === 'cluster',
+    );
+  if (clusterRules.length > 1) {
+    diagnostics.push({
+      code: 'behavior.multiple-cluster-rules',
+      severity: 'error',
+      message: 'A layer may declare only one symbol clustering rule.',
+      path: `/behavior/zoom_rules/${clusterRules[1]!.index}`,
+    });
   }
 }
 
@@ -558,6 +573,25 @@ function lintLayerComposition(
         message: `Source '${source.id}' is shared by clustered and unclustered layers; use distinct source IDs to preserve both semantics.`,
         path: `/layers/${clustered[0]!.index}/behavior/zoom_rules`,
       });
+    } else if (clustered.length > 1) {
+      const configurations = new Set(
+        clustered.map(({ layer }) => {
+          const rule = layer.behavior!.zoom_rules.find(
+            (candidate) =>
+              candidate.target === 'symbols' &&
+              candidate.action === 'cluster',
+          )!;
+          return rule.max_zoom ?? 14;
+        }),
+      );
+      if (configurations.size > 1) {
+        diagnostics.push({
+          code: 'layers.shared-source-cluster-config-conflict',
+          severity: 'error',
+          message: `Source '${source.id}' is shared by layers with different cluster maximum zooms; use one configuration or distinct source IDs.`,
+          path: `/layers/${clustered[1]!.index}/behavior/zoom_rules`,
+        });
+      }
     }
   }
 }

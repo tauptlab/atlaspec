@@ -18,6 +18,16 @@ async function upgradedExample(): Promise<ReturnType<typeof upgradeAtlaspec>> {
   return upgradeAtlaspec(value);
 }
 
+async function upgradedShelter(): Promise<ReturnType<typeof upgradeAtlaspec>> {
+  const value = parse(
+    await readFile(
+      resolve(process.cwd(), 'examples', 'shelter-capacity.atlas.yaml'),
+      'utf8',
+    ),
+  ) as AtlaspecV01Document;
+  return upgradeAtlaspec(value);
+}
+
 describe('Atlaspec 0.2 linting', () => {
   it('uses layer-rooted diagnostics for family semantics', async () => {
     const document = await upgradedExample();
@@ -71,6 +81,27 @@ describe('Atlaspec 0.2 linting', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'layers.shared-source-cluster-conflict',
+          path: '/layers/1/behavior/zoom_rules',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects different cluster configurations on one shared source', async () => {
+    const document = await upgradedShelter();
+    const second = structuredClone(document.layers[0]!);
+    second.id = 'secondary-sites';
+    second.purpose = 'supporting';
+    delete second.encoding.label;
+    second.behavior!.zoom_rules = [
+      { target: 'symbols', action: 'cluster', max_zoom: 12 },
+    ];
+    document.layers.push(second);
+
+    expect(lintAtlaspec(document)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'layers.shared-source-cluster-config-conflict',
           path: '/layers/1/behavior/zoom_rules',
         }),
       ]),

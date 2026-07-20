@@ -155,4 +155,25 @@ describe('validateAtlaspec', () => {
       ]),
     );
   });
+
+  it('rejects multiple cluster configurations within one layer', async () => {
+    const document = await example('shelter-capacity.atlas.yaml');
+    const behavior = document['behavior'] as {
+      zoom_rules: Array<Record<string, unknown>>;
+    };
+    behavior.zoom_rules.push({
+      max_zoom: 12,
+      target: 'symbols',
+      action: 'cluster',
+    });
+
+    expect(validateAtlaspec(document).diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'behavior.multiple-cluster-rules',
+          path: '/behavior/zoom_rules/2',
+        }),
+      ]),
+    );
+  });
 });

@@ -69,3 +69,13 @@ The official development generation workflow is documented in
 model-by-task shards, pins every provenance digest, rejects local agent wrappers
 from official evidence, and verifies missing or invalid reports without
 dropping failed generations.
+
+## AtlasBench Local qualification
+
+The local Codex and Claude qualification is a separate within-agent protocol.
+It uses 12 development tasks, two repetitions, balanced condition order, and a
+locked output-tokens-per-accepted-map gate. Prepare, run, and aggregate it with
+`benchmark:local:prepare`, `benchmark:local:run-job`, and
+`benchmark:local:status`. Absolute token counts must not be compared across the
+two agents. The first completed result and its failed qualification verdict are
+preserved in `../docs/LOCAL_QUALIFICATION_2026-07-20.md`.

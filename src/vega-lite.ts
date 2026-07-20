@@ -83,6 +83,7 @@ export function compileVegaLite(value: unknown): VegaLiteCompilationResult {
         version: document.version,
         map: document.map,
         intent: document.intent,
+        constraints: document.constraints ?? {},
         layers: document.layers.map((layer) => ({
           id: layer.id,
           purpose: layer.purpose,

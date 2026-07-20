@@ -78,6 +78,11 @@ export function downgradeAtlaspec(
       'Atlaspec 0.2 protected layer IDs have no lossless Atlaspec 0.1 representation.',
     );
   }
+  if (document.constraints?.allow_duplicate_labels === true) {
+    throw new AtlaspecMigrationError(
+      'Atlaspec 0.2 duplicate-label permission has no Atlaspec 0.1 representation.',
+    );
+  }
 
   const { layers: _layers, constraints, ...shared } = document;
   const mergedConstraints = compact({

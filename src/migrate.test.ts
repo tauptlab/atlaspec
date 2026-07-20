@@ -87,4 +87,16 @@ describe('Atlaspec migration', () => {
       'exactly one layer',
     );
   });
+
+  it('fails closed on duplicate-label permission during downgrade', async () => {
+    const upgraded = upgradeAtlaspec(await example('flood-risk.atlas.yaml'));
+    upgraded.constraints = {
+      ...upgraded.constraints,
+      allow_duplicate_labels: true,
+    };
+
+    expect(() => downgradeAtlaspec(upgraded)).toThrow(
+      'duplicate-label permission',
+    );
+  });
 });

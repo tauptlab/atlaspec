@@ -267,6 +267,14 @@ function traceGlobalConstraints(
       reason: 'Authored label priority was retained in compiler metadata.',
     });
   }
+  if (document.constraints?.allow_duplicate_labels === true) {
+    decisions.push({
+      code: 'constraints.duplicate-labels-allowed',
+      path: '/constraints/allow_duplicate_labels',
+      value: true,
+      reason: 'The explicit duplicate-label opt-in was retained in compiler metadata.',
+    });
+  }
 }
 
 function compileSources(

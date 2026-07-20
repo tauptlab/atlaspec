@@ -314,6 +314,7 @@ export const AtlaspecLayerSchema = Type.Object(
 export const GlobalConstraintsSchema = Type.Object(
   {
     colorblind_safe: Type.Optional(Type.Boolean()),
+    allow_duplicate_labels: Type.Optional(Type.Boolean()),
     protected_layers: Type.Optional(
       Type.Array(Type.String({ minLength: 1 }), { uniqueItems: true }),
     ),

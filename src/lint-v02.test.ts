@@ -125,4 +125,27 @@ describe('Atlaspec 0.2 linting', () => {
       ]),
     );
   });
+
+  it('permits duplicate labels only through an explicit map-level opt-in', async () => {
+    const document = await upgradedShelter();
+    const second = structuredClone(document.layers[0]!);
+    second.id = 'secondary-sites';
+    second.purpose = 'supporting';
+    document.layers.push(second);
+
+    expect(
+      lintAtlaspec(document).some(
+        (diagnostic) => diagnostic.code === 'layers.duplicate-label',
+      ),
+    ).toBe(true);
+    document.constraints = {
+      ...document.constraints,
+      allow_duplicate_labels: true,
+    };
+    expect(
+      lintAtlaspec(document).some(
+        (diagnostic) => diagnostic.code === 'layers.duplicate-label',
+      ),
+    ).toBe(false);
+  });
 });

@@ -576,23 +576,25 @@ function lintLayerComposition(
   document: AtlaspecV02Document,
   diagnostics: Diagnostic[],
 ): void {
-  const labels = new Map<string, number>();
-  for (const [index, layer] of document.layers.entries()) {
-    const labelName = layer.encoding.label?.field;
-    if (labelName !== undefined) {
-      const field = document.data.fields[labelName];
-      if (field !== undefined) {
-        const key = `${field.source}\u0000${labelName}`;
-        const previous = labels.get(key);
-        if (previous !== undefined) {
-          diagnostics.push({
-            code: 'layers.duplicate-label',
-            severity: 'error',
-            message: `Layers ${previous} and ${index} label the same field '${labelName}' from source '${field.source}'.`,
-            path: `/layers/${index}/encoding/label/field`,
-          });
-        } else {
-          labels.set(key, index);
+  if (document.constraints?.allow_duplicate_labels !== true) {
+    const labels = new Map<string, number>();
+    for (const [index, layer] of document.layers.entries()) {
+      const labelName = layer.encoding.label?.field;
+      if (labelName !== undefined) {
+        const field = document.data.fields[labelName];
+        if (field !== undefined) {
+          const key = `${field.source}\u0000${labelName}`;
+          const previous = labels.get(key);
+          if (previous !== undefined) {
+            diagnostics.push({
+              code: 'layers.duplicate-label',
+              severity: 'error',
+              message: `Layers ${previous} and ${index} label the same field '${labelName}' from source '${field.source}'.`,
+              path: `/layers/${index}/encoding/label/field`,
+            });
+          } else {
+            labels.set(key, index);
+          }
         }
       }
     }

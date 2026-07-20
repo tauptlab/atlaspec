@@ -207,6 +207,73 @@ Complete runnable examples:
 
 - [Flood-risk choropleth](examples/flood-risk.atlas.yaml)
 - [Emergency-shelter proportional symbols](examples/shelter-capacity.atlas.yaml)
+- [Multi-layer operations overview](examples/operations-overview.atlas.yaml)
+- [Cross-renderer portable overview](examples/portable-overview.atlas.yaml)
+
+## Experimental version 0.2
+
+Version 0.2 replaces the single top-level `family` and `encoding` with stable,
+ordered semantic layers. Each layer has an ID, purpose, family, encoding,
+missing-data policy, and optional behavior. Shared intent, data, viewport, and
+basemap remain at document level.
+
+The abbreviated shape below omits required source, field, and encoding details;
+use the linked runnable examples as copyable input.
+
+```yaml
+version: "0.2"
+map: response-overview
+title: Flood risk and emergency facilities
+intent:
+  task: compare
+  audience: operations
+  primary_message: Compare district risk and locate response facilities.
+data:
+  sources: [] # declare GeoJSON sources
+  fields: {}  # declare semantic fields
+layers:
+  - id: flood-risk
+    purpose: primary
+    family: choropleth
+    encoding: {}
+  - id: facilities
+    purpose: supporting
+    family: categorical-point
+    encoding: {}
+```
+
+The MapLibre compiler supports all four families in authored draw order and
+names generated renderer layers as `{map}-{layer}-{role}`. The Vega-Lite v6
+target supports the portable static subset: choropleths, proportional symbols,
+categorical points, and point labels. It fails with capability diagnostics for
+heatmap kernels, clustering, semantic zoom, and unsupported non-point labels;
+requirements are never silently dropped.
+
+Upgrade a 0.1 document without modifying the source file:
+
+```powershell
+npm run atlaspec -- upgrade examples/flood-risk.atlas.yaml `
+  --output flood-risk.v02.atlas.yaml
+```
+
+Compile or inspect renderer support:
+
+```powershell
+npm run atlaspec -- compile examples/portable-overview.atlas.yaml `
+  --target maplibre --output portable.maplibre.json
+
+npm run atlaspec -- compile examples/portable-overview.atlas.yaml `
+  --target vega-lite --output portable.vegalite.json
+
+npm run atlaspec -- capabilities examples/operations-overview.atlas.yaml `
+  --target vega-lite
+```
+
+The v0.2 implementation is experimental. Its schema, migration, MapLibre
+composition, Vega-Lite subset, and compatibility fixtures are implemented, but
+the fresh AtlasBench 0.2 model evaluation has not yet been run. See the locked
+[v0.2 scope](docs/SCOPE_0.2.md) and
+[evaluation contract](docs/BENCHMARK_0.2.md).
 
 ## Supported in version 0.1
 
@@ -259,8 +326,11 @@ when any error diagnostic remains.
 |---|---|
 | `npm run atlaspec -- validate <file>` | validate YAML or JSON and print diagnostics |
 | `npm run atlaspec -- validate <file> --json` | emit a machine-readable validation report |
-| `npm run atlaspec -- compile <file>` | write the compiled MapLibre style to stdout |
-| `npm run atlaspec -- compile <file> -o <style.json>` | write the style to a file |
+| `npm run atlaspec -- compile <file>` | compile to MapLibre and write JSON to stdout |
+| `npm run atlaspec -- compile <file> --target vega-lite` | compile the portable 0.2 subset to Vega-Lite |
+| `npm run atlaspec -- compile <file> -o <artifact.json>` | write the renderer artifact to a file |
+| `npm run atlaspec -- upgrade <file> [-o <file>]` | convert 0.1 to canonical 0.2 YAML |
+| `npm run atlaspec -- capabilities <file> --target <target>` | report target support and fail-closed diagnostics |
 | `npm run atlaspec -- --help` | show all available commands |
 
 After `npm run build`, the compiled CLI entry point is `dist/cli.js`. The
@@ -287,11 +357,13 @@ if (!result.ok) {
   );
   console.log(result.decisions);
 }
+
 ```
 
 The package exports the TypeBox schemas, inferred TypeScript types, document
-loader/parser, validator, linter, MapLibre compiler, diagnostics, decision
-records, and compiled style types from [src/index.ts](src/index.ts).
+loader/parser, validator, linter, migration helpers, MapLibre and Vega-Lite
+compilers, diagnostics, decision records, and compiled artifact types from
+[src/index.ts](src/index.ts).
 
 ## Using Atlaspec with an AI agent
 
@@ -354,7 +426,7 @@ survival, hosted-model reproduction, or comprehensive visual evaluation.
 ## Repository map
 
 ```text
-src/                    schema, validation, linting, and MapLibre compiler
+src/                    schemas, migration, validation, linting, and compilers
 examples/               runnable Atlaspec documents and local GeoJSON
 benchmark/              AtlasBench harness, adapters, references, and corpus
 benchmark/corpus/       frozen 36-development / 12-holdout task matrix
@@ -363,9 +435,12 @@ docs/                   scope, benchmark contracts, runbooks, and evidence
 
 ## Project status
 
-Atlaspec 0.1 is pre-alpha. The schema, compiler, diagnostics, four initial map
-families, MapLibre backend, benchmark harness, and frozen corpus are executable.
-The strongest current evidence is the completed local-agent holdout above.
+Atlaspec remains pre-alpha. Version 0.1 has a schema, MapLibre compiler,
+diagnostics, four map families, benchmark harness, and frozen corpus. Version
+0.2 now has an experimental layers schema, guarded migration, multi-layer
+MapLibre compiler, portable Vega-Lite subset, and capability inspection. The
+strongest current performance evidence remains the completed v0.1 local-agent
+holdout above.
 
 Work still required before a stable release includes:
 
@@ -373,10 +448,10 @@ Work still required before a stable release includes:
 - rendered screenshot and viewport-level quality validation;
 - blind human map-reading and cartographer review;
 - edit-survival and ablation studies;
-- package publication, compatibility policy, and migration tooling;
-- evaluation of additional map families and compiler backends.
+- package publication and a stable compatibility policy;
+- execution of the fresh multi-layer and cross-renderer AtlasBench 0.2 corpus.
 
-Active v0.2 design work is governed by the pre-implementation
+Active v0.2 work is governed by the pre-implementation
 [v0.2 scope](docs/SCOPE_0.2.md) and
 [AtlasBench 0.2 contract](docs/BENCHMARK_0.2.md). It focuses on multi-layer
 composition, v0.1 compatibility, Vega-Lite portability, and localized edit

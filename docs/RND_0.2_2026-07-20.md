@@ -78,9 +78,9 @@ source/field label pairs conservatively.
 
 Vega-Lite specifications compile without warnings, but external GeoJSON fetch,
 browser rendering, viewport screenshots, map-reading accuracy, and blind
-cartographer review remain unmeasured. The fresh v0.2 datasets, executable
-manifests, semantic normalizer, edit-survival evaluator, and model runs also
-remain pending.
+cartographer review remain unmeasured. The fresh v0.2 datasets are now locked,
+while executable manifests, semantic normalizer, edit-survival evaluator, and
+model runs remain pending.
 
 ## Current conclusion
 

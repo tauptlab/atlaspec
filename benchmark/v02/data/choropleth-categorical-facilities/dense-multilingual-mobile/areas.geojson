@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.82000000000001,
+              37.42
+            ],
+            [
+              126.98,
+              37.42
+            ],
+            [
+              126.98,
+              37.58
+            ],
+            [
+              126.82000000000001,
+              37.58
+            ],
+            [
+              126.82000000000001,
+              37.42
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 1 긴급대응 거점 Emergency Response Location",
+        "risk_rate": 0.08,
+        "demand_rate": 0.18
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.02,
+              37.42
+            ],
+            [
+              127.17999999999999,
+              37.42
+            ],
+            [
+              127.17999999999999,
+              37.58
+            ],
+            [
+              127.02,
+              37.58
+            ],
+            [
+              127.02,
+              37.42
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 2 긴급대응 거점 Emergency Response Location",
+        "risk_rate": 0.24,
+        "demand_rate": 0.37
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              126.82000000000001,
+              37.620000000000005
+            ],
+            [
+              126.98,
+              37.620000000000005
+            ],
+            [
+              126.98,
+              37.78
+            ],
+            [
+              126.82000000000001,
+              37.78
+            ],
+            [
+              126.82000000000001,
+              37.620000000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 3 긴급대응 거점 Emergency Response Location",
+        "risk_rate": 0.51,
+        "demand_rate": 0.64
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.02,
+              37.620000000000005
+            ],
+            [
+              127.17999999999999,
+              37.620000000000005
+            ],
+            [
+              127.17999999999999,
+              37.78
+            ],
+            [
+              127.02,
+              37.78
+            ],
+            [
+              127.02,
+              37.620000000000005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 4 긴급대응 거점 Emergency Response Location",
+        "risk_rate": 0.86,
+        "demand_rate": 0.92
+      }
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.6
+        ]
+      },
+      "properties": {
+        "name": "facilities 1 긴급대응 거점 Emergency Response Location",
+        "capacity": 12,
+        "category": "clinic",
+        "severity": 1,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0002,
+          37.60015
+        ]
+      },
+      "properties": {
+        "name": "facilities 2 긴급대응 거점 Emergency Response Location",
+        "capacity": 35,
+        "category": "shelter",
+        "severity": 2,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0004,
+          37.600300000000004
+        ]
+      },
+      "properties": {
+        "name": "facilities 3 긴급대응 거점 Emergency Response Location",
+        "capacity": 80,
+        "category": "depot",
+        "severity": 3,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0006,
+          37.60045
+        ]
+      },
+      "properties": {
+        "name": "facilities 4 긴급대응 거점 Emergency Response Location",
+        "capacity": 160,
+        "category": "clinic",
+        "severity": 4,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0008,
+          37.6006
+        ]
+      },
+      "properties": {
+        "name": "facilities 5 긴급대응 거점 Emergency Response Location",
+        "capacity": 420,
+        "category": "shelter",
+        "severity": 5,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001,
+          37.60075
+        ]
+      },
+      "properties": {
+        "name": "facilities 6 긴급대응 거점 Emergency Response Location",
+        "capacity": 900,
+        "category": "depot",
+        "severity": 1,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    }
+  ]
+}

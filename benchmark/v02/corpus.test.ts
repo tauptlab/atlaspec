@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildV02CorpusMatrix,
+  buildV02Datasets,
   COMPOSITION_ARCHETYPES,
   validateV02CorpusMatrix,
   V02_DIFFICULTIES,
@@ -47,5 +48,33 @@ describe('AtlasBench 0.2 task matrix', () => {
     ) as unknown;
 
     expect(actual).toEqual(buildV02CorpusMatrix());
+  });
+
+  it('generates every fresh data path with deterministic adversarial coverage', async () => {
+    const matrix = buildV02CorpusMatrix();
+    const datasets = buildV02Datasets(matrix);
+    const required = new Set(matrix.tasks.flatMap((task) => task.data_files));
+
+    expect(datasets.size).toBe(36);
+    expect(new Set(datasets.keys())).toEqual(required);
+    for (const [path, expected] of datasets) {
+      expect(expected.type).toBe('FeatureCollection');
+      expect(expected.features.length).toBeGreaterThan(0);
+      const actual = JSON.parse(
+        await readFile(resolve('benchmark', 'v02', path), 'utf8'),
+      ) as unknown;
+      expect(actual).toEqual(expected);
+    }
+
+    const multilingual = datasets.get(
+      'data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson',
+    )!;
+    expect(multilingual.features[0]!.properties['name']).toContain('긴급대응');
+    const geographic = datasets.get(
+      'data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson',
+    )!;
+    expect(
+      ((geographic.features[0]!.geometry['coordinates'] as number[][][])[0]![0]![0]),
+    ).toBeGreaterThan(170);
   });
 });

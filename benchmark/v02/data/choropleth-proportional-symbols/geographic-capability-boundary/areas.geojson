@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              179.11999999999998,
+              71.92
+            ],
+            [
+              179.28,
+              71.92
+            ],
+            [
+              179.28,
+              72.08
+            ],
+            [
+              179.11999999999998,
+              72.08
+            ],
+            [
+              179.11999999999998,
+              71.92
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 1",
+        "risk_rate": 0.08,
+        "demand_rate": 0.18
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -179.48000000000002,
+              72.92
+            ],
+            [
+              -179.32,
+              72.92
+            ],
+            [
+              -179.32,
+              73.08
+            ],
+            [
+              -179.48000000000002,
+              73.08
+            ],
+            [
+              -179.48000000000002,
+              72.92
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 2",
+        "risk_rate": 0.24,
+        "demand_rate": 0.37
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              169.92,
+              79.92
+            ],
+            [
+              170.08,
+              79.92
+            ],
+            [
+              170.08,
+              80.08
+            ],
+            [
+              169.92,
+              80.08
+            ],
+            [
+              169.92,
+              79.92
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 3",
+        "risk_rate": 0.51,
+        "demand_rate": 0.64
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -168.08,
+              77.92
+            ],
+            [
+              -167.92,
+              77.92
+            ],
+            [
+              -167.92,
+              78.08
+            ],
+            [
+              -168.08,
+              78.08
+            ],
+            [
+              -168.08,
+              77.92
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "District 4",
+        "risk_rate": 0.86,
+        "demand_rate": 0.92
+      }
+    }
+  ]
+}

@@ -13,6 +13,11 @@ The checked-in `matrix.json` locks:
 - 33 cross-renderer-representable tasks and 15 capability-negative controls;
 - stable localized-edit targets and planned data paths.
 
+The same generator now locks 36 fresh GeoJSON files covering missing values,
+skew, dense overlap, multilingual labels, mobile-density stress, high latitude,
+and antimeridian-adjacent geometry. Every task data path resolves to a generated
+artifact and is checked byte-for-byte in `npm run check`.
+
 Regenerate and verify the matrix with:
 
 ```powershell
@@ -22,11 +27,11 @@ npm run corpus:v02:check
 
 ## Evidence boundary
 
-The matrix is locked, but its GeoJSON datasets, prompts, hard-check manifests,
+The matrix and GeoJSON datasets are locked, but prompts, hard-check manifests,
 semantic normalizer, edit-survival evaluator, development runs, and one-time
-holdout runs are still pending. `status: matrix-locked-data-pending` is part of
-the generated artifact so the matrix cannot be mistaken for an executable or
-completed benchmark.
+holdout runs are still pending. `status: data-locked-manifests-pending` is part
+of the generated artifact so the corpus cannot be mistaken for an executable
+or completed benchmark.
 
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked

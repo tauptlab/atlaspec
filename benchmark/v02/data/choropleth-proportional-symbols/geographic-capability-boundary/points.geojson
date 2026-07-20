@@ -1,0 +1,113 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.4,
+          76
+        ]
+      },
+      "properties": {
+        "name": "points 1",
+        "capacity": 12,
+        "category": "clinic",
+        "severity": 1,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.425,
+          76
+        ]
+      },
+      "properties": {
+        "name": "points 2",
+        "capacity": 35,
+        "category": "shelter",
+        "severity": 2,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.45000000000002,
+          76
+        ]
+      },
+      "properties": {
+        "name": "points 3",
+        "capacity": 80,
+        "category": "depot",
+        "severity": 3,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.475,
+          76
+        ]
+      },
+      "properties": {
+        "name": "points 4",
+        "capacity": 160,
+        "category": "clinic",
+        "severity": 4,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.4,
+          76.025
+        ]
+      },
+      "properties": {
+        "name": "points 5",
+        "capacity": 420,
+        "category": "shelter",
+        "severity": 5,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          179.425,
+          76.025
+        ]
+      },
+      "properties": {
+        "name": "points 6",
+        "capacity": 900,
+        "category": "depot",
+        "severity": 1,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    }
+  ]
+}

@@ -42,8 +42,17 @@ export interface V02CorpusMatrix {
   repetitions: 5;
   bootstrap_seed: 2803528194;
   split_policy: string;
-  status: 'matrix-locked-data-pending';
+  status: 'data-locked-manifests-pending';
   tasks: V02CorpusTask[];
+}
+
+export interface V02FeatureCollection {
+  type: 'FeatureCollection';
+  features: Array<{
+    type: 'Feature';
+    geometry: Record<string, unknown>;
+    properties: Record<string, unknown>;
+  }>;
 }
 
 const LAYER_COUNTS: Record<CompositionArchetype, number> = {
@@ -91,9 +100,23 @@ export function buildV02CorpusMatrix(): V02CorpusMatrix {
     bootstrap_seed: 2803528194,
     split_policy:
       'One deterministically rotated variant per archetype-difficulty cell is held out; each variant appears exactly three times in holdout.',
-    status: 'matrix-locked-data-pending',
+    status: 'data-locked-manifests-pending',
     tasks,
   };
+}
+
+export function buildV02Datasets(
+  matrix = buildV02CorpusMatrix(),
+): ReadonlyMap<string, V02FeatureCollection> {
+  const datasets = new Map<string, V02FeatureCollection>();
+  for (const task of matrix.tasks) {
+    for (const path of task.data_files) {
+      if (!datasets.has(path)) {
+        datasets.set(path, dataset(task.archetype, task.variant, path));
+      }
+    }
+  }
+  return datasets;
 }
 
 export function validateV02CorpusMatrix(matrix: V02CorpusMatrix): string[] {
@@ -190,4 +213,115 @@ function stressors(
     case 'geographic-capability-boundary':
       return [...result, 'high-latitude', 'antimeridian', 'capability-boundary'];
   }
+}
+
+function dataset(
+  archetype: CompositionArchetype,
+  variant: V02Variant,
+  path: string,
+): V02FeatureCollection {
+  const kind = path.split('/').at(-1)!.replace('.geojson', '');
+  return kind === 'areas'
+    ? areaDataset(variant, archetype === 'heatmap-reference-points')
+    : pointDataset(variant, kind);
+}
+
+function areaDataset(
+  variant: V02Variant,
+  pointGeometry: boolean,
+): V02FeatureCollection {
+  if (pointGeometry) return pointDataset(variant, 'incidents');
+  const centers: Array<[number, number]> =
+    variant === 'geographic-capability-boundary'
+      ? [
+          [179.2, 72],
+          [-179.4, 73],
+          [170, 80],
+          [-168, 78],
+        ]
+      : [
+          [126.9, 37.5],
+          [127.1, 37.5],
+          [126.9, 37.7],
+          [127.1, 37.7],
+        ];
+  return {
+    type: 'FeatureCollection',
+    features: centers.map(([longitude, latitude], index) => {
+      const properties: Record<string, unknown> = {
+        name: label(variant, 'District', index),
+        risk_rate: [0.08, 0.24, 0.51, 0.86][index],
+        demand_rate: [0.18, 0.37, 0.64, 0.92][index],
+      };
+      if (variant === 'missing-and-skew') {
+        if (index === 1) delete properties['risk_rate'];
+        if (index === 3) properties['demand_rate'] = 0.995;
+      }
+      const delta = 0.08;
+      return {
+        type: 'Feature' as const,
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[
+            [longitude - delta, latitude - delta],
+            [longitude + delta, latitude - delta],
+            [longitude + delta, latitude + delta],
+            [longitude - delta, latitude + delta],
+            [longitude - delta, latitude - delta],
+          ]],
+        },
+        properties,
+      };
+    }),
+  };
+}
+
+function pointDataset(
+  variant: V02Variant,
+  kind: string,
+): V02FeatureCollection {
+  const count = kind === 'incidents' ? 12 : 6;
+  const center =
+    variant === 'geographic-capability-boundary'
+      ? [179.4, 76]
+      : [127.0, 37.6];
+  return {
+    type: 'FeatureCollection',
+    features: Array.from({ length: count }, (_unused, index) => {
+      const dense = variant === 'dense-multilingual-mobile';
+      const longitude = center[0]! + (dense ? index * 0.0002 : (index % 4) * 0.025);
+      const latitude = center[1]! + (dense ? index * 0.00015 : Math.floor(index / 4) * 0.025);
+      const properties: Record<string, unknown> = {
+        name: label(variant, kind, index),
+        capacity: [12, 35, 80, 160, 420, 900][index % 6],
+        category: ['clinic', 'shelter', 'depot'][index % 3],
+        severity: (index % 5) + 1,
+        reference_type: ['hospital', 'school', 'station'][index % 3],
+        status: ['open', 'limited', 'closed'][index % 3],
+      };
+      if (variant === 'missing-and-skew') {
+        if (index === 1) {
+          delete properties[
+            kind === 'facilities'
+              ? 'category'
+              : kind === 'incidents'
+                ? 'severity'
+                : 'capacity'
+          ];
+        }
+        if (index === count - 1) properties['capacity'] = 10000;
+      }
+      return {
+        type: 'Feature' as const,
+        geometry: { type: 'Point', coordinates: [longitude, latitude] },
+        properties,
+      };
+    }),
+  };
+}
+
+function label(variant: V02Variant, prefix: string, index: number): string {
+  return variant === 'dense-multilingual-mobile'
+    ? `${prefix} ${index + 1} 긴급대응 거점 Emergency Response Location`
+    : `${prefix} ${index + 1}`;
 }

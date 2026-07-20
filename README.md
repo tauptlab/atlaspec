@@ -274,8 +274,8 @@ composition, Vega-Lite subset, and compatibility fixtures are implemented, but
 the fresh AtlasBench 0.2 model evaluation has not yet been run. See the locked
 [v0.2 scope](docs/SCOPE_0.2.md) and
 [evaluation contract](docs/BENCHMARK_0.2.md). The fresh 48-task
-[v0.2 matrix](benchmark/v02/README.md) is locked at the task-design stage; its
-datasets, executable manifests, and model runs remain pending. The latest
+[v0.2 matrix and 36 GeoJSON datasets](benchmark/v02/README.md) are locked;
+executable prompts, manifests, and model runs remain pending. The latest
 [semantic-loss R&D report](docs/RND_0.2_2026-07-20.md) records hardened compiler
 paths and the remaining risks without treating them as performance evidence.
 

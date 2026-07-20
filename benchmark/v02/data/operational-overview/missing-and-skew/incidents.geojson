@@ -1,0 +1,220 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.6
+        ]
+      },
+      "properties": {
+        "name": "incidents 1",
+        "capacity": 12,
+        "category": "clinic",
+        "severity": 1,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.025,
+          37.6
+        ]
+      },
+      "properties": {
+        "name": "incidents 2",
+        "capacity": 35,
+        "category": "shelter",
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.05,
+          37.6
+        ]
+      },
+      "properties": {
+        "name": "incidents 3",
+        "capacity": 80,
+        "category": "depot",
+        "severity": 3,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.075,
+          37.6
+        ]
+      },
+      "properties": {
+        "name": "incidents 4",
+        "capacity": 160,
+        "category": "clinic",
+        "severity": 4,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.625
+        ]
+      },
+      "properties": {
+        "name": "incidents 5",
+        "capacity": 420,
+        "category": "shelter",
+        "severity": 5,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.025,
+          37.625
+        ]
+      },
+      "properties": {
+        "name": "incidents 6",
+        "capacity": 900,
+        "category": "depot",
+        "severity": 1,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.05,
+          37.625
+        ]
+      },
+      "properties": {
+        "name": "incidents 7",
+        "capacity": 12,
+        "category": "clinic",
+        "severity": 2,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.075,
+          37.625
+        ]
+      },
+      "properties": {
+        "name": "incidents 8",
+        "capacity": 35,
+        "category": "shelter",
+        "severity": 3,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127,
+          37.65
+        ]
+      },
+      "properties": {
+        "name": "incidents 9",
+        "capacity": 80,
+        "category": "depot",
+        "severity": 4,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.025,
+          37.65
+        ]
+      },
+      "properties": {
+        "name": "incidents 10",
+        "capacity": 160,
+        "category": "clinic",
+        "severity": 5,
+        "reference_type": "hospital",
+        "status": "open"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.05,
+          37.65
+        ]
+      },
+      "properties": {
+        "name": "incidents 11",
+        "capacity": 420,
+        "category": "shelter",
+        "severity": 1,
+        "reference_type": "school",
+        "status": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.075,
+          37.65
+        ]
+      },
+      "properties": {
+        "name": "incidents 12",
+        "capacity": 10000,
+        "category": "depot",
+        "severity": 2,
+        "reference_type": "station",
+        "status": "closed"
+      }
+    }
+  ]
+}

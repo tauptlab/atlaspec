@@ -84,8 +84,11 @@ record. Metadata-free direct renderer outputs are checked against locked
 source, role, order, and field contracts, and development/holdout manifests are
 generated. A deterministic 48-task, 214-condition evaluator dry-run passes with
 zero model calls. The auditable local model runner and complete localized
-second-turn evaluator are now implemented, but neither development nor holdout
-model calls have been made with them yet.
+second-turn evaluator are now implemented. A one-task local development
+qualification subsequently made 18 calls across discovery and corrected runs;
+its final balanced slice did not demonstrate an Atlaspec reliability advantage.
+The full development matrix and holdout remain unrun, and the holdout remains
+untouched. See `V02_LOCAL_QUALIFICATION_2026-07-20.md` for the exact boundary.
 
 ## Current conclusion
 

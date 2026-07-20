@@ -270,15 +270,17 @@ npm run atlaspec -- capabilities examples/operations-overview.atlas.yaml `
 ```
 
 The v0.2 implementation is experimental. Its schema, migration, MapLibre
-composition, Vega-Lite subset, and compatibility fixtures are implemented, but
-the fresh AtlasBench 0.2 model evaluation has not yet been run. See the locked
+composition, Vega-Lite subset, and compatibility fixtures are implemented. A
+minimal local development qualification has run, but the full fresh AtlasBench
+0.2 development and holdout evaluations have not. See the locked
 [v0.2 scope](docs/SCOPE_0.2.md) and
 [evaluation contract](docs/BENCHMARK_0.2.md). The fresh 48-task
 [v0.2 matrix and 36 GeoJSON datasets](benchmark/v02/README.md) are locked;
 prompts, hard requirements, direct-renderer structural normalization, and
 development/holdout manifests are also locked. The deterministic 214-condition
 dry-run passes with zero model calls, and the auditable local model runner is
-ready; development and holdout model runs remain pending. The latest
+ready; the qualification did not demonstrate an Atlaspec reliability advantage.
+Full development and holdout runs remain pending. The latest
 [semantic-loss R&D report](docs/RND_0.2_2026-07-20.md) records hardened compiler
 paths and the remaining risks without treating them as performance evidence.
 
@@ -425,6 +427,7 @@ Start with:
 - [Initial failed local qualification](docs/LOCAL_QUALIFICATION_2026-07-20.md)
 - [Post-fix R&D](docs/LOCAL_POSTFIX_RND_2026-07-20.md)
 - [One-time local holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md)
+- [AtlasBench 0.2 local qualification](docs/V02_LOCAL_QUALIFICATION_2026-07-20.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. It does not substitute for human accuracy, expert review, edit

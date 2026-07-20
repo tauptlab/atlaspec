@@ -37,6 +37,7 @@ describe('AtlasBench 0.2 model runner', () => {
     );
 
     expect(report.runs).toHaveLength(5);
+    expect(report.execution_order).toBe('balanced');
     expect(report.runs.every((run) => run.final_accepted)).toBe(true);
     const repaired = report.runs.find((run) => run.condition === 'atlaspec-repair')!;
     expect(repaired.attempts.map((attempt) => attempt.stage)).toEqual([
@@ -79,6 +80,28 @@ describe('AtlasBench 0.2 model runner', () => {
     expect(report.runs).toHaveLength(1);
     expect(report.runs[0]?.final_accepted).toBe(true);
     expect(report.runs[0]?.edit).toBeNull();
+  });
+
+  it('rotates condition order using the task position in the locked manifest', async () => {
+    const manifest = await developmentManifest();
+    const task = manifest.tasks[1]!;
+    const adapter = new ReferenceAdapter(new Map([[task.id, task]]), false);
+    const report = await runV02Experiment(
+      resolve('benchmark/v02/development.manifest.json'),
+      adapter,
+      {
+        model: { provider: 'fixture', model: 'reference', version: '1' },
+        sampling: { temperature: 0 },
+        repetitions: 1,
+        task_ids: [task.id],
+        conditions: ['direct-maplibre', 'atlaspec-maplibre'],
+      },
+    );
+
+    expect(report.runs.map((run) => run.condition)).toEqual([
+      'atlaspec-maplibre',
+      'direct-maplibre',
+    ]);
   });
 });
 

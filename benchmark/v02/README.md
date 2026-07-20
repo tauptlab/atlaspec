@@ -42,7 +42,9 @@ Vega-Lite artifacts are checked for source files, authored order, renderer
 roles, and field bindings against the locked task contracts. The model runner
 now preserves prompts, inputs, raw responses, token/charge/latency records,
 validation failures, one diagnostic repair, and localized second-turn edits.
-It refuses to overwrite a report. `status: runner-ready-model-runs-pending`
+Condition order rotates by locked task position and repetition to limit
+provider-cache and order bias. The runner refuses to overwrite a report.
+`status: runner-ready-model-runs-pending`
 means the executable contract is ready, but no v0.2 performance evidence has
 yet been produced.
 

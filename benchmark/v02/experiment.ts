@@ -101,6 +101,7 @@ export interface V02ExperimentReport {
   manifest_sha256: string;
   model: ModelIdentity;
   sampling: Sampling;
+  execution_order: 'balanced';
   runs: V02RunRecord[];
   summaries: V02ConditionSummary[];
 }
@@ -126,10 +127,18 @@ export async function runV02Experiment(
   }
 
   for (let repetition = 1; repetition <= repetitions; repetition += 1) {
-    for (const task of tasks) {
+    for (const { task, manifestIndex } of tasks) {
       const dataInputs = await loadInputs(dirname(absoluteManifest), task.data_files, 'data');
-      for (const condition of task.conditions) {
-        if (options.conditions !== undefined && !options.conditions.includes(condition)) continue;
+      const conditions = task.conditions.filter(
+        (condition) =>
+          options.conditions === undefined || options.conditions.includes(condition),
+      );
+      if (conditions.length === 0) {
+        throw new Error(`No selected conditions are declared for task ${task.id}.`);
+      }
+      const offset = (manifestIndex + repetition - 1) % conditions.length;
+      for (let conditionIndex = 0; conditionIndex < conditions.length; conditionIndex += 1) {
+        const condition = conditions[(conditionIndex + offset) % conditions.length]!;
         const reference = await referenceInput(dirname(absoluteManifest), condition);
         runs.push(
           await runCondition(
@@ -155,6 +164,7 @@ export async function runV02Experiment(
     manifest_sha256: sha256(manifestRaw),
     model: structuredClone(options.model),
     sampling: structuredClone(options.sampling),
+    execution_order: 'balanced',
     runs,
     summaries: summarizeV02Runs(runs),
   };
@@ -482,10 +492,17 @@ function parseManifest(raw: string): V02EvaluationManifest {
   return value as V02EvaluationManifest;
 }
 
-function selectTasks(tasks: V02ManifestTask[], requested?: readonly string[]): V02ManifestTask[] {
-  if (requested === undefined) return tasks;
-  const selected = tasks.filter((task) => requested.includes(task.id));
-  const missing = requested.filter((id) => !selected.some((task) => task.id === id));
+function selectTasks(
+  tasks: V02ManifestTask[],
+  requested?: readonly string[],
+): Array<{ task: V02ManifestTask; manifestIndex: number }> {
+  const selected = tasks
+    .map((task, manifestIndex) => ({ task, manifestIndex }))
+    .filter(({ task }) => requested === undefined || requested.includes(task.id));
+  if (requested === undefined) return selected;
+  const missing = requested.filter(
+    (id) => !selected.some(({ task }) => task.id === id),
+  );
   if (missing.length > 0) throw new Error(`Unknown task IDs: ${missing.join(', ')}`);
   return selected;
 }

@@ -1,0 +1,193 @@
+export const COMPOSITION_ARCHETYPES = [
+  'choropleth-proportional-symbols',
+  'choropleth-categorical-facilities',
+  'heatmap-reference-points',
+  'operational-overview',
+] as const;
+
+export const V02_DIFFICULTIES = [
+  'basic',
+  'intermediate',
+  'adversarial',
+] as const;
+
+export const V02_VARIANTS = [
+  'canonical',
+  'missing-and-skew',
+  'dense-multilingual-mobile',
+  'geographic-capability-boundary',
+] as const;
+
+export type CompositionArchetype = (typeof COMPOSITION_ARCHETYPES)[number];
+export type V02Difficulty = (typeof V02_DIFFICULTIES)[number];
+export type V02Variant = (typeof V02_VARIANTS)[number];
+export type V02Split = 'development' | 'holdout';
+
+export interface V02CorpusTask {
+  id: string;
+  archetype: CompositionArchetype;
+  difficulty: V02Difficulty;
+  variant: V02Variant;
+  split: V02Split;
+  portability: 'representable' | 'capability-negative';
+  layer_count: number;
+  edit_target: string;
+  data_files: string[];
+  stressors: string[];
+}
+
+export interface V02CorpusMatrix {
+  version: '0.2';
+  corpus: 'atlasbench-v02-48';
+  repetitions: 5;
+  bootstrap_seed: 2803528194;
+  split_policy: string;
+  status: 'matrix-locked-data-pending';
+  tasks: V02CorpusTask[];
+}
+
+const LAYER_COUNTS: Record<CompositionArchetype, number> = {
+  'choropleth-proportional-symbols': 2,
+  'choropleth-categorical-facilities': 2,
+  'heatmap-reference-points': 2,
+  'operational-overview': 3,
+};
+
+const EDIT_TARGETS: Record<CompositionArchetype, string> = {
+  'choropleth-proportional-symbols': 'sites',
+  'choropleth-categorical-facilities': 'facilities',
+  'heatmap-reference-points': 'reference-points',
+  'operational-overview': 'incidents',
+};
+
+export function buildV02CorpusMatrix(): V02CorpusMatrix {
+  const tasks: V02CorpusTask[] = [];
+  for (const [archetypeIndex, archetype] of COMPOSITION_ARCHETYPES.entries()) {
+    for (const [difficultyIndex, difficulty] of V02_DIFFICULTIES.entries()) {
+      const holdoutVariantIndex =
+        (archetypeIndex + difficultyIndex) % V02_VARIANTS.length;
+      for (const [variantIndex, variant] of V02_VARIANTS.entries()) {
+        tasks.push({
+          id: `${archetype}-${difficulty}-${variant}`,
+          archetype,
+          difficulty,
+          variant,
+          split:
+            variantIndex === holdoutVariantIndex ? 'holdout' : 'development',
+          portability: portability(archetype, difficulty, variant),
+          layer_count: LAYER_COUNTS[archetype],
+          edit_target: EDIT_TARGETS[archetype],
+          data_files: dataFiles(archetype, variant),
+          stressors: stressors(difficulty, variant),
+        });
+      }
+    }
+  }
+
+  return {
+    version: '0.2',
+    corpus: 'atlasbench-v02-48',
+    repetitions: 5,
+    bootstrap_seed: 2803528194,
+    split_policy:
+      'One deterministically rotated variant per archetype-difficulty cell is held out; each variant appears exactly three times in holdout.',
+    status: 'matrix-locked-data-pending',
+    tasks,
+  };
+}
+
+export function validateV02CorpusMatrix(matrix: V02CorpusMatrix): string[] {
+  const diagnostics: string[] = [];
+  const ids = new Set<string>();
+  const cells = new Set<string>();
+  const holdoutByArchetypeDifficulty = new Map<string, number>();
+  const holdoutByVariant = new Map<V02Variant, number>();
+
+  if (matrix.tasks.length !== 48) {
+    diagnostics.push(`matrix.count expected=48 actual=${matrix.tasks.length}`);
+  }
+  for (const task of matrix.tasks) {
+    if (ids.has(task.id)) diagnostics.push(`matrix.duplicate-id ${task.id}`);
+    ids.add(task.id);
+    const cell = `${task.archetype}/${task.difficulty}/${task.variant}`;
+    if (cells.has(cell)) diagnostics.push(`matrix.duplicate-cell ${cell}`);
+    cells.add(cell);
+    if (task.split === 'holdout') {
+      const group = `${task.archetype}/${task.difficulty}`;
+      holdoutByArchetypeDifficulty.set(
+        group,
+        (holdoutByArchetypeDifficulty.get(group) ?? 0) + 1,
+      );
+      holdoutByVariant.set(
+        task.variant,
+        (holdoutByVariant.get(task.variant) ?? 0) + 1,
+      );
+    }
+  }
+
+  for (const archetype of COMPOSITION_ARCHETYPES) {
+    for (const difficulty of V02_DIFFICULTIES) {
+      for (const variant of V02_VARIANTS) {
+        const cell = `${archetype}/${difficulty}/${variant}`;
+        if (!cells.has(cell)) diagnostics.push(`matrix.missing-cell ${cell}`);
+      }
+      const group = `${archetype}/${difficulty}`;
+      const count = holdoutByArchetypeDifficulty.get(group) ?? 0;
+      if (count !== 1) {
+        diagnostics.push(`matrix.holdout-per-group ${group}=${count}`);
+      }
+    }
+  }
+  for (const variant of V02_VARIANTS) {
+    const count = holdoutByVariant.get(variant) ?? 0;
+    if (count !== 3) {
+      diagnostics.push(`matrix.holdout-per-variant ${variant}=${count}`);
+    }
+  }
+
+  return diagnostics.sort();
+}
+
+function portability(
+  archetype: CompositionArchetype,
+  difficulty: V02Difficulty,
+  variant: V02Variant,
+): V02CorpusTask['portability'] {
+  return archetype === 'heatmap-reference-points' ||
+    (difficulty === 'adversarial' &&
+      variant === 'geographic-capability-boundary')
+    ? 'capability-negative'
+    : 'representable';
+}
+
+function dataFiles(
+  archetype: CompositionArchetype,
+  variant: V02Variant,
+): string[] {
+  const root = `data/${archetype}/${variant}`;
+  return archetype === 'operational-overview'
+    ? [`${root}/areas.geojson`, `${root}/incidents.geojson`, `${root}/facilities.geojson`]
+    : [`${root}/areas.geojson`, `${root}/points.geojson`];
+}
+
+function stressors(
+  difficulty: V02Difficulty,
+  variant: V02Variant,
+): string[] {
+  const result =
+    difficulty === 'basic'
+      ? ['desktop-viewport']
+      : difficulty === 'intermediate'
+        ? ['layer-visibility', 'localized-edit']
+        : ['mobile-viewport', 'conflicting-visibility', 'localized-edit'];
+  switch (variant) {
+    case 'canonical':
+      return [...result, 'shared-source-baseline'];
+    case 'missing-and-skew':
+      return [...result, 'missing-values', 'skew', 'extreme-values'];
+    case 'dense-multilingual-mobile':
+      return [...result, 'dense-overlap', 'multilingual-labels', 'mobile'];
+    case 'geographic-capability-boundary':
+      return [...result, 'high-latitude', 'antimeridian', 'capability-boundary'];
+  }
+}

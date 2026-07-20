@@ -1,0 +1,1006 @@
+{
+  "version": "0.2",
+  "corpus": "atlasbench-v02-48",
+  "repetitions": 5,
+  "bootstrap_seed": 2803528194,
+  "split_policy": "One deterministically rotated variant per archetype-difficulty cell is held out; each variant appears exactly three times in holdout.",
+  "status": "matrix-locked-data-pending",
+  "tasks": [
+    {
+      "id": "choropleth-proportional-symbols-basic-canonical",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/canonical/areas.geojson",
+        "data/choropleth-proportional-symbols/canonical/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-basic-missing-and-skew",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "basic",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+        "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-basic-dense-multilingual-mobile",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "basic",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-basic-geographic-capability-boundary",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "basic",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-canonical",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/canonical/areas.geojson",
+        "data/choropleth-proportional-symbols/canonical/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-missing-and-skew",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "intermediate",
+      "variant": "missing-and-skew",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+        "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-dense-multilingual-mobile",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "intermediate",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-geographic-capability-boundary",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "intermediate",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-canonical",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/canonical/areas.geojson",
+        "data/choropleth-proportional-symbols/canonical/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-missing-and-skew",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "adversarial",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+        "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-dense-multilingual-mobile",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "adversarial",
+      "variant": "dense-multilingual-mobile",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-geographic-capability-boundary",
+      "archetype": "choropleth-proportional-symbols",
+      "difficulty": "adversarial",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "sites",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-canonical",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-missing-and-skew",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "basic",
+      "variant": "missing-and-skew",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+        "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-dense-multilingual-mobile",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "basic",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-geographic-capability-boundary",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "basic",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-canonical",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-missing-and-skew",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "intermediate",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+        "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-dense-multilingual-mobile",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "intermediate",
+      "variant": "dense-multilingual-mobile",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-geographic-capability-boundary",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "intermediate",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-canonical",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-missing-and-skew",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "adversarial",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+        "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-dense-multilingual-mobile",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "adversarial",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-geographic-capability-boundary",
+      "archetype": "choropleth-categorical-facilities",
+      "difficulty": "adversarial",
+      "variant": "geographic-capability-boundary",
+      "split": "holdout",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "facilities",
+      "data_files": [
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-canonical",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/canonical/areas.geojson",
+        "data/heatmap-reference-points/canonical/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-missing-and-skew",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "basic",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-dense-multilingual-mobile",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "basic",
+      "variant": "dense-multilingual-mobile",
+      "split": "holdout",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+        "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-geographic-capability-boundary",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "basic",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+        "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-canonical",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/canonical/areas.geojson",
+        "data/heatmap-reference-points/canonical/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-missing-and-skew",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "intermediate",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-dense-multilingual-mobile",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "intermediate",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+        "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-geographic-capability-boundary",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "intermediate",
+      "variant": "geographic-capability-boundary",
+      "split": "holdout",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+        "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-canonical",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "holdout",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/canonical/areas.geojson",
+        "data/heatmap-reference-points/canonical/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-missing-and-skew",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "adversarial",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-dense-multilingual-mobile",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "adversarial",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+        "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-geographic-capability-boundary",
+      "archetype": "heatmap-reference-points",
+      "difficulty": "adversarial",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 2,
+      "edit_target": "reference-points",
+      "data_files": [
+        "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+        "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-canonical",
+      "archetype": "operational-overview",
+      "difficulty": "basic",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/canonical/areas.geojson",
+        "data/operational-overview/canonical/incidents.geojson",
+        "data/operational-overview/canonical/facilities.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-missing-and-skew",
+      "archetype": "operational-overview",
+      "difficulty": "basic",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/missing-and-skew/areas.geojson",
+        "data/operational-overview/missing-and-skew/incidents.geojson",
+        "data/operational-overview/missing-and-skew/facilities.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-dense-multilingual-mobile",
+      "archetype": "operational-overview",
+      "difficulty": "basic",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-geographic-capability-boundary",
+      "archetype": "operational-overview",
+      "difficulty": "basic",
+      "variant": "geographic-capability-boundary",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/geographic-capability-boundary/areas.geojson",
+        "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+        "data/operational-overview/geographic-capability-boundary/facilities.geojson"
+      ],
+      "stressors": [
+        "desktop-viewport",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-canonical",
+      "archetype": "operational-overview",
+      "difficulty": "intermediate",
+      "variant": "canonical",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/canonical/areas.geojson",
+        "data/operational-overview/canonical/incidents.geojson",
+        "data/operational-overview/canonical/facilities.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-missing-and-skew",
+      "archetype": "operational-overview",
+      "difficulty": "intermediate",
+      "variant": "missing-and-skew",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/missing-and-skew/areas.geojson",
+        "data/operational-overview/missing-and-skew/incidents.geojson",
+        "data/operational-overview/missing-and-skew/facilities.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-dense-multilingual-mobile",
+      "archetype": "operational-overview",
+      "difficulty": "intermediate",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-geographic-capability-boundary",
+      "archetype": "operational-overview",
+      "difficulty": "intermediate",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/geographic-capability-boundary/areas.geojson",
+        "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+        "data/operational-overview/geographic-capability-boundary/facilities.geojson"
+      ],
+      "stressors": [
+        "layer-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-canonical",
+      "archetype": "operational-overview",
+      "difficulty": "adversarial",
+      "variant": "canonical",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/canonical/areas.geojson",
+        "data/operational-overview/canonical/incidents.geojson",
+        "data/operational-overview/canonical/facilities.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "shared-source-baseline"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-missing-and-skew",
+      "archetype": "operational-overview",
+      "difficulty": "adversarial",
+      "variant": "missing-and-skew",
+      "split": "holdout",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/missing-and-skew/areas.geojson",
+        "data/operational-overview/missing-and-skew/incidents.geojson",
+        "data/operational-overview/missing-and-skew/facilities.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "missing-values",
+        "skew",
+        "extreme-values"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-dense-multilingual-mobile",
+      "archetype": "operational-overview",
+      "difficulty": "adversarial",
+      "variant": "dense-multilingual-mobile",
+      "split": "development",
+      "portability": "representable",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "dense-overlap",
+        "multilingual-labels",
+        "mobile"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-geographic-capability-boundary",
+      "archetype": "operational-overview",
+      "difficulty": "adversarial",
+      "variant": "geographic-capability-boundary",
+      "split": "development",
+      "portability": "capability-negative",
+      "layer_count": 3,
+      "edit_target": "incidents",
+      "data_files": [
+        "data/operational-overview/geographic-capability-boundary/areas.geojson",
+        "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+        "data/operational-overview/geographic-capability-boundary/facilities.geojson"
+      ],
+      "stressors": [
+        "mobile-viewport",
+        "conflicting-visibility",
+        "localized-edit",
+        "high-latitude",
+        "antimeridian",
+        "capability-boundary"
+      ]
+    }
+  ]
+}

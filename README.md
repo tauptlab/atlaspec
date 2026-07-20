@@ -273,7 +273,9 @@ The v0.2 implementation is experimental. Its schema, migration, MapLibre
 composition, Vega-Lite subset, and compatibility fixtures are implemented, but
 the fresh AtlasBench 0.2 model evaluation has not yet been run. See the locked
 [v0.2 scope](docs/SCOPE_0.2.md) and
-[evaluation contract](docs/BENCHMARK_0.2.md).
+[evaluation contract](docs/BENCHMARK_0.2.md). The fresh 48-task
+[v0.2 matrix](benchmark/v02/README.md) is locked at the task-design stage; its
+datasets, executable manifests, and model runs remain pending.
 
 ## Supported in version 0.1
 
@@ -430,6 +432,7 @@ src/                    schemas, migration, validation, linting, and compilers
 examples/               runnable Atlaspec documents and local GeoJSON
 benchmark/              AtlasBench harness, adapters, references, and corpus
 benchmark/corpus/       frozen 36-development / 12-holdout task matrix
+benchmark/v02/          locked v0.2 matrix; data and executable manifests pending
 docs/                   scope, benchmark contracts, runbooks, and evidence
 ```
 

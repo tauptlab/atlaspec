@@ -23,6 +23,8 @@ Key notation: `*` means required; all unmarked keys are optional.
   - measurement: `nominal`, `ordinal`, `quantitative`, `temporal`
   - semantic_type: `category`, `count`, `rate`, `probability`, `delta`, `rank`, `capacity`, `uncertainty`, `identifier`, `label`
   - normalization: `none`, `ratio`, `per-capita`, `density`
+  - range: exactly two numbers, for example `[0, 1]`
+  - domain: array of unique strings, for example `[clinic, shelter, depot]`
 - encoding: `geometry*`, `color`, `size`, `category`, `label`, `weight`
   - geometry object: `source*`, `support*`
     - support: `point`, `line`, `polygon`, `grid`
@@ -32,6 +34,8 @@ Key notation: `*` means required; all unmarked keys are optional.
 - constraints: `colorblind_safe`, `missing_data`, `raw_count_choropleth`, `protected_layers`, `label_priority`, `viewport`
   - missing_data: `explicit`, `hide`, `error`
   - raw_count_choropleth: `reject` or `allow`
+  - protected_layers: array of strings; never a single string
+  - label_priority: array of strings such as `[name]`; never a string or boolean
   - viewport object: `width*`, `height*`
 - behavior: `zoom_rules*`
   - each zoom rule: `min_zoom`, `max_zoom`, `target*`, `action*`
@@ -40,6 +44,8 @@ Key notation: `*` means required; all unmarked keys are optional.
 - basemap: `style*`, `contrast`
   - style: `minimal-light`, `minimal-dark`, `none`
   - contrast: `light`, `dark`, `auto`
+- metadata: optional key/value object whose values may only be a string, number,
+  or boolean. Do not put arrays or nested objects in metadata.
 
 Do not put `zoom`, `zoom_rules`, or scale settings at the document root or
 inside `constraints`. Semantic zoom belongs only at

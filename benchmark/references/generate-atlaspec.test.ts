@@ -14,5 +14,8 @@ describe('schema-derived Atlaspec generation reference', () => {
     expect(reference).toContain('size, category, label, and weight objects: `field` only');
     expect(reference).toContain('`behavior.zoom_rules`');
     expect(reference).toContain('ordinal or quantitative');
+    expect(reference).toContain('label_priority: array of strings');
+    expect(reference).toContain('never a string or boolean');
+    expect(reference).toContain('Do not put arrays or nested objects in metadata.');
   });
 });

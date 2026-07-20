@@ -66,6 +66,8 @@ ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enu
   - measurement: ${values(measurementValues)}
   - semantic_type: ${values(semanticValues)}
   - normalization: ${values(normalizationValues)}
+  - range: exactly two numbers, for example \`[0, 1]\`
+  - domain: array of unique strings, for example \`[clinic, shelter, depot]\`
 - encoding: ${keyList(node(EncodingSchema))}
   - geometry object: ${keyList(property(node(EncodingSchema), 'geometry'))}
     - support: ${values(supportValues)}
@@ -75,6 +77,8 @@ ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enu
 - constraints: ${keyList(constraints)}
   - missing_data: ${values(missingValues)}
   - raw_count_choropleth: \`reject\` or \`allow\`
+  - protected_layers: array of strings; never a single string
+  - label_priority: array of strings such as \`[name]\`; never a string or boolean
   - viewport object: ${keyList(property(constraints, 'viewport'))}
 - behavior: ${keyList(behavior)}
   - each zoom rule: ${keyList(zoomRule)}
@@ -83,6 +87,8 @@ ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enu
 - basemap: ${keyList(basemap)}
   - style: ${values(basemapStyles)}
   - contrast: ${values(contrastValues)}
+- metadata: optional key/value object whose values may only be a string, number,
+  or boolean. Do not put arrays or nested objects in metadata.
 
 Do not put \`zoom\`, \`zoom_rules\`, or scale settings at the document root or
 inside \`constraints\`. Semantic zoom belongs only at

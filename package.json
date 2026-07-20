@@ -39,6 +39,8 @@
     "corpus:check": "tsx benchmark/corpus/generate.ts --check",
     "corpus:generate": "tsx benchmark/corpus/generate.ts",
     "corpus:prepare": "tsx benchmark/corpus/prepare-cli.ts",
+    "reference:atlaspec:check": "tsx benchmark/references/generate-atlaspec.ts --check",
+    "reference:atlaspec:generate": "tsx benchmark/references/generate-atlaspec.ts",
     "test": "vitest run src benchmark",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"

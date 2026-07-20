@@ -752,7 +752,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/canonical/areas.geojson",
         "data/operational-overview/canonical/incidents.geojson",
@@ -771,7 +771,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/missing-and-skew/areas.geojson",
         "data/operational-overview/missing-and-skew/incidents.geojson",
@@ -792,7 +792,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/dense-multilingual-mobile/areas.geojson",
         "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
@@ -813,7 +813,7 @@
       "split": "holdout",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/geographic-capability-boundary/areas.geojson",
         "data/operational-overview/geographic-capability-boundary/incidents.geojson",
@@ -834,7 +834,7 @@
       "split": "holdout",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/canonical/areas.geojson",
         "data/operational-overview/canonical/incidents.geojson",
@@ -854,7 +854,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/missing-and-skew/areas.geojson",
         "data/operational-overview/missing-and-skew/incidents.geojson",
@@ -876,7 +876,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/dense-multilingual-mobile/areas.geojson",
         "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
@@ -898,7 +898,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/geographic-capability-boundary/areas.geojson",
         "data/operational-overview/geographic-capability-boundary/incidents.geojson",
@@ -920,7 +920,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/canonical/areas.geojson",
         "data/operational-overview/canonical/incidents.geojson",
@@ -941,7 +941,7 @@
       "split": "holdout",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/missing-and-skew/areas.geojson",
         "data/operational-overview/missing-and-skew/incidents.geojson",
@@ -964,7 +964,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/dense-multilingual-mobile/areas.geojson",
         "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
@@ -987,7 +987,7 @@
       "split": "development",
       "portability": "capability-negative",
       "layer_count": 3,
-      "edit_target": "incidents",
+      "edit_target": "facilities",
       "data_files": [
         "data/operational-overview/geographic-capability-boundary/areas.geojson",
         "data/operational-overview/geographic-capability-boundary/incidents.geojson",

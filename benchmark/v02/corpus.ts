@@ -66,7 +66,7 @@ const EDIT_TARGETS: Record<CompositionArchetype, string> = {
   'choropleth-proportional-symbols': 'sites',
   'choropleth-categorical-facilities': 'facilities',
   'heatmap-reference-points': 'reference-points',
-  'operational-overview': 'incidents',
+  'operational-overview': 'facilities',
 };
 
 export function buildV02CorpusMatrix(): V02CorpusMatrix {

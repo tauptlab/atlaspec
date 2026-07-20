@@ -646,8 +646,8 @@
       "id": "operational-overview-basic-geographic-capability-boundary",
       "split": "holdout",
       "prompt": "Create one ordered multi-layer map for task operational-overview-basic-geographic-capability-boundary. demand (primary) is a choropleth using source areas from data/operational-overview/geographic-capability-boundary/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/geographic-capability-boundary/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/geographic-capability-boundary/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary.",
-      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
-      "edit_target": "incidents",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
       "portability": "capability-negative",
       "data_files": [
         "data/operational-overview/geographic-capability-boundary/areas.geojson",
@@ -738,8 +738,8 @@
       "id": "operational-overview-intermediate-canonical",
       "split": "holdout",
       "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-canonical. demand (primary) is a choropleth using source areas from data/operational-overview/canonical/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/canonical/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/canonical/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline.",
-      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
-      "edit_target": "incidents",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
       "portability": "capability-negative",
       "data_files": [
         "data/operational-overview/canonical/areas.geojson",
@@ -830,8 +830,8 @@
       "id": "operational-overview-adversarial-missing-and-skew",
       "split": "holdout",
       "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-missing-and-skew. demand (primary) is a choropleth using source areas from data/operational-overview/missing-and-skew/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/missing-and-skew/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/missing-and-skew/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values.",
-      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
-      "edit_target": "incidents",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
       "portability": "capability-negative",
       "data_files": [
         "data/operational-overview/missing-and-skew/areas.geojson",

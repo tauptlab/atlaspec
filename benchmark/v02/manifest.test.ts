@@ -33,6 +33,9 @@ describe('AtlasBench 0.2 manifests', () => {
       );
       expect(task.prompt).toContain('Preserve layer order');
       expect(task.edit_prompt).toContain(task.edit_target);
+      expect(task.layers.find((layer) => layer.id === task.edit_target)?.missing_data).not.toBe(
+        'hide',
+      );
       expect(task.conditions.includes('direct-vega-lite')).toBe(
         task.portability === 'representable',
       );

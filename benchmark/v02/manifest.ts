@@ -106,6 +106,12 @@ export function validateV02Manifest(
         diagnostics.push(`manifest.unknown-source-file ${task.id}/${layer.id}`);
       }
     }
+    const editLayer = task.layers.find((layer) => layer.id === task.edit_target);
+    if (editLayer === undefined) {
+      diagnostics.push(`manifest.edit-target-missing ${task.id}/${task.edit_target}`);
+    } else if (editLayer.missing_data === 'hide') {
+      diagnostics.push(`manifest.edit-noop ${task.id}/${task.edit_target}`);
+    }
   }
   return diagnostics.sort();
 }

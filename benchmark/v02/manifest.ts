@@ -296,10 +296,13 @@ function pointLayer(
     source,
     source_file: sourceFile,
     support: 'point',
-    bindings: [
-      { channel, field, path: field },
-      { channel: 'label', field: `${source}_name`, path: 'name' },
-    ],
+    bindings:
+      family === 'heatmap'
+        ? [{ channel, field, path: field }]
+        : [
+            { channel, field, path: field },
+            { channel: 'label', field: `${source}_name`, path: 'name' },
+          ],
     maplibre_types:
       family === 'heatmap' ? ['heatmap'] : ['circle', 'symbol'],
     vega_marks:

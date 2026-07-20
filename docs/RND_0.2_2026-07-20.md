@@ -82,8 +82,9 @@ cartographer review remain unmeasured. The fresh v0.2 datasets are now locked,
 and compiler-produced artifacts now share a verified renderer-neutral semantic
 record. Metadata-free direct renderer outputs are checked against locked
 source, role, order, and field contracts, and development/holdout manifests are
-generated. The generation runner, complete two-turn edit-survival evaluator,
-and model runs remain pending.
+generated. A deterministic 48-task, 214-condition evaluator dry-run passes with
+zero model calls. The model-generation runner, complete two-turn edit-survival
+evaluator, and model runs remain pending.
 
 ## Current conclusion
 

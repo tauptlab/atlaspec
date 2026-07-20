@@ -23,7 +23,13 @@ Regenerate and verify the matrix with:
 ```powershell
 npm run corpus:v02:generate
 npm run corpus:v02:check
+npm run benchmark:v02:dry-run
 ```
+
+The deterministic dry-run currently replays all 48 tasks and 214 declared
+conditions through reference generation, parsing, official renderer validation,
+compiler capability checks, and locked semantic checks. It passes 214/214 with
+`model_calls: 0`. This proves evaluator consistency, not model performance.
 
 ## Evidence boundary
 
@@ -32,8 +38,8 @@ sets, and development/holdout manifests are locked. Compiler-produced MapLibre a
 Vega-Lite artifacts now carry and verify a common semantic record, including
 an unrelated-layer edit-survival comparison. Metadata-free direct MapLibre and
 Vega-Lite artifacts are checked for source files, authored order, renderer
-roles, and field bindings against the locked task contracts. The generation
-runner, complete two-turn edit evaluator, development runs, and one-time
+roles, and field bindings against the locked task contracts. The model-generation
+runner, complete two-turn edit evaluator, development model runs, and one-time
 holdout runs are still pending. `status: contracts-locked-runner-pending` is
 part of the generated artifact so the corpus cannot be mistaken for an
 executable or completed benchmark.

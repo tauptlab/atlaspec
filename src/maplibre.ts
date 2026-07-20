@@ -409,6 +409,7 @@ function compileChoropleth(
       id: `${document.map}-fill`,
       type: 'fill',
       source: document.encoding.geometry.source,
+      ...optionalFilter(missingDataFilter(document, colorField.path)),
       paint: {
         'fill-color': explicitMissing
           ? ['case', ['has', colorField.path], colorExpression, '#bdbdbd']
@@ -450,7 +451,12 @@ function compileProportionalSymbols(
     id: `${document.map}-symbols`,
     type: 'circle',
     source: document.encoding.geometry.source,
-    ...(clustered ? { filter: ['!', ['has', 'point_count']] } : {}),
+    ...optionalFilter(
+      combineFilters(
+        clustered ? ['!', ['has', 'point_count']] : undefined,
+        missingDataFilter(document, sizeField.path),
+      ),
+    ),
     paint: {
       'circle-radius': [
         'interpolate',
@@ -543,6 +549,7 @@ function compileCategoricalPoints(
       id: `${document.map}-symbols`,
       type: 'circle',
       source: document.encoding.geometry.source,
+      ...optionalFilter(missingDataFilter(document, categoryField.path)),
       paint: {
         'circle-radius': 7,
         'circle-color': matches,
@@ -578,6 +585,11 @@ function compileHeatmap(
       id: `${document.map}-heatmap`,
       type: 'heatmap',
       source: document.encoding.geometry.source,
+      ...optionalFilter(
+        weightField === undefined
+          ? undefined
+          : missingDataFilter(document, weightField.path),
+      ),
       maxzoom: 18,
       paint: {
         'heatmap-weight':
@@ -622,11 +634,19 @@ function compileLabels(
     return undefined;
   }
   const labelField = document.data.fields[labelName]!;
+  const encodedField = primaryEncodedField(document);
   return applyZoomRules(document, 'labels', {
     id: `${document.map}-labels`,
     type: 'symbol',
     source: document.encoding.geometry.source,
-    ...(filter === undefined ? {} : { filter }),
+    ...optionalFilter(
+      combineFilters(
+        filter,
+        encodedField === undefined
+          ? undefined
+          : missingDataFilter(document, encodedField.path),
+      ),
+    ),
     layout: {
       'text-field': ['get', labelField.path],
       'text-size': 12,
@@ -641,6 +661,37 @@ function compileLabels(
       'text-halo-width': 1.25,
     },
   });
+}
+
+function primaryEncodedField(document: AtlaspecV01Document): Field | undefined {
+  const name =
+    document.encoding.color?.field ??
+    document.encoding.size?.field ??
+    document.encoding.category?.field ??
+    document.encoding.weight?.field;
+  return name === undefined ? undefined : document.data.fields[name];
+}
+
+function missingDataFilter(
+  document: AtlaspecV01Document,
+  path: string,
+): unknown[] | undefined {
+  return document.constraints?.missing_data === 'hide'
+    ? ['has', path]
+    : undefined;
+}
+
+function combineFilters(
+  ...filters: Array<unknown | undefined>
+): unknown | undefined {
+  const active = filters.filter((filter) => filter !== undefined);
+  if (active.length === 0) return undefined;
+  if (active.length === 1) return active[0];
+  return ['all', ...active];
+}
+
+function optionalFilter(filter: unknown | undefined): Record<string, unknown> {
+  return filter === undefined ? {} : { filter };
 }
 
 function applyZoomRules(

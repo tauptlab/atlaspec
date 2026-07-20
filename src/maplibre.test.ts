@@ -184,4 +184,67 @@ describe('compileMapLibre', () => {
       ]),
     );
   });
+
+  it('compiles hide missing-data policies into thematic and label filters', async () => {
+    const document = (await example(
+      'portable-overview.atlas.yaml',
+    )) as Record<string, unknown>;
+    const layers = document['layers'] as Array<Record<string, unknown>>;
+    const firstConstraints = layers[0]!['constraints'] as Record<string, unknown>;
+    const secondConstraints = layers[1]!['constraints'] as Record<string, unknown>;
+    firstConstraints['missing_data'] = 'hide';
+    secondConstraints['missing_data'] = 'hide';
+
+    const result = compileMapLibre(document);
+    expect(result.ok, JSON.stringify(result.diagnostics)).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.style.layers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'portable-overview-flood-risk-fill',
+          filter: ['has', 'flood_probability'],
+        }),
+        expect.objectContaining({
+          id: 'portable-overview-facilities-symbols',
+          filter: ['has', 'type'],
+        }),
+        expect.objectContaining({
+          id: 'portable-overview-facilities-labels',
+          filter: ['has', 'type'],
+        }),
+      ]),
+    );
+  });
+
+  it('combines clustering and missing-data filters without dropping either', async () => {
+    const document = (await example(
+      'shelter-capacity.atlas.yaml',
+    )) as Record<string, unknown>;
+    const constraints = document['constraints'] as Record<string, unknown>;
+    constraints['missing_data'] = 'hide';
+
+    const result = compileMapLibre(document);
+    expect(result.ok, JSON.stringify(result.diagnostics)).toBe(true);
+    if (!result.ok) return;
+
+    expect(
+      result.style.layers.find(
+        (layer) => layer['id'] === 'shelter-capacity-symbols',
+      )?.['filter'],
+    ).toEqual([
+      'all',
+      ['!', ['has', 'point_count']],
+      ['has', 'capacity'],
+    ]);
+    expect(
+      result.style.layers.find(
+        (layer) => layer['id'] === 'shelter-capacity-labels',
+      )?.['filter'],
+    ).toEqual([
+      'all',
+      ['!', ['has', 'point_count']],
+      ['has', 'capacity'],
+    ]);
+  });
 });

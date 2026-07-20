@@ -39,6 +39,12 @@ describe('AtlasBench 0.2 manifests', () => {
       expect(task.conditions.includes('direct-vega-lite')).toBe(
         task.portability === 'representable',
       );
+      expect(task.capability_requirement === null).toBe(
+        task.portability === 'representable',
+      );
+      if (task.capability_requirement !== null) {
+        expect(task.prompt).toContain('Capability control:');
+      }
     }
   });
 

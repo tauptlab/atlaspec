@@ -11,6 +11,7 @@
       "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "sites",
       "portability": "representable",
+      "capability_requirement": null,
       "data_files": [
         "data/choropleth-proportional-symbols/canonical/areas.geojson",
         "data/choropleth-proportional-symbols/canonical/points.geojson"
@@ -83,6 +84,7 @@
       "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "sites",
       "portability": "representable",
+      "capability_requirement": null,
       "data_files": [
         "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
         "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
@@ -155,6 +157,7 @@
       "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "sites",
       "portability": "representable",
+      "capability_requirement": null,
       "data_files": [
         "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
         "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
@@ -227,6 +230,7 @@
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "representable",
+      "capability_requirement": null,
       "data_files": [
         "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
         "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
@@ -299,6 +303,7 @@
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "representable",
+      "capability_requirement": null,
       "data_files": [
         "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
         "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
@@ -367,10 +372,17 @@
     {
       "id": "choropleth-categorical-facilities-adversarial-geographic-capability-boundary",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-adversarial-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-adversarial-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, high-latitude, antimeridian, capability-boundary. Capability control: layer facilities must cluster symbols through zoom 9; do not silently omit or approximate this behavior.",
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-behavior",
+        "layer_id": "facilities",
+        "action": "cluster",
+        "target": "symbols",
+        "max_zoom": 9
+      },
       "data_files": [
         "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
         "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
@@ -438,10 +450,15 @@
     {
       "id": "heatmap-reference-points-basic-dense-multilingual-mobile",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-basic-dense-multilingual-mobile. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/dense-multilingual-mobile/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, dense-overlap, multilingual-labels, mobile.",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-basic-dense-multilingual-mobile. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/dense-multilingual-mobile/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, dense-overlap, multilingual-labels, mobile. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "reference-points",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
         "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
@@ -507,10 +524,15 @@
     {
       "id": "heatmap-reference-points-intermediate-geographic-capability-boundary",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-intermediate-geographic-capability-boundary. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/geographic-capability-boundary/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/geographic-capability-boundary/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-intermediate-geographic-capability-boundary. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/geographic-capability-boundary/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/geographic-capability-boundary/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, high-latitude, antimeridian, capability-boundary. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "reference-points",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
         "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
@@ -576,10 +598,15 @@
     {
       "id": "heatmap-reference-points-adversarial-canonical",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-adversarial-canonical. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/canonical/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/canonical/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, shared-source-baseline.",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-adversarial-canonical. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/canonical/areas.geojson; bind weight=severity and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/canonical/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, shared-source-baseline. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "reference-points",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/heatmap-reference-points/canonical/areas.geojson",
         "data/heatmap-reference-points/canonical/points.geojson"
@@ -645,10 +672,15 @@
     {
       "id": "operational-overview-basic-geographic-capability-boundary",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task operational-overview-basic-geographic-capability-boundary. demand (primary) is a choropleth using source areas from data/operational-overview/geographic-capability-boundary/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/geographic-capability-boundary/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/geographic-capability-boundary/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary.",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-basic-geographic-capability-boundary. demand (primary) is a choropleth using source areas from data/operational-overview/geographic-capability-boundary/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/geographic-capability-boundary/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/geographic-capability-boundary/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/operational-overview/geographic-capability-boundary/areas.geojson",
         "data/operational-overview/geographic-capability-boundary/incidents.geojson",
@@ -737,10 +769,15 @@
     {
       "id": "operational-overview-intermediate-canonical",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-canonical. demand (primary) is a choropleth using source areas from data/operational-overview/canonical/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/canonical/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/canonical/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline.",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-canonical. demand (primary) is a choropleth using source areas from data/operational-overview/canonical/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/canonical/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/canonical/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/operational-overview/canonical/areas.geojson",
         "data/operational-overview/canonical/incidents.geojson",
@@ -829,10 +866,15 @@
     {
       "id": "operational-overview-adversarial-missing-and-skew",
       "split": "holdout",
-      "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-missing-and-skew. demand (primary) is a choropleth using source areas from data/operational-overview/missing-and-skew/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/missing-and-skew/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/missing-and-skew/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-missing-and-skew. demand (primary) is a choropleth using source areas from data/operational-overview/missing-and-skew/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/missing-and-skew/incidents.geojson; bind weight=severity and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/missing-and-skew/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values. Capability control: preserve layer incidents as a heatmap; do not approximate it with another family.",
       "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
       "edit_target": "facilities",
       "portability": "capability-negative",
+      "capability_requirement": {
+        "kind": "unsupported-family",
+        "layer_id": "incidents",
+        "family": "heatmap"
+      },
       "data_files": [
         "data/operational-overview/missing-and-skew/areas.geojson",
         "data/operational-overview/missing-and-skew/incidents.geojson",

@@ -55,6 +55,19 @@ export function validateDirectMapLibreSemantics(
       }
     }
   }
+  const capability = task.capability_requirement;
+  if (capability?.kind === 'unsupported-behavior') {
+    const layer = task.layers.find((candidate) => candidate.id === capability.layer_id);
+    const source = layer === undefined ? undefined : style.sources[layer.source];
+    if (
+      source?.['cluster'] !== true ||
+      source['clusterMaxZoom'] !== capability.max_zoom
+    ) {
+      diagnostics.push(
+        `maplibre.behavior-missing ${capability.layer_id}/cluster/${capability.max_zoom}`,
+      );
+    }
+  }
   if (!strictlyIncreasing(order) || order.length !== task.layers.length) {
     diagnostics.push('maplibre.layer-order');
   }

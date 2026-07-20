@@ -40,6 +40,16 @@ export interface V02ManifestTask {
   edit_prompt: string;
   edit_target: string;
   portability: V02CorpusTask['portability'];
+  capability_requirement:
+    | null
+    | { kind: 'unsupported-family'; layer_id: string; family: 'heatmap' }
+    | {
+        kind: 'unsupported-behavior';
+        layer_id: string;
+        action: 'cluster';
+        target: 'symbols';
+        max_zoom: 9;
+      };
   data_files: string[];
   layers: V02LayerRequirement[];
   conditions: V02Condition[];
@@ -100,6 +110,9 @@ export function validateV02Manifest(
     if (task.conditions.includes('vega-capability-negative') === portable) {
       diagnostics.push(`manifest.capability-control-mismatch ${task.id}`);
     }
+    if (portable !== (task.capability_requirement === null)) {
+      diagnostics.push(`manifest.capability-requirement-mismatch ${task.id}`);
+    }
     const files = new Set(task.data_files);
     for (const layer of task.layers) {
       if (!files.has(layer.source_file)) {
@@ -145,7 +158,7 @@ export function buildV02ReferenceDocument(
       })),
       fields,
     },
-    layers: task.layers.map((layer, index) => ({
+    layers: task.layers.map((layer) => ({
       id: layer.id,
       purpose: layer.purpose,
       family: layer.family,
@@ -164,16 +177,15 @@ export function buildV02ReferenceDocument(
           ? { raw_count_choropleth: 'reject' as const }
           : {}),
       },
-      ...(task.portability === 'capability-negative' &&
-      !task.layers.some((candidate) => candidate.family === 'heatmap') &&
-      index === task.layers.length - 1
+      ...(task.capability_requirement?.kind === 'unsupported-behavior' &&
+      layer.id === task.capability_requirement.layer_id
         ? {
             behavior: {
               zoom_rules: [
                 {
-                  max_zoom: 9,
-                  target: 'symbols' as const,
-                  action: 'cluster' as const,
+                  max_zoom: task.capability_requirement.max_zoom,
+                  target: task.capability_requirement.target,
+                  action: task.capability_requirement.action,
                 },
               ],
             },
@@ -203,6 +215,7 @@ function manifest(
 
 function manifestTask(task: V02CorpusTask): V02ManifestTask {
   const layers = layerRequirements(task.archetype, task.data_files);
+  const capabilityRequirement = capabilityRequirementFor(task, layers);
   const layerInstruction = layers
     .map(
       (layer) =>
@@ -213,7 +226,8 @@ function manifestTask(task: V02CorpusTask): V02ManifestTask {
   const prompt =
     `Create one ordered multi-layer map for task ${task.id}. ${layerInstruction}. ` +
     `Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. ` +
-    `Stress requirements: ${task.stressors.join(', ')}.`;
+    `Stress requirements: ${task.stressors.join(', ')}.` +
+    capabilityInstruction(capabilityRequirement);
   const conditions: V02Condition[] = [
     'direct-maplibre',
     'atlaspec-maplibre',
@@ -233,10 +247,42 @@ function manifestTask(task: V02CorpusTask): V02ManifestTask {
       'Do not rename, reorder, or alter any other semantic layer.',
     edit_target: task.edit_target,
     portability: task.portability,
+    capability_requirement: capabilityRequirement,
     data_files: [...task.data_files],
     layers,
     conditions,
   };
+}
+
+function capabilityRequirementFor(
+  task: V02CorpusTask,
+  layers: V02LayerRequirement[],
+): V02ManifestTask['capability_requirement'] {
+  if (task.portability === 'representable') return null;
+  const heatmap = layers.find((layer) => layer.family === 'heatmap');
+  if (heatmap !== undefined) {
+    return { kind: 'unsupported-family', layer_id: heatmap.id, family: 'heatmap' };
+  }
+  const pointLayer = [...layers].reverse().find((layer) => layer.support === 'point');
+  if (pointLayer === undefined) {
+    throw new Error(`Capability-negative task has no point layer: ${task.id}`);
+  }
+  return {
+    kind: 'unsupported-behavior',
+    layer_id: pointLayer.id,
+    action: 'cluster',
+    target: 'symbols',
+    max_zoom: 9,
+  };
+}
+
+function capabilityInstruction(
+  requirement: V02ManifestTask['capability_requirement'],
+): string {
+  if (requirement === null) return '';
+  return requirement.kind === 'unsupported-family'
+    ? ` Capability control: preserve layer ${requirement.layer_id} as a heatmap; do not approximate it with another family.`
+    : ` Capability control: layer ${requirement.layer_id} must cluster symbols through zoom ${requirement.max_zoom}; do not silently omit or approximate this behavior.`;
 }
 
 function layerRequirements(

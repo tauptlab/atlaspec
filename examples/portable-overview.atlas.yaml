@@ -1,0 +1,66 @@
+version: "0.2"
+map: portable-overview
+title: Flood risk and emergency facility types
+description: Compare flood risk while distinguishing emergency facilities.
+
+intent:
+  task: compare
+  audience: operations
+  primary_message: Compare district risk and identify the type of nearby response facilities.
+
+data:
+  sources:
+    - id: districts
+      type: geojson
+      url: ./data/districts.geojson
+    - id: facilities
+      type: geojson
+      url: ./data/facilities.geojson
+  fields:
+    flood_probability:
+      source: districts
+      path: flood_probability
+      measurement: quantitative
+      semantic_type: probability
+      unit: ratio
+      normalization: ratio
+      range: [0, 1]
+    facility_type:
+      source: facilities
+      path: type
+      measurement: nominal
+      semantic_type: category
+      domain: [shelter, hospital, supply-depot]
+    facility_name:
+      source: facilities
+      path: name
+      measurement: nominal
+      semantic_type: label
+
+layers:
+  - id: flood-risk
+    purpose: primary
+    family: choropleth
+    encoding:
+      geometry: {source: districts, support: polygon}
+      color: {field: flood_probability, classification: continuous}
+    constraints:
+      missing_data: explicit
+      raw_count_choropleth: reject
+  - id: facilities
+    purpose: supporting
+    family: categorical-point
+    encoding:
+      geometry: {source: facilities, support: point}
+      category: {field: facility_type}
+      label: {field: facility_name}
+    constraints:
+      missing_data: error
+
+constraints:
+  colorblind_safe: true
+  protected_layers: [facilities]
+  label_priority: [facility_name]
+  viewport: {width: 960, height: 640}
+
+basemap: {style: minimal-light, contrast: light}

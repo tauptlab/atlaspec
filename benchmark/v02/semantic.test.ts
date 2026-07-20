@@ -13,7 +13,11 @@ import {
   compareUntargetedLayers,
   extractMapLibreSemantics,
   extractVegaLiteSemantics,
+  validateDirectMapLibreSemantics,
+  validateDirectVegaLiteSemantics,
 } from './semantic.js';
+import { buildV02CorpusMatrix } from './corpus.js';
+import { buildV02Manifests } from './manifest.js';
 
 async function portable(): Promise<AtlaspecV02Document> {
   return parse(
@@ -86,6 +90,53 @@ describe('AtlasBench 0.2 semantic normalization', () => {
       expect.arrayContaining([
         expect.stringContaining('/layers/0/missing_data'),
       ]),
+    );
+  });
+
+  it('validates metadata-free direct renderer outputs against locked contracts', () => {
+    const task = buildV02Manifests(buildV02CorpusMatrix()).development.tasks.find(
+      (candidate) => candidate.id.startsWith('choropleth-proportional-symbols'),
+    )!;
+    const [areasFile, pointsFile] = task.data_files;
+    const maplibre = {
+      version: 8 as const,
+      name: 'direct',
+      glyphs: 'https://example.test/{fontstack}/{range}.pbf',
+      metadata: {},
+      sources: {
+        areas: { type: 'geojson', data: areasFile },
+        points: { type: 'geojson', data: pointsFile },
+      },
+      layers: [
+        { id: 'a', type: 'fill', source: 'areas', paint: { 'fill-color': ['get', 'risk_rate'] } },
+        { id: 'b', type: 'circle', source: 'points', paint: { 'circle-radius': ['get', 'capacity'] } },
+        { id: 'c', type: 'symbol', source: 'points', layout: { 'text-field': ['get', 'name'] } },
+      ],
+    };
+    const vegaLite = {
+      layer: [
+        { data: { url: areasFile }, mark: 'geoshape', encoding: { color: { field: 'risk_rate' } } },
+        { data: { url: pointsFile }, mark: 'circle', encoding: { size: { field: 'capacity' } } },
+        { data: { url: pointsFile }, mark: 'text', encoding: { text: { field: 'name' } } },
+      ],
+    };
+
+    expect(validateDirectMapLibreSemantics(maplibre, task)).toEqual({
+      accepted: true,
+      diagnostics: [],
+    });
+    expect(validateDirectVegaLiteSemantics(vegaLite, task)).toEqual({
+      accepted: true,
+      diagnostics: [],
+    });
+    (maplibre.layers[1]!.paint as Record<string, unknown>)['circle-radius'] = 7;
+    expect(validateDirectMapLibreSemantics(maplibre, task)).toEqual(
+      expect.objectContaining({
+        accepted: false,
+        diagnostics: expect.arrayContaining([
+          expect.stringContaining('maplibre.binding-missing sites/size/capacity'),
+        ]),
+      }),
     );
   });
 });

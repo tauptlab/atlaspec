@@ -1,0 +1,2850 @@
+{
+  "version": "0.2",
+  "suite": "atlasbench-v02-48-development",
+  "repetitions": 5,
+  "status": "contract-locked-runner-pending",
+  "tasks": [
+    {
+      "id": "choropleth-proportional-symbols-basic-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-basic-missing-and-skew. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/missing-and-skew/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/missing-and-skew/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+        "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-basic-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-basic-dense-multilingual-mobile. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-basic-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-basic-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-intermediate-canonical. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/canonical/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/canonical/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/canonical/areas.geojson",
+        "data/choropleth-proportional-symbols/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-intermediate-dense-multilingual-mobile. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-intermediate-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-intermediate-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-adversarial-canonical. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/canonical/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/canonical/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/canonical/areas.geojson",
+        "data/choropleth-proportional-symbols/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-adversarial-missing-and-skew. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/missing-and-skew/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/missing-and-skew/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+        "data/choropleth-proportional-symbols/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-proportional-symbols-adversarial-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-proportional-symbols-adversarial-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. sites (supporting) is a proportional-symbol using source points from data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson; bind size=capacity, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer sites to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "sites",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "sites",
+          "purpose": "supporting",
+          "family": "proportional-symbol",
+          "source": "points",
+          "source_file": "data/choropleth-proportional-symbols/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "size",
+              "field": "capacity",
+              "path": "capacity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-basic-canonical. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/canonical/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/canonical/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, shared-source-baseline.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-basic-dense-multilingual-mobile. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-basic-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-basic-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-intermediate-canonical. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/canonical/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/canonical/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-intermediate-missing-and-skew. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/missing-and-skew/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/missing-and-skew/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+        "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-intermediate-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-intermediate-geographic-capability-boundary. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+        "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-adversarial-canonical. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/canonical/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/canonical/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/canonical/areas.geojson",
+        "data/choropleth-categorical-facilities/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-adversarial-missing-and-skew. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/missing-and-skew/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/missing-and-skew/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+        "data/choropleth-categorical-facilities/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "choropleth-categorical-facilities-adversarial-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task choropleth-categorical-facilities-adversarial-dense-multilingual-mobile. risk (primary) is a choropleth using source areas from data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson; bind color=risk_rate and use missing_data=explicit. facilities (supporting) is a categorical-point using source facilities from data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson; bind category=category, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer facilities to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "facilities",
+      "portability": "representable",
+      "data_files": [
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+        "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "risk",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/choropleth-categorical-facilities/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "risk_rate",
+              "path": "risk_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "facilities",
+          "purpose": "supporting",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/choropleth-categorical-facilities/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "category",
+              "path": "category"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-basic-canonical. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/canonical/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/canonical/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, shared-source-baseline.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/canonical/areas.geojson",
+        "data/heatmap-reference-points/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/canonical/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-basic-missing-and-skew. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/missing-and-skew/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/missing-and-skew/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-basic-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-basic-geographic-capability-boundary. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/geographic-capability-boundary/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/geographic-capability-boundary/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+        "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-intermediate-canonical. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/canonical/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/canonical/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/canonical/areas.geojson",
+        "data/heatmap-reference-points/canonical/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/canonical/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/canonical/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-intermediate-missing-and-skew. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/missing-and-skew/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/missing-and-skew/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-intermediate-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-intermediate-dense-multilingual-mobile. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/dense-multilingual-mobile/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+        "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-adversarial-missing-and-skew. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/missing-and-skew/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/missing-and-skew/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+        "data/heatmap-reference-points/missing-and-skew/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/missing-and-skew/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-adversarial-dense-multilingual-mobile. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/dense-multilingual-mobile/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+        "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/dense-multilingual-mobile/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/dense-multilingual-mobile/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "heatmap-reference-points-adversarial-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task heatmap-reference-points-adversarial-geographic-capability-boundary. incidents (primary) is a heatmap using source incidents from data/heatmap-reference-points/geographic-capability-boundary/areas.geojson; bind weight=severity, label=name and use missing_data=hide. reference-points (reference) is a categorical-point using source references from data/heatmap-reference-points/geographic-capability-boundary/points.geojson; bind category=reference_type, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer reference-points to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "reference-points",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+        "data/heatmap-reference-points/geographic-capability-boundary/points.geojson"
+      ],
+      "layers": [
+        {
+          "id": "incidents",
+          "purpose": "primary",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/heatmap-reference-points/geographic-capability-boundary/areas.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "reference-points",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "references",
+          "source_file": "data/heatmap-reference-points/geographic-capability-boundary/points.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "reference_type",
+              "path": "reference_type"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-basic-canonical. demand (primary) is a choropleth using source areas from data/operational-overview/canonical/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/canonical/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/canonical/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, shared-source-baseline.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/canonical/areas.geojson",
+        "data/operational-overview/canonical/incidents.geojson",
+        "data/operational-overview/canonical/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/canonical/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/canonical/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-basic-missing-and-skew. demand (primary) is a choropleth using source areas from data/operational-overview/missing-and-skew/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/missing-and-skew/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/missing-and-skew/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/missing-and-skew/areas.geojson",
+        "data/operational-overview/missing-and-skew/incidents.geojson",
+        "data/operational-overview/missing-and-skew/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/missing-and-skew/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/missing-and-skew/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-basic-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-basic-dense-multilingual-mobile. demand (primary) is a choropleth using source areas from data/operational-overview/dense-multilingual-mobile/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/dense-multilingual-mobile/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/dense-multilingual-mobile/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: desktop-viewport, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-missing-and-skew",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-missing-and-skew. demand (primary) is a choropleth using source areas from data/operational-overview/missing-and-skew/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/missing-and-skew/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/missing-and-skew/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, missing-values, skew, extreme-values.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/missing-and-skew/areas.geojson",
+        "data/operational-overview/missing-and-skew/incidents.geojson",
+        "data/operational-overview/missing-and-skew/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/missing-and-skew/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/missing-and-skew/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/missing-and-skew/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-dense-multilingual-mobile. demand (primary) is a choropleth using source areas from data/operational-overview/dense-multilingual-mobile/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/dense-multilingual-mobile/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/dense-multilingual-mobile/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-intermediate-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-intermediate-geographic-capability-boundary. demand (primary) is a choropleth using source areas from data/operational-overview/geographic-capability-boundary/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/geographic-capability-boundary/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/geographic-capability-boundary/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: layer-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/geographic-capability-boundary/areas.geojson",
+        "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+        "data/operational-overview/geographic-capability-boundary/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/geographic-capability-boundary/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-canonical",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-canonical. demand (primary) is a choropleth using source areas from data/operational-overview/canonical/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/canonical/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/canonical/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, shared-source-baseline.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/canonical/areas.geojson",
+        "data/operational-overview/canonical/incidents.geojson",
+        "data/operational-overview/canonical/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/canonical/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/canonical/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/canonical/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-dense-multilingual-mobile",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-dense-multilingual-mobile. demand (primary) is a choropleth using source areas from data/operational-overview/dense-multilingual-mobile/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/dense-multilingual-mobile/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/dense-multilingual-mobile/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, dense-overlap, multilingual-labels, mobile.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "representable",
+      "data_files": [
+        "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+        "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+        "data/operational-overview/dense-multilingual-mobile/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/dense-multilingual-mobile/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "direct-vega-lite",
+        "atlaspec-vega-lite"
+      ]
+    },
+    {
+      "id": "operational-overview-adversarial-geographic-capability-boundary",
+      "split": "development",
+      "prompt": "Create one ordered multi-layer map for task operational-overview-adversarial-geographic-capability-boundary. demand (primary) is a choropleth using source areas from data/operational-overview/geographic-capability-boundary/areas.geojson; bind color=demand_rate and use missing_data=explicit. incidents (supporting) is a heatmap using source incidents from data/operational-overview/geographic-capability-boundary/incidents.geojson; bind weight=severity, label=name and use missing_data=hide. facilities (reference) is a categorical-point using source facilities from data/operational-overview/geographic-capability-boundary/facilities.geojson; bind category=status, label=name and use missing_data=error. Preserve layer order, source identities, field bindings, legends, and a 960 by 640 viewport. Stress requirements: mobile-viewport, conflicting-visibility, localized-edit, high-latitude, antimeridian, capability-boundary.",
+      "edit_prompt": "Change only layer incidents to hide missing encoded values. Do not rename, reorder, or alter any other semantic layer.",
+      "edit_target": "incidents",
+      "portability": "capability-negative",
+      "data_files": [
+        "data/operational-overview/geographic-capability-boundary/areas.geojson",
+        "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+        "data/operational-overview/geographic-capability-boundary/facilities.geojson"
+      ],
+      "layers": [
+        {
+          "id": "demand",
+          "purpose": "primary",
+          "family": "choropleth",
+          "source": "areas",
+          "source_file": "data/operational-overview/geographic-capability-boundary/areas.geojson",
+          "support": "polygon",
+          "bindings": [
+            {
+              "channel": "color",
+              "field": "demand_rate",
+              "path": "demand_rate"
+            }
+          ],
+          "maplibre_types": [
+            "fill"
+          ],
+          "vega_marks": [
+            "geoshape"
+          ],
+          "missing_data": "explicit"
+        },
+        {
+          "id": "incidents",
+          "purpose": "supporting",
+          "family": "heatmap",
+          "source": "incidents",
+          "source_file": "data/operational-overview/geographic-capability-boundary/incidents.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "weight",
+              "field": "severity",
+              "path": "severity"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "heatmap"
+          ],
+          "vega_marks": [],
+          "missing_data": "hide"
+        },
+        {
+          "id": "facilities",
+          "purpose": "reference",
+          "family": "categorical-point",
+          "source": "facilities",
+          "source_file": "data/operational-overview/geographic-capability-boundary/facilities.geojson",
+          "support": "point",
+          "bindings": [
+            {
+              "channel": "category",
+              "field": "status",
+              "path": "status"
+            },
+            {
+              "channel": "label",
+              "field": "name",
+              "path": "name"
+            }
+          ],
+          "maplibre_types": [
+            "circle",
+            "symbol"
+          ],
+          "vega_marks": [
+            "circle",
+            "text"
+          ],
+          "missing_data": "error"
+        }
+      ],
+      "conditions": [
+        "direct-maplibre",
+        "atlaspec-maplibre",
+        "atlaspec-repair",
+        "vega-capability-negative"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { MapLibreStyle } from '../../src/maplibre.js';
 import type { SemanticMapRecord } from '../../src/semantic.js';
 import type { VegaLiteSpec } from '../../src/vega-lite.js';
+import type { V02LayerRequirement, V02ManifestTask } from './manifest.js';
 
 export type SemanticExtractionResult =
   | { ok: true; record: SemanticMapRecord }
@@ -9,6 +10,98 @@ export type SemanticExtractionResult =
 export interface SemanticComparison {
   equal: boolean;
   differences: string[];
+}
+
+export interface DirectSemanticCheck {
+  accepted: boolean;
+  diagnostics: string[];
+}
+
+export function validateDirectMapLibreSemantics(
+  style: MapLibreStyle,
+  task: V02ManifestTask,
+): DirectSemanticCheck {
+  const diagnostics: string[] = [];
+  const order: number[] = [];
+  for (const requirement of task.layers) {
+    const source = style.sources[requirement.source];
+    if (source === undefined) {
+      diagnostics.push(`maplibre.source-missing ${requirement.source}`);
+    } else if (!sourceUrlMatches(source['data'], requirement.source_file)) {
+      diagnostics.push(`maplibre.source-data-mismatch ${requirement.source}`);
+    }
+    const matching = style.layers
+      .map((layer, index) => ({ layer, index }))
+      .filter(
+        ({ layer }) =>
+          layer['source'] === requirement.source &&
+          requirement.maplibre_types.includes(String(layer['type'])),
+      );
+    for (const type of requirement.maplibre_types) {
+      if (!matching.some(({ layer }) => layer['type'] === type)) {
+        diagnostics.push(`maplibre.role-missing ${requirement.id}/${type}`);
+      }
+    }
+    const thematicType = maplibreThematicType(requirement);
+    const thematic = matching.find(({ layer }) => layer['type'] === thematicType);
+    if (thematic !== undefined) order.push(thematic.index);
+    for (const binding of requirement.bindings) {
+      const roleType = maplibreBindingType(binding.channel, requirement.family);
+      const candidates = matching.filter(({ layer }) => layer['type'] === roleType);
+      if (!candidates.some(({ layer }) => containsString(layer, binding.path))) {
+        diagnostics.push(
+          `maplibre.binding-missing ${requirement.id}/${binding.channel}/${binding.path}`,
+        );
+      }
+    }
+  }
+  if (!strictlyIncreasing(order) || order.length !== task.layers.length) {
+    diagnostics.push('maplibre.layer-order');
+  }
+  return { accepted: diagnostics.length === 0, diagnostics: diagnostics.sort() };
+}
+
+export function validateDirectVegaLiteSemantics(
+  spec: VegaLiteSpec,
+  task: V02ManifestTask,
+): DirectSemanticCheck {
+  const diagnostics: string[] = [];
+  const units = Array.isArray(spec['layer'])
+    ? spec['layer'].map((value, index) => ({ value: asRecord(value), index }))
+    : [];
+  const order: number[] = [];
+  for (const requirement of task.layers) {
+    const matching = units.filter(({ value }) =>
+      value === undefined
+        ? false
+        : dataMatches(value['data'], requirement.source_file),
+    );
+    for (const mark of requirement.vega_marks) {
+      if (!matching.some(({ value }) => markType(value?.['mark']) === mark)) {
+        diagnostics.push(`vega-lite.role-missing ${requirement.id}/${mark}`);
+      }
+    }
+    const thematicMark = vegaThematicMark(requirement);
+    const thematic = matching.find(
+      ({ value }) => markType(value?.['mark']) === thematicMark,
+    );
+    if (thematic !== undefined) order.push(thematic.index);
+    for (const binding of requirement.bindings) {
+      const mark = vegaBindingMark(binding.channel, requirement.family);
+      const candidates = matching.filter(
+        ({ value }) => markType(value?.['mark']) === mark,
+      );
+      if (!candidates.some(({ value }) => containsString(value, binding.path))) {
+        diagnostics.push(
+          `vega-lite.binding-missing ${requirement.id}/${binding.channel}/${binding.path}`,
+        );
+      }
+    }
+  }
+  if (!strictlyIncreasing(order) || order.length !== task.layers.length) {
+    diagnostics.push('vega-lite.layer-order');
+  }
+  return { accepted: diagnostics.length === 0, diagnostics: diagnostics.sort() };
 }
 
 export function extractMapLibreSemantics(
@@ -135,4 +228,81 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
 
 function escapePointer(value: string): string {
   return value.replaceAll('~', '~0').replaceAll('/', '~1');
+}
+
+function maplibreThematicType(requirement: V02LayerRequirement): string {
+  return requirement.family === 'choropleth'
+    ? 'fill'
+    : requirement.family === 'heatmap'
+      ? 'heatmap'
+      : 'circle';
+}
+
+function maplibreBindingType(
+  channel: V02LayerRequirement['bindings'][number]['channel'],
+  family: V02LayerRequirement['family'],
+): string {
+  if (channel === 'label') return 'symbol';
+  return family === 'choropleth'
+    ? 'fill'
+    : family === 'heatmap'
+      ? 'heatmap'
+      : 'circle';
+}
+
+function vegaThematicMark(requirement: V02LayerRequirement): string {
+  return requirement.family === 'choropleth'
+    ? 'geoshape'
+    : requirement.family === 'heatmap'
+      ? 'rect'
+      : 'circle';
+}
+
+function vegaBindingMark(
+  channel: V02LayerRequirement['bindings'][number]['channel'],
+  family: V02LayerRequirement['family'],
+): string {
+  if (channel === 'label') return 'text';
+  return family === 'choropleth'
+    ? 'geoshape'
+    : family === 'heatmap'
+      ? 'rect'
+      : 'circle';
+}
+
+function markType(mark: unknown): string | undefined {
+  if (typeof mark === 'string') return mark;
+  return typeof asRecord(mark)?.['type'] === 'string'
+    ? (asRecord(mark)!['type'] as string)
+    : undefined;
+}
+
+function dataMatches(data: unknown, sourceFile: string): boolean {
+  const record = asRecord(data);
+  if (record === undefined) return false;
+  return sourceUrlMatches(record['url'], sourceFile);
+}
+
+function sourceUrlMatches(value: unknown, sourceFile: string): boolean {
+  return (
+    typeof value === 'string' &&
+    (value === sourceFile || value.endsWith(sourceFile.replaceAll('\\', '/')))
+  );
+}
+
+function containsString(value: unknown, expected: string): boolean {
+  if (typeof value === 'string') {
+    return value === expected || value.endsWith(`.${expected}`) || value.includes(expected);
+  }
+  if (Array.isArray(value)) {
+    return value.some((item) => containsString(item, expected));
+  }
+  const record = asRecord(value);
+  return record === undefined
+    ? false
+    : Object.values(record).some((item) => containsString(item, expected));
+}
+
+function strictlyIncreasing(values: number[]): boolean {
+  return values.every((value, index) => index === 0 || values[index - 1]! < value);
 }

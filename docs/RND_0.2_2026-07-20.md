@@ -80,8 +80,10 @@ Vega-Lite specifications compile without warnings, but external GeoJSON fetch,
 browser rendering, viewport screenshots, map-reading accuracy, and blind
 cartographer review remain unmeasured. The fresh v0.2 datasets are now locked,
 and compiler-produced artifacts now share a verified renderer-neutral semantic
-record. Independent direct-renderer normalization, executable manifests, the
-complete edit-survival evaluator, and model runs remain pending.
+record. Metadata-free direct renderer outputs are checked against locked
+source, role, order, and field contracts, and development/holdout manifests are
+generated. The generation runner, complete two-turn edit-survival evaluator,
+and model runs remain pending.
 
 ## Current conclusion
 

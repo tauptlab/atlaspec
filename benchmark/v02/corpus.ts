@@ -42,7 +42,7 @@ export interface V02CorpusMatrix {
   repetitions: 5;
   bootstrap_seed: 2803528194;
   split_policy: string;
-  status: 'data-locked-manifests-pending';
+  status: 'contracts-locked-runner-pending';
   tasks: V02CorpusTask[];
 }
 
@@ -100,7 +100,7 @@ export function buildV02CorpusMatrix(): V02CorpusMatrix {
     bootstrap_seed: 2803528194,
     split_policy:
       'One deterministically rotated variant per archetype-difficulty cell is held out; each variant appears exactly three times in holdout.',
-    status: 'data-locked-manifests-pending',
+    status: 'contracts-locked-runner-pending',
     tasks,
   };
 }

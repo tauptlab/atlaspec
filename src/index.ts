@@ -34,6 +34,7 @@ export {
 export { loadDocument, parseDocument } from './load.js';
 export { compileMapLibre } from './maplibre.js';
 export { validateAtlaspec } from './validate.js';
+export { buildSemanticRecord } from './semantic.js';
 export {
   compileVegaLite,
   inspectVegaLiteCapabilities,
@@ -55,3 +56,9 @@ export type {
   VegaLiteCompilationResult,
   VegaLiteSpec,
 } from './vega-lite.js';
+
+export type {
+  SemanticFieldBinding,
+  SemanticLayerRecord,
+  SemanticMapRecord,
+} from './semantic.js';

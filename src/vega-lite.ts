@@ -7,6 +7,7 @@ import type {
   Field,
 } from './schema.js';
 import { validateAtlaspec } from './validate.js';
+import { buildSemanticRecord } from './semantic.js';
 
 export type VegaLiteSpec = Record<string, unknown>;
 
@@ -84,6 +85,7 @@ export function compileVegaLite(value: unknown): VegaLiteCompilationResult {
         map: document.map,
         intent: document.intent,
         constraints: document.constraints ?? {},
+        semantic: buildSemanticRecord(document),
         layers: document.layers.map((layer) => ({
           id: layer.id,
           purpose: layer.purpose,

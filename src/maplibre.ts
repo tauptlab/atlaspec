@@ -6,6 +6,7 @@ import type {
   DataSource,
   Field,
 } from './schema.js';
+import { buildSemanticRecord } from './semantic.js';
 import { validateAtlaspec } from './validate.js';
 
 export interface CompilationDecision {
@@ -150,6 +151,7 @@ function compileMapLibreV02(
         family: layer.family,
       })),
       'atlaspec:intent': document.intent,
+      'atlaspec:semantic': buildSemanticRecord(document),
       'atlaspec:legend': legends,
       'atlaspec:decisions': decisions,
     },

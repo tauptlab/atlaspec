@@ -27,11 +27,13 @@ npm run corpus:v02:check
 
 ## Evidence boundary
 
-The matrix and GeoJSON datasets are locked, but prompts, hard-check manifests,
-semantic normalizer, edit-survival evaluator, development runs, and one-time
-holdout runs are still pending. `status: data-locked-manifests-pending` is part
-of the generated artifact so the corpus cannot be mistaken for an executable
-or completed benchmark.
+The matrix and GeoJSON datasets are locked. Compiler-produced MapLibre and
+Vega-Lite artifacts now carry and verify a common semantic record, including
+an unrelated-layer edit-survival comparison. Independent normalization of
+direct renderer baselines, prompts, hard-check manifests, the complete edit
+evaluator, development runs, and one-time holdout runs are still pending.
+`status: data-locked-manifests-pending` is part of the generated artifact so
+the corpus cannot be mistaken for an executable or completed benchmark.
 
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked

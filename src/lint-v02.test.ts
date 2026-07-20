@@ -107,4 +107,22 @@ describe('Atlaspec 0.2 linting', () => {
       ]),
     );
   });
+
+  it('rejects later choropleths that would occlude the same polygon source', async () => {
+    const document = await upgradedExample();
+    const second = structuredClone(document.layers[0]!);
+    second.id = 'secondary-fill';
+    second.purpose = 'supporting';
+    delete second.encoding.label;
+    document.layers.push(second);
+
+    expect(lintAtlaspec(document)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'layers.occluded-choropleth',
+          path: '/layers/1/encoding/geometry/source',
+        }),
+      ]),
+    );
+  });
 });

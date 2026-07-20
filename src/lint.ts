@@ -352,6 +352,31 @@ function lintZoomRules(
       });
     }
     if (
+      rule.action !== 'cluster' &&
+      rule.min_zoom === undefined &&
+      rule.max_zoom === undefined
+    ) {
+      diagnostics.push({
+        code: 'behavior.zoom-bound-required',
+        severity: 'error',
+        message: 'A visibility rule requires at least one zoom bound.',
+        path: root,
+      });
+    }
+    if (
+      (rule.action === 'show' || rule.action === 'show-labels') &&
+      rule.min_zoom !== undefined &&
+      rule.max_zoom !== undefined &&
+      rule.min_zoom === rule.max_zoom
+    ) {
+      diagnostics.push({
+        code: 'behavior.empty-zoom-range',
+        severity: 'error',
+        message: 'A show rule with equal minimum and maximum zoom is never visible.',
+        path: root,
+      });
+    }
+    if (
       rule.action === 'hide' &&
       rule.min_zoom !== undefined &&
       rule.max_zoom !== undefined
@@ -409,6 +434,22 @@ function lintZoomRules(
       message: 'A layer may declare only one symbol clustering rule.',
       path: `/behavior/zoom_rules/${clusterRules[1]!.index}`,
     });
+  }
+
+  const visibilityByTarget = new Map<string, number>();
+  for (const [index, rule] of rules.entries()) {
+    if (rule.action === 'cluster') continue;
+    const previous = visibilityByTarget.get(rule.target);
+    if (previous !== undefined) {
+      diagnostics.push({
+        code: 'behavior.multiple-visibility-rules',
+        severity: 'error',
+        message: `Zoom target '${rule.target}' has multiple order-dependent visibility rules.`,
+        path: `/behavior/zoom_rules/${index}`,
+      });
+    } else {
+      visibilityByTarget.set(rule.target, index);
+    }
   }
 }
 
@@ -592,6 +633,23 @@ function lintLayerComposition(
           path: `/layers/${clustered[1]!.index}/behavior/zoom_rules`,
         });
       }
+    }
+  }
+
+  const choroplethsBySource = new Map<string, number>();
+  for (const [index, layer] of document.layers.entries()) {
+    if (layer.family !== 'choropleth') continue;
+    const source = layer.encoding.geometry.source;
+    const previous = choroplethsBySource.get(source);
+    if (previous !== undefined) {
+      diagnostics.push({
+        code: 'layers.occluded-choropleth',
+        severity: 'error',
+        message: `Choropleth layers ${previous} and ${index} use the same polygon source; the later fill would occlude the earlier thematic color.`,
+        path: `/layers/${index}/encoding/geometry/source`,
+      });
+    } else {
+      choroplethsBySource.set(source, index);
     }
   }
 }

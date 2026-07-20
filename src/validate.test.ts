@@ -176,4 +176,35 @@ describe('validateAtlaspec', () => {
       ]),
     );
   });
+
+  it('rejects no-op and order-dependent visibility rules', async () => {
+    const document = await example('flood-risk.atlas.yaml');
+    document['behavior'] = {
+      zoom_rules: [
+        { target: 'fill', action: 'show' },
+        { min_zoom: 8, target: 'fill', action: 'show' },
+      ],
+    };
+
+    const codes = new Set(
+      validateAtlaspec(document).diagnostics.map((diagnostic) => diagnostic.code),
+    );
+    expect(codes.has('behavior.zoom-bound-required')).toBe(true);
+    expect(codes.has('behavior.multiple-visibility-rules')).toBe(true);
+  });
+
+  it('rejects an empty show interval', async () => {
+    const document = await example('flood-risk.atlas.yaml');
+    document['behavior'] = {
+      zoom_rules: [
+        { min_zoom: 8, max_zoom: 8, target: 'fill', action: 'show' },
+      ],
+    };
+
+    expect(validateAtlaspec(document).diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'behavior.empty-zoom-range' }),
+      ]),
+    );
+  });
 });

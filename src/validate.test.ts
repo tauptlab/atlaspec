@@ -110,4 +110,49 @@ describe('validateAtlaspec', () => {
 
     expect(validateAtlaspec(document).valid).toBe(true);
   });
+
+  it('rejects bounded hide rules that cannot compile without layer splitting', async () => {
+    const document = await example('flood-risk.atlas.yaml');
+    document['behavior'] = {
+      zoom_rules: [
+        {
+          min_zoom: 5,
+          max_zoom: 10,
+          target: 'fill',
+          action: 'hide',
+        },
+      ],
+    };
+
+    expect(validateAtlaspec(document).diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'behavior.bounded-hide-unsupported',
+          path: '/behavior/zoom_rules/0',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects zoom actions that would be silently ignored by the compiler', async () => {
+    const document = await example('flood-risk.atlas.yaml');
+    document['behavior'] = {
+      zoom_rules: [
+        { min_zoom: 3, target: 'fill', action: 'cluster' },
+        { min_zoom: 8, target: 'symbols', action: 'show-labels' },
+      ],
+    };
+
+    const codes = new Set(
+      validateAtlaspec(document).diagnostics.map((diagnostic) => diagnostic.code),
+    );
+    expect(codes).toEqual(
+      new Set([
+        'behavior.cluster-min-zoom-unsupported',
+        'behavior.cluster-target',
+        'behavior.show-labels-target',
+        'behavior.target-unavailable',
+      ]),
+    );
+  });
 });

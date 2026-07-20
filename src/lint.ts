@@ -337,6 +337,7 @@ function lintZoomRules(
   diagnostics: Diagnostic[],
 ): void {
   for (const [index, rule] of (document.behavior?.zoom_rules ?? []).entries()) {
+    const root = `/behavior/zoom_rules/${index}`;
     if (
       rule.min_zoom !== undefined &&
       rule.max_zoom !== undefined &&
@@ -346,9 +347,72 @@ function lintZoomRules(
         code: 'behavior.invalid-zoom-range',
         severity: 'error',
         message: 'Zoom rule minimum exceeds its maximum.',
-        path: `/behavior/zoom_rules/${index}`,
+        path: root,
       });
     }
+    if (
+      rule.action === 'hide' &&
+      rule.min_zoom !== undefined &&
+      rule.max_zoom !== undefined
+    ) {
+      diagnostics.push({
+        code: 'behavior.bounded-hide-unsupported',
+        severity: 'error',
+        message: 'A bounded hide interval requires splitting a renderer layer and is not supported.',
+        path: root,
+      });
+    }
+    if (rule.action === 'cluster' && rule.target !== 'symbols') {
+      diagnostics.push({
+        code: 'behavior.cluster-target',
+        severity: 'error',
+        message: "Clustering is supported only for target 'symbols'.",
+        path: `${root}/target`,
+      });
+    }
+    if (rule.action === 'cluster' && rule.min_zoom !== undefined) {
+      diagnostics.push({
+        code: 'behavior.cluster-min-zoom-unsupported',
+        severity: 'error',
+        message: 'MapLibre clustering cannot begin at an authored minimum zoom.',
+        path: `${root}/min_zoom`,
+      });
+    }
+    if (rule.action === 'show-labels' && rule.target !== 'labels') {
+      diagnostics.push({
+        code: 'behavior.show-labels-target',
+        severity: 'error',
+        message: "The show-labels action requires target 'labels'.",
+        path: `${root}/target`,
+      });
+    }
+    if (!hasZoomTarget(document, rule.target)) {
+      diagnostics.push({
+        code: 'behavior.target-unavailable',
+        severity: 'error',
+        message: `Zoom target '${rule.target}' is not emitted by the ${document.family} layer.`,
+        path: `${root}/target`,
+      });
+    }
+  }
+}
+
+function hasZoomTarget(
+  document: AtlaspecV01Document,
+  target: 'fill' | 'symbols' | 'labels' | 'heatmap',
+): boolean {
+  switch (target) {
+    case 'fill':
+      return document.family === 'choropleth';
+    case 'symbols':
+      return (
+        document.family === 'proportional-symbol' ||
+        document.family === 'categorical-point'
+      );
+    case 'labels':
+      return document.encoding.label !== undefined;
+    case 'heatmap':
+      return document.family === 'heatmap';
   }
 }
 

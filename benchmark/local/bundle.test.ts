@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildCorpusArtifacts, VARIANTS } from '../corpus/corpus.js';
-import { buildLocalQualificationBundle, qualificationTaskIds } from './bundle.js';
+import {
+  buildLocalQualificationBundle,
+  postFixTaskIds,
+  qualificationTaskIds,
+} from './bundle.js';
 
 describe('AtlasBench Local qualification bundle', () => {
   it('selects twelve balanced development tasks without exposing holdout', () => {
@@ -10,6 +14,20 @@ describe('AtlasBench Local qualification bundle', () => {
     const selected = artifacts.matrix.tasks.filter((task) => ids.has(task.id));
     expect(selected).toHaveLength(12);
     expect(selected.every((task) => task.split === 'development')).toBe(true);
+    for (const variant of VARIANTS) {
+      expect(selected.filter((task) => task.variant === variant)).toHaveLength(3);
+    }
+  });
+
+  it('selects a balanced post-fix slice disjoint from qualification and holdout', () => {
+    const artifacts = buildCorpusArtifacts();
+    const qualification = qualificationTaskIds(artifacts.matrix);
+    const postFix = postFixTaskIds(artifacts.matrix);
+    const selected = artifacts.matrix.tasks.filter((task) => postFix.has(task.id));
+
+    expect(selected).toHaveLength(12);
+    expect(selected.every((task) => task.split === 'development')).toBe(true);
+    expect([...postFix].every((id) => !qualification.has(id))).toBe(true);
     for (const variant of VARIANTS) {
       expect(selected.filter((task) => task.variant === variant)).toHaveLength(3);
     }
@@ -70,4 +88,58 @@ describe('AtlasBench Local qualification bundle', () => {
       expect(manifest.execution_order).toBe('balanced');
     }
   });
+
+  it('labels the post-fix plan and manifests independently', () => {
+    const artifacts = buildCorpusArtifacts();
+    const bundle = buildLocalQualificationBundle(
+      artifacts.development,
+      artifacts.matrix,
+      {
+        phase: 'postfix',
+        agents: testAgents(),
+        source_manifest_raw: JSON.stringify(artifacts.development),
+        matrix_raw: JSON.stringify(artifacts.matrix),
+        source_directory: 'C:/repo/benchmark/corpus',
+        output_directory: 'C:/repo/work/local-postfix',
+        lockfile_raw: '{}',
+        compiler_commit: 'commit',
+        generated_at: '2026-07-20T00:00:00Z',
+      },
+    );
+
+    expect(bundle.ledger.benchmark_id).toBe('atlasbench-local-postfix-v1');
+    expect(bundle.ledger.qualification.selection).toBe(
+      'second-development-variant-after-rotated-holdout',
+    );
+    expect(
+      [...bundle.manifests.values()].every((manifest) =>
+        manifest.suite.startsWith('atlasbench-local-postfix-'),
+      ),
+    ).toBe(true);
+  });
 });
+
+function testAgents() {
+  return [
+    {
+      id: 'codex' as const,
+      cli_version: 'codex-cli 0.144.4',
+      model: {
+        provider: 'codex-cli',
+        model: 'default',
+        version: 'codex-cli 0.144.4;model=unreported',
+      },
+      cost_observed: false,
+    },
+    {
+      id: 'claude' as const,
+      cli_version: '2.1.17 (Claude Code)',
+      model: {
+        provider: 'claude-cli',
+        model: 'opus',
+        version: 'claude-opus-4-5-20251101',
+      },
+      cost_observed: true,
+    },
+  ];
+}

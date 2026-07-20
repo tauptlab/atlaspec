@@ -14,6 +14,7 @@ import {
 
 interface Options {
   output: string;
+  phase: 'qualification' | 'postfix';
   codexVersion: string;
   claudeCliVersion: string;
   claudeModel: string;
@@ -23,8 +24,9 @@ interface Options {
 const executeFile = promisify(execFile);
 const program = new Command()
   .name('atlasbench-local-prepare')
-  .description('Prepare the pre-committed local Codex and Claude qualification')
+  .description('Prepare a pre-committed local Codex and Claude benchmark slice')
   .requiredOption('--output <directory>', 'new local qualification directory')
+  .option('--phase <phase>', 'qualification or postfix', 'qualification')
   .requiredOption('--codex-version <version>', 'exact Codex CLI version output')
   .requiredOption('--claude-cli-version <version>', 'exact Claude Code version output')
   .requiredOption('--claude-model <model>', 'Claude model selector')
@@ -32,6 +34,9 @@ const program = new Command()
 
 program.action(async (options: Options) => {
   try {
+    if (options.phase !== 'qualification' && options.phase !== 'postfix') {
+      throw new Error(`Unknown local benchmark phase: ${String(options.phase)}`);
+    }
     const outputDirectory = resolve(options.output);
     await assertEmptyOutput(outputDirectory);
     const sourcePath = resolve('benchmark/corpus/development.manifest.json');
@@ -44,6 +49,7 @@ program.action(async (options: Options) => {
       JSON.parse(sourceRaw) as ExperimentManifest,
       JSON.parse(matrixRaw) as CorpusMatrix,
       {
+        phase: options.phase,
         agents: [
           {
             id: 'codex',

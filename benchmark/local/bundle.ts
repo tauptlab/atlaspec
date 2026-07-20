@@ -34,7 +34,9 @@ export interface LocalQualificationJob {
 
 export interface LocalQualificationLedger {
   schema_version: '0.1';
-  benchmark_id: 'atlasbench-local-qualification-v1';
+  benchmark_id:
+    | 'atlasbench-local-qualification-v1'
+    | 'atlasbench-local-postfix-v1';
   generated_at: string;
   compiler_commit: string;
   lockfile_sha256: string;
@@ -44,7 +46,9 @@ export interface LocalQualificationLedger {
   qualification: {
     task_count: 12;
     repetitions: 2;
-    selection: 'next-development-variant-after-rotated-holdout';
+    selection:
+      | 'next-development-variant-after-rotated-holdout'
+      | 'second-development-variant-after-rotated-holdout';
     execution_order: 'balanced';
   };
   thresholds: LocalTokenThresholds;
@@ -79,6 +83,7 @@ export interface LocalQualificationBundle {
 }
 
 export interface BuildLocalQualificationOptions {
+  phase?: 'qualification' | 'postfix';
   agents: readonly LocalAgentIdentity[];
   source_manifest_raw: string;
   matrix_raw: string;
@@ -96,14 +101,15 @@ export function buildLocalQualificationBundle(
 ): LocalQualificationBundle {
   assertSource(source, matrix);
   assertAgents(options.agents);
-  const selectedIds = qualificationTaskIds(matrix);
+  const phase = options.phase ?? 'qualification';
+  const selectedIds = localTaskIds(matrix, phase === 'qualification' ? 1 : 2);
   const selected = new Map(
     source.tasks
       .filter((task) => selectedIds.has(task.id))
       .map((task) => [task.id, task]),
   );
   if (selected.size !== 12) {
-    throw new Error(`Qualification selection expected 12 development tasks, got ${selected.size}.`);
+    throw new Error(`Local selection expected 12 development tasks, got ${selected.size}.`);
   }
 
   const manifests = new Map<string, ExperimentManifest>();
@@ -126,7 +132,7 @@ export function buildLocalQualificationBundle(
       const manifest = rebaseManifestPaths(
         {
           ...structuredClone(source),
-          suite: `atlasbench-local-qualification-${agent.id}-${difficulty}`,
+          suite: `atlasbench-local-${phase}-${agent.id}-${difficulty}`,
           repetitions: 2,
           execution_order: 'balanced',
           model: structuredClone(agent.model),
@@ -157,7 +163,10 @@ export function buildLocalQualificationBundle(
   return {
     ledger: {
       schema_version: '0.1',
-      benchmark_id: 'atlasbench-local-qualification-v1',
+      benchmark_id:
+        phase === 'qualification'
+          ? 'atlasbench-local-qualification-v1'
+          : 'atlasbench-local-postfix-v1',
       generated_at: options.generated_at,
       compiler_commit: options.compiler_commit,
       lockfile_sha256: sha256(options.lockfile_raw),
@@ -167,7 +176,10 @@ export function buildLocalQualificationBundle(
       qualification: {
         task_count: 12,
         repetitions: 2,
-        selection: 'next-development-variant-after-rotated-holdout',
+        selection:
+          phase === 'qualification'
+            ? 'next-development-variant-after-rotated-holdout'
+            : 'second-development-variant-after-rotated-holdout',
         execution_order: 'balanced',
       },
       thresholds: {
@@ -198,10 +210,19 @@ export function buildLocalQualificationBundle(
 }
 
 export function qualificationTaskIds(matrix: CorpusMatrix): Set<string> {
+  return localTaskIds(matrix, 1);
+}
+
+export function postFixTaskIds(matrix: CorpusMatrix): Set<string> {
+  return localTaskIds(matrix, 2);
+}
+
+function localTaskIds(matrix: CorpusMatrix, variantOffset: 1 | 2): Set<string> {
   const ids = new Set<string>();
   for (const [familyIndex, family] of FAMILIES.entries()) {
     for (const [difficultyIndex, difficulty] of DIFFICULTIES.entries()) {
-      const selectedVariant = VARIANTS[(familyIndex + difficultyIndex + 1) % VARIANTS.length]!;
+      const selectedVariant =
+        VARIANTS[(familyIndex + difficultyIndex + variantOffset) % VARIANTS.length]!;
       const task = matrix.tasks.find(
         (candidate) =>
           candidate.family === family &&
@@ -209,7 +230,9 @@ export function qualificationTaskIds(matrix: CorpusMatrix): Set<string> {
           candidate.variant === selectedVariant,
       );
       if (task === undefined || task.split !== 'development') {
-        throw new Error(`Qualification task is not development-visible: ${family}/${difficulty}/${selectedVariant}.`);
+        throw new Error(
+          `Local task is not development-visible: ${family}/${difficulty}/${selectedVariant}.`,
+        );
       }
       ids.add(task.id);
     }

@@ -34,6 +34,10 @@ export {
 export { loadDocument, parseDocument } from './load.js';
 export { compileMapLibre } from './maplibre.js';
 export { validateAtlaspec } from './validate.js';
+export {
+  compileVegaLite,
+  inspectVegaLiteCapabilities,
+} from './vega-lite.js';
 
 export type {
   Diagnostic,
@@ -46,3 +50,8 @@ export type {
   CompilationResult,
   MapLibreStyle,
 } from './maplibre.js';
+
+export type {
+  VegaLiteCompilationResult,
+  VegaLiteSpec,
+} from './vega-lite.js';

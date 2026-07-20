@@ -10,6 +10,8 @@ import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 
 import { compileMapLibre } from './maplibre.js';
+import { upgradeAtlaspec } from './migrate.js';
+import type { AtlaspecV01Document } from './schema.js';
 
 async function example(name: string): Promise<unknown> {
   return parse(await readFile(resolve('examples', name), 'utf8')) as unknown;
@@ -203,15 +205,27 @@ describe('compileMapLibre', () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: 'portable-overview-flood-risk-fill',
-          filter: ['has', 'flood_probability'],
+          filter: [
+            'all',
+            ['has', 'flood_probability'],
+            ['!=', ['get', 'flood_probability'], null],
+          ],
         }),
         expect.objectContaining({
           id: 'portable-overview-facilities-symbols',
-          filter: ['has', 'type'],
+          filter: [
+            'all',
+            ['has', 'type'],
+            ['!=', ['get', 'type'], null],
+          ],
         }),
         expect.objectContaining({
           id: 'portable-overview-facilities-labels',
-          filter: ['has', 'type'],
+          filter: [
+            'all',
+            ['has', 'type'],
+            ['!=', ['get', 'type'], null],
+          ],
         }),
       ]),
     );
@@ -246,5 +260,73 @@ describe('compileMapLibre', () => {
       ['!', ['has', 'point_count']],
       ['has', 'capacity'],
     ]);
+  });
+
+  it('renders explicit missing proportional symbols and records legend policy in 0.2', async () => {
+    const document = (await example(
+      'operations-overview.atlas.yaml',
+    )) as Record<string, unknown>;
+    const layers = document['layers'] as Array<Record<string, unknown>>;
+    const constraints = layers[1]!['constraints'] as Record<string, unknown>;
+    constraints['missing_data'] = 'explicit';
+
+    const result = compileMapLibre(document);
+    expect(result.ok, JSON.stringify(result.diagnostics)).toBe(true);
+    if (!result.ok) return;
+    const symbols = result.style.layers.find(
+      (layer) => layer['id'] === 'operations-overview-shelters-symbols',
+    )!;
+    const paint = symbols['paint'] as Record<string, unknown>;
+
+    expect(paint['circle-radius']).toEqual(
+      expect.arrayContaining(['case', 6]),
+    );
+    expect(paint['circle-color']).toEqual([
+      'case',
+      ['all', ['has', 'capacity'], ['!=', ['get', 'capacity'], null]],
+      '#0072b2',
+      '#9ca3af',
+    ]);
+    expect(result.style.metadata['atlaspec:legend']).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          layer_id: 'shelters',
+          missing_data: 'explicit',
+        }),
+      ]),
+    );
+    expect(
+      validateStyleMin(result.style as unknown as StyleSpecification),
+    ).toEqual([]);
+  });
+
+  it('adds an explicit missing overlay for weighted 0.2 heatmaps', async () => {
+    const v01 = (await example(
+      'incident-density.atlas.yaml',
+    )) as AtlaspecV01Document;
+    const document = upgradeAtlaspec(v01);
+    document.layers[0]!.constraints!.missing_data = 'explicit';
+
+    const result = compileMapLibre(document);
+    expect(result.ok, JSON.stringify(result.diagnostics)).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.style.layers.map((layer) => layer['id'])).toEqual(
+      expect.arrayContaining([
+        'incident-density-main-heatmap',
+        'incident-density-main-missing',
+      ]),
+    );
+    expect(
+      result.style.layers.find(
+        (layer) => layer['id'] === 'incident-density-main-missing',
+      )?.['filter'],
+    ).toEqual([
+      '!',
+      ['all', ['has', 'severity'], ['!=', ['get', 'severity'], null]],
+    ]);
+    expect(
+      validateStyleMin(result.style as unknown as StyleSpecification),
+    ).toEqual([]);
   });
 });

@@ -117,7 +117,7 @@ function compileMapLibreV02(
   const legends: Array<Record<string, unknown>> = [];
   for (const [index, layerDocument] of layerDocuments.entries()) {
     const decisionStart = decisions.length;
-    layers.push(...compileThematicLayers(layerDocument, decisions));
+    layers.push(...compileThematicLayers(layerDocument, decisions, true));
     for (let decisionIndex = decisionStart; decisionIndex < decisions.length; decisionIndex += 1) {
       const decision = decisions[decisionIndex]!;
       decision.path = layerDecisionPath(index, decision.path);
@@ -129,6 +129,7 @@ function compileMapLibreV02(
         layer_id: document.layers[index]!.id,
         purpose: document.layers[index]!.purpose,
         family: document.layers[index]!.family,
+        missing_data: document.layers[index]!.constraints?.missing_data ?? null,
         ...legend,
       });
     }
@@ -336,20 +337,21 @@ function compileLayers(
 function compileThematicLayers(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
+  strictMissing = false,
 ): Array<Record<string, unknown>> {
   const layers: Array<Record<string, unknown>> = [];
   switch (document.family) {
     case 'choropleth':
-      layers.push(...compileChoropleth(document, decisions));
+      layers.push(...compileChoropleth(document, decisions, strictMissing));
       break;
     case 'proportional-symbol':
-      layers.push(...compileProportionalSymbols(document, decisions));
+      layers.push(...compileProportionalSymbols(document, decisions, strictMissing));
       break;
     case 'categorical-point':
-      layers.push(...compileCategoricalPoints(document, decisions));
+      layers.push(...compileCategoricalPoints(document, decisions, strictMissing));
       break;
     case 'heatmap':
-      layers.push(...compileHeatmap(document, decisions));
+      layers.push(...compileHeatmap(document, decisions, strictMissing));
       break;
   }
 
@@ -383,6 +385,7 @@ function compileBackground(
 function compileChoropleth(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
+  strictMissing = false,
 ): Array<Record<string, unknown>> {
   const colorName = document.encoding.color!.field;
   const colorField = document.data.fields[colorName]!;
@@ -417,10 +420,17 @@ function compileChoropleth(
       id: `${document.map}-fill`,
       type: 'fill',
       source: document.encoding.geometry.source,
-      ...optionalFilter(missingDataFilter(document, colorField.path)),
+      ...optionalFilter(missingDataFilter(document, colorField.path, strictMissing)),
       paint: {
         'fill-color': explicitMissing
-          ? ['case', ['has', colorField.path], colorExpression, '#bdbdbd']
+          ? [
+              'case',
+              strictMissing
+                ? validValueExpression(colorField.path)
+                : ['has', colorField.path],
+              colorExpression,
+              '#bdbdbd',
+            ]
           : colorExpression,
         'fill-opacity': 0.82,
         'fill-outline-color': '#475569',
@@ -428,7 +438,7 @@ function compileChoropleth(
     }),
   ];
 
-  const labels = compileLabels(document);
+  const labels = compileLabels(document, undefined, strictMissing);
   if (labels !== undefined) {
     layers.push(labels);
   }
@@ -438,6 +448,7 @@ function compileChoropleth(
 function compileProportionalSymbols(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
+  strictMissing = false,
 ): Array<Record<string, unknown>> {
   const sizeName = document.encoding.size!.field;
   const sizeField = document.data.fields[sizeName]!;
@@ -447,6 +458,16 @@ function compileProportionalSymbols(
   const clustered = document.behavior?.zoom_rules.some(
     (rule) => rule.target === 'symbols' && rule.action === 'cluster',
   );
+  const explicitMissing = document.constraints?.missing_data === 'explicit';
+  const radiusExpression: unknown[] = [
+    'interpolate',
+    ['linear'],
+    ['sqrt', ['max', 0, ['to-number', ['get', sizeField.path]]]],
+    sqrtMin,
+    4,
+    sqrtMax,
+    28,
+  ];
 
   decisions.push({
     code: 'size.area-proportional-scale',
@@ -462,20 +483,18 @@ function compileProportionalSymbols(
     ...optionalFilter(
       combineFilters(
         clustered ? ['!', ['has', 'point_count']] : undefined,
-        missingDataFilter(document, sizeField.path),
+        missingDataFilter(document, sizeField.path, strictMissing),
       ),
     ),
     paint: {
-      'circle-radius': [
-        'interpolate',
-        ['linear'],
-        ['sqrt', ['max', 0, ['to-number', ['get', sizeField.path]]]],
-        sqrtMin,
-        4,
-        sqrtMax,
-        28,
-      ],
-      'circle-color': '#0072b2',
+      'circle-radius':
+        strictMissing && explicitMissing
+          ? ['case', validValueExpression(sizeField.path), radiusExpression, 6]
+          : radiusExpression,
+      'circle-color':
+        strictMissing && explicitMissing
+          ? ['case', validValueExpression(sizeField.path), '#0072b2', '#9ca3af']
+          : '#0072b2',
       'circle-opacity': 0.78,
       'circle-stroke-color': '#ffffff',
       'circle-stroke-width': 1.5,
@@ -519,7 +538,11 @@ function compileProportionalSymbols(
   }
   layers.push(symbolLayer);
 
-  const labels = compileLabels(document, clustered ? ['!', ['has', 'point_count']] : undefined);
+  const labels = compileLabels(
+    document,
+    clustered ? ['!', ['has', 'point_count']] : undefined,
+    strictMissing,
+  );
   if (labels !== undefined) {
     layers.push(labels);
   }
@@ -529,6 +552,7 @@ function compileProportionalSymbols(
 function compileCategoricalPoints(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
+  strictMissing = false,
 ): Array<Record<string, unknown>> {
   const categoryName = document.encoding.category!.field;
   const categoryField = document.data.fields[categoryName]!;
@@ -557,16 +581,21 @@ function compileCategoricalPoints(
       id: `${document.map}-symbols`,
       type: 'circle',
       source: document.encoding.geometry.source,
-      ...optionalFilter(missingDataFilter(document, categoryField.path)),
+      ...optionalFilter(
+        missingDataFilter(document, categoryField.path, strictMissing),
+      ),
       paint: {
         'circle-radius': 7,
-        'circle-color': matches,
+        'circle-color':
+          strictMissing && document.constraints?.missing_data === 'explicit'
+            ? ['case', validValueExpression(categoryField.path), matches, '#9ca3af']
+            : matches,
         'circle-stroke-color': '#ffffff',
         'circle-stroke-width': 1.5,
       },
     }),
   ];
-  const labels = compileLabels(document);
+  const labels = compileLabels(document, undefined, strictMissing);
   if (labels !== undefined) {
     layers.push(labels);
   }
@@ -576,6 +605,7 @@ function compileCategoricalPoints(
 function compileHeatmap(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
+  strictMissing = false,
 ): Array<Record<string, unknown>> {
   const weightName = document.encoding.weight?.field;
   const weightField = weightName === undefined ? undefined : document.data.fields[weightName];
@@ -588,15 +618,14 @@ function compileHeatmap(
     reason: 'Version 0.1 uses viewport-stable heatmap defaults with zoom interpolation.',
   });
 
-  return [
-    applyZoomRules(document, 'heatmap', {
+  const heatmap = applyZoomRules(document, 'heatmap', {
       id: `${document.map}-heatmap`,
       type: 'heatmap',
       source: document.encoding.geometry.source,
       ...optionalFilter(
         weightField === undefined
           ? undefined
-          : missingDataFilter(document, weightField.path),
+          : missingDataFilter(document, weightField.path, strictMissing),
       ),
       maxzoom: 18,
       paint: {
@@ -629,13 +658,35 @@ function compileHeatmap(
           '#fde725',
         ],
       },
-    }),
-  ];
+    });
+  if (
+    strictMissing &&
+    weightField !== undefined &&
+    document.constraints?.missing_data === 'explicit'
+  ) {
+    return [
+      heatmap,
+      applyZoomRules(document, 'heatmap', {
+        id: `${document.map}-missing`,
+        type: 'circle',
+        source: document.encoding.geometry.source,
+        filter: ['!', validValueExpression(weightField.path)],
+        paint: {
+          'circle-radius': 5,
+          'circle-color': '#9ca3af',
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 1,
+        },
+      }),
+    ];
+  }
+  return [heatmap];
 }
 
 function compileLabels(
   document: AtlaspecV01Document,
   filter?: unknown,
+  strictMissing = false,
 ): Record<string, unknown> | undefined {
   const labelName = document.encoding.label?.field;
   if (labelName === undefined) {
@@ -652,7 +703,7 @@ function compileLabels(
         filter,
         encodedField === undefined
           ? undefined
-          : missingDataFilter(document, encodedField.path),
+          : missingDataFilter(document, encodedField.path, strictMissing),
       ),
     ),
     layout: {
@@ -683,10 +734,17 @@ function primaryEncodedField(document: AtlaspecV01Document): Field | undefined {
 function missingDataFilter(
   document: AtlaspecV01Document,
   path: string,
+  strictMissing: boolean,
 ): unknown[] | undefined {
   return document.constraints?.missing_data === 'hide'
-    ? ['has', path]
+    ? strictMissing
+      ? validValueExpression(path)
+      : ['has', path]
     : undefined;
+}
+
+function validValueExpression(path: string): unknown[] {
+  return ['all', ['has', path], ['!=', ['get', path], null]];
 }
 
 function combineFilters(

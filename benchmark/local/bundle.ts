@@ -47,15 +47,7 @@ export interface LocalQualificationLedger {
     selection: 'next-development-variant-after-rotated-holdout';
     execution_order: 'balanced';
   };
-  thresholds: {
-    relative_failure_reduction: 0.3;
-    output_token_reduction: 0.25;
-    low_baseline_failure_rate: 0.1;
-    yield_noninferiority_margin: 0.03;
-    confidence_level: 0.95;
-    bootstrap_iterations: 10000;
-    bootstrap_seed: 20260720;
-  };
+  thresholds: LocalTokenThresholds;
   source: {
     suite: string;
     manifest_sha256: string;
@@ -69,6 +61,16 @@ export interface LocalQualificationLedger {
     base_generation_calls: number;
     max_generation_calls: number;
   };
+}
+
+export interface LocalTokenThresholds {
+  relative_failure_reduction: number;
+  output_token_reduction: number;
+  low_baseline_failure_rate: number;
+  yield_noninferiority_margin: number;
+  confidence_level: number;
+  bootstrap_iterations: number;
+  bootstrap_seed: number;
 }
 
 export interface LocalQualificationBundle {

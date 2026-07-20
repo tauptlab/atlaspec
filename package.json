@@ -31,6 +31,7 @@
     "benchmark:official:prepare": "tsx benchmark/official/prepare-cli.ts",
     "benchmark:official:run-job": "tsx benchmark/official/run-job-cli.ts",
     "benchmark:official:status": "tsx benchmark/official/status-cli.ts",
+    "benchmark:local:prepare": "tsx benchmark/local/prepare-cli.ts",
     "build": "tsc -p tsconfig.build.json",
     "check": "npm run typecheck && npm test",
     "corpus:check": "tsx benchmark/corpus/generate.ts --check",

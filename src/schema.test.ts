@@ -31,6 +31,7 @@ describe('AtlaspecSchema', () => {
     'shelter-capacity.atlas.yaml',
     'facility-types.atlas.yaml',
     'incident-density.atlas.yaml',
+    'operations-overview.atlas.yaml',
   ])(
     'accepts canonical example %s',
     async (name) => {

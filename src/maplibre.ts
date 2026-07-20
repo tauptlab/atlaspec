@@ -1,5 +1,11 @@
 import type { Diagnostic } from './diagnostics.js';
-import type { AtlaspecV01Document, DataSource, Field } from './schema.js';
+import type {
+  AtlaspecLayer,
+  AtlaspecV01Document,
+  AtlaspecV02Document,
+  DataSource,
+  Field,
+} from './schema.js';
 import { validateAtlaspec } from './validate.js';
 
 export interface CompilationDecision {
@@ -49,21 +55,21 @@ export function compileMapLibre(value: unknown): CompilationResult {
     return { ok: false, diagnostics: validation.diagnostics };
   }
 
-  if ((value as { version?: unknown }).version !== '0.1') {
-    return {
-      ok: false,
-      diagnostics: [
-        {
-          code: 'compiler.v02-not-implemented',
-          severity: 'error',
-          message: 'MapLibre composition for Atlaspec 0.2 is not implemented yet.',
-          path: '/version',
-        },
-      ],
-    };
-  }
+  return (value as { version: '0.1' | '0.2' }).version === '0.1'
+    ? compileMapLibreV01(
+        value as AtlaspecV01Document,
+        validation.diagnostics,
+      )
+    : compileMapLibreV02(
+        value as AtlaspecV02Document,
+        validation.diagnostics,
+      );
+}
 
-  const document = value as AtlaspecV01Document;
+function compileMapLibreV01(
+  document: AtlaspecV01Document,
+  diagnostics: Diagnostic[],
+): CompilationResult {
   const decisions: CompilationDecision[] = [];
   const sources = compileSources(document, decisions);
   const layers = compileLayers(document, decisions);
@@ -88,8 +94,179 @@ export function compileMapLibre(value: unknown): CompilationResult {
     ok: true,
     style,
     decisions,
-    diagnostics: validation.diagnostics,
+    diagnostics,
   };
+}
+
+function compileMapLibreV02(
+  document: AtlaspecV02Document,
+  diagnostics: Diagnostic[],
+): CompilationResult {
+  const decisions: CompilationDecision[] = [];
+  const sources = compileSourcesV02(document, decisions);
+  const layerDocuments = document.layers.map((layer) =>
+    layerAsV01(document, layer),
+  );
+  const layers: Array<Record<string, unknown>> = [];
+  const background = compileBackground(
+    { ...layerDocuments[0]!, map: document.map },
+    decisions,
+  );
+  if (background !== undefined) layers.push(background);
+
+  const legends: Array<Record<string, unknown>> = [];
+  for (const [index, layerDocument] of layerDocuments.entries()) {
+    const decisionStart = decisions.length;
+    layers.push(...compileThematicLayers(layerDocument, decisions));
+    for (let decisionIndex = decisionStart; decisionIndex < decisions.length; decisionIndex += 1) {
+      const decision = decisions[decisionIndex]!;
+      decision.path = layerDecisionPath(index, decision.path);
+    }
+
+    const legend = compileLegend(layerDocument);
+    if (legend !== undefined) {
+      legends.push({
+        layer_id: document.layers[index]!.id,
+        purpose: document.layers[index]!.purpose,
+        family: document.layers[index]!.family,
+        ...legend,
+      });
+    }
+  }
+
+  traceGlobalConstraints(document, decisions);
+
+  const style: MapLibreStyle = {
+    version: 8,
+    name: document.title,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+    metadata: {
+      'atlaspec:version': document.version,
+      'atlaspec:map': document.map,
+      'atlaspec:layers': document.layers.map((layer) => ({
+        id: layer.id,
+        purpose: layer.purpose,
+        family: layer.family,
+      })),
+      'atlaspec:intent': document.intent,
+      'atlaspec:legend': legends,
+      'atlaspec:decisions': decisions,
+    },
+    sources,
+    layers,
+  };
+
+  return { ok: true, style, decisions, diagnostics };
+}
+
+function compileSourcesV02(
+  document: AtlaspecV02Document,
+  decisions: CompilationDecision[],
+): Record<string, Record<string, unknown>> {
+  const result: Record<string, Record<string, unknown>> = {};
+
+  for (const source of document.data.sources) {
+    const compiled = compileSource(source);
+    const clusteredLayerIndex = document.layers.findIndex(
+      (layer) =>
+        layer.encoding.geometry.source === source.id &&
+        hasClusterRule(layer),
+    );
+    if (clusteredLayerIndex >= 0) {
+      const rule = document.layers[clusteredLayerIndex]!.behavior!.zoom_rules.find(
+        (candidate) =>
+          candidate.target === 'symbols' && candidate.action === 'cluster',
+      )!;
+      compiled['cluster'] = true;
+      compiled['clusterMaxZoom'] = rule.max_zoom ?? 14;
+      compiled['clusterRadius'] = 50;
+      decisions.push({
+        code: 'source.cluster-enabled',
+        path: `/layers/${clusteredLayerIndex}/behavior/zoom_rules`,
+        value: {
+          source: source.id,
+          maxZoom: compiled['clusterMaxZoom'],
+          radius: compiled['clusterRadius'],
+        },
+        reason: 'A semantic zoom rule requested point clustering.',
+      });
+    }
+    result[source.id] = compiled;
+  }
+
+  return result;
+}
+
+function layerAsV01(
+  document: AtlaspecV02Document,
+  layer: AtlaspecLayer,
+): AtlaspecV01Document {
+  const constraints = {
+    ...layer.constraints,
+    ...(document.constraints?.colorblind_safe === undefined
+      ? {}
+      : { colorblind_safe: document.constraints.colorblind_safe }),
+    ...(document.constraints?.label_priority === undefined
+      ? {}
+      : { label_priority: document.constraints.label_priority }),
+    ...(document.constraints?.viewport === undefined
+      ? {}
+      : { viewport: document.constraints.viewport }),
+  };
+
+  return {
+    version: '0.1',
+    map: `${document.map}-${layer.id}`,
+    title: document.title,
+    ...(document.description === undefined
+      ? {}
+      : { description: document.description }),
+    family: layer.family,
+    intent: document.intent,
+    data: document.data,
+    encoding: layer.encoding,
+    ...(Object.keys(constraints).length === 0 ? {} : { constraints }),
+    ...(layer.behavior === undefined ? {} : { behavior: layer.behavior }),
+    ...(document.basemap === undefined ? {} : { basemap: document.basemap }),
+    ...(document.metadata === undefined ? {} : { metadata: document.metadata }),
+  };
+}
+
+function hasClusterRule(layer: AtlaspecLayer): boolean {
+  return (layer.behavior?.zoom_rules ?? []).some(
+    (rule) => rule.target === 'symbols' && rule.action === 'cluster',
+  );
+}
+
+function layerDecisionPath(index: number, path: string): string {
+  for (const root of ['/encoding', '/behavior', '/constraints']) {
+    if (path === root || path.startsWith(`${root}/`)) {
+      return `/layers/${index}${path}`;
+    }
+  }
+  return path;
+}
+
+function traceGlobalConstraints(
+  document: AtlaspecV02Document,
+  decisions: CompilationDecision[],
+): void {
+  if (document.constraints?.protected_layers !== undefined) {
+    decisions.push({
+      code: 'constraints.protected-layers',
+      path: '/constraints/protected_layers',
+      value: document.constraints.protected_layers,
+      reason: 'Authored semantic layer protection was retained in compiler metadata.',
+    });
+  }
+  if (document.constraints?.label_priority !== undefined) {
+    decisions.push({
+      code: 'constraints.label-priority',
+      path: '/constraints/label_priority',
+      value: document.constraints.label_priority,
+      reason: 'Authored label priority was retained in compiler metadata.',
+    });
+  }
 }
 
 function compileSources(
@@ -143,6 +320,16 @@ function compileLayers(
     layers.push(background);
   }
 
+  layers.push(...compileThematicLayers(document, decisions));
+
+  return layers;
+}
+
+function compileThematicLayers(
+  document: AtlaspecV01Document,
+  decisions: CompilationDecision[],
+): Array<Record<string, unknown>> {
+  const layers: Array<Record<string, unknown>> = [];
   switch (document.family) {
     case 'choropleth':
       layers.push(...compileChoropleth(document, decisions));

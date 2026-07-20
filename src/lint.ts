@@ -447,7 +447,55 @@ function lintAtlaspecV02(document: AtlaspecV02Document): Diagnostic[] {
     }
   }
 
+  lintLayerComposition(document, diagnostics);
+
   return deduplicateDiagnostics(diagnostics);
+}
+
+function lintLayerComposition(
+  document: AtlaspecV02Document,
+  diagnostics: Diagnostic[],
+): void {
+  const labels = new Map<string, number>();
+  for (const [index, layer] of document.layers.entries()) {
+    const labelName = layer.encoding.label?.field;
+    if (labelName !== undefined) {
+      const field = document.data.fields[labelName];
+      if (field !== undefined) {
+        const key = `${field.source}\u0000${labelName}`;
+        const previous = labels.get(key);
+        if (previous !== undefined) {
+          diagnostics.push({
+            code: 'layers.duplicate-label',
+            severity: 'error',
+            message: `Layers ${previous} and ${index} label the same field '${labelName}' from source '${field.source}'.`,
+            path: `/layers/${index}/encoding/label/field`,
+          });
+        } else {
+          labels.set(key, index);
+        }
+      }
+    }
+  }
+
+  for (const source of document.data.sources) {
+    const users = document.layers
+      .map((layer, index) => ({ layer, index }))
+      .filter(({ layer }) => layer.encoding.geometry.source === source.id);
+    const clustered = users.filter(({ layer }) =>
+      (layer.behavior?.zoom_rules ?? []).some(
+        (rule) => rule.target === 'symbols' && rule.action === 'cluster',
+      ),
+    );
+    if (clustered.length > 0 && clustered.length !== users.length) {
+      diagnostics.push({
+        code: 'layers.shared-source-cluster-conflict',
+        severity: 'error',
+        message: `Source '${source.id}' is shared by clustered and unclustered layers; use distinct source IDs to preserve both semantics.`,
+        path: `/layers/${clustered[0]!.index}/behavior/zoom_rules`,
+      });
+    }
+  }
 }
 
 function layerPath(index: number, path: string): string {

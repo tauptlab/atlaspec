@@ -48,4 +48,32 @@ describe('Atlaspec 0.2 linting', () => {
     expect(codes.has('layers.primary-count')).toBe(true);
     expect(codes.has('constraints.unknown-protected-layer')).toBe(true);
   });
+
+  it('fails closed when shared MapLibre source clustering semantics conflict', async () => {
+    const document = await upgradedExample();
+    document.layers.push({
+      ...structuredClone(document.layers[0]!),
+      id: 'clustered-points',
+      purpose: 'supporting',
+      family: 'proportional-symbol',
+      encoding: {
+        geometry: { source: 'districts', support: 'point' },
+        size: { field: 'flood_probability' },
+      },
+      behavior: {
+        zoom_rules: [
+          { target: 'symbols', action: 'cluster', max_zoom: 9 },
+        ],
+      },
+    });
+
+    expect(lintAtlaspec(document)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'layers.shared-source-cluster-conflict',
+          path: '/layers/1/behavior/zoom_rules',
+        }),
+      ]),
+    );
+  });
 });

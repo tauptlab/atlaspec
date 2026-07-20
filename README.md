@@ -376,6 +376,12 @@ Work still required before a stable release includes:
 - package publication, compatibility policy, and migration tooling;
 - evaluation of additional map families and compiler backends.
 
+Active v0.2 design work is governed by the pre-implementation
+[v0.2 scope](docs/SCOPE_0.2.md) and
+[AtlasBench 0.2 contract](docs/BENCHMARK_0.2.md). It focuses on multi-layer
+composition, v0.1 compatibility, Vega-Lite portability, and localized edit
+survival using a new benchmark corpus.
+
 ## Contributing
 
 Atlaspec welcomes focused issues and pull requests, especially around semantic

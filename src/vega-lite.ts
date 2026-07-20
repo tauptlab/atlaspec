@@ -137,6 +137,18 @@ export function inspectVegaLiteCapabilities(
         ),
       );
     }
+    if (
+      layer.family === 'proportional-symbol' &&
+      layer.constraints?.missing_data === 'explicit'
+    ) {
+      diagnostics.push(
+        capabilityDiagnostic(
+          'vega-lite.unsupported-explicit-missing-symbol',
+          `${root}/constraints/missing_data`,
+          'The Vega-Lite 0.2 target cannot yet preserve an explicit missing-value symbol and legend for proportional symbols.',
+        ),
+      );
+    }
   }
   return diagnostics;
 }
@@ -161,6 +173,7 @@ function compileLayer(
       compiled.push({
         name: `${name}-fill`,
         data,
+        ...optionalTransform(missingTransforms(layer, colorField)),
         mark: { type: 'geoshape', stroke: '#ffffff', strokeWidth: 0.6 },
         encoding: {
           color: quantitativeColor(
@@ -184,7 +197,7 @@ function compileLayer(
       compiled.push({
         name: `${name}-symbols`,
         data,
-        transform: pointTransforms(),
+        transform: [...pointTransforms(), ...missingTransforms(layer, sizeField)],
         mark: {
           type: 'circle',
           opacity: 0.82,
@@ -220,10 +233,20 @@ function compileLayer(
       const categoryName = layer.encoding.category!.field;
       const categoryField = document.data.fields[categoryName]!;
       const domain = categoryField.domain!;
+      const explicitMissing = layer.constraints?.missing_data === 'explicit';
+      const encodedDomain = explicitMissing ? [...domain, 'Missing'] : domain;
+      const categoryTransforms = explicitMissing
+        ? [
+            {
+              calculate: `isValid(${propertyExpression(categoryField)}) ? ${propertyExpression(categoryField)} : 'Missing'`,
+              as: '_atlaspec_category',
+            },
+          ]
+        : missingTransforms(layer, categoryField);
       compiled.push({
         name: `${name}-symbols`,
         data,
-        transform: pointTransforms(),
+        transform: [...pointTransforms(), ...categoryTransforms],
         mark: {
           type: 'circle',
           size: 110,
@@ -233,15 +256,18 @@ function compileLayer(
         encoding: {
           ...positionEncoding(),
           color: {
-            field: propertyField(categoryField),
+            field: explicitMissing
+              ? '_atlaspec_category'
+              : propertyField(categoryField),
             type: 'nominal',
             scale: {
-              domain,
-              range: domain.map(
-                (_value, domainIndex) =>
-                  CATEGORICAL_PALETTE[
-                    domainIndex % CATEGORICAL_PALETTE.length
-                  ],
+              domain: encodedDomain,
+              range: encodedDomain.map((_value, domainIndex) =>
+                domainIndex === domain.length
+                  ? '#9ca3af'
+                  : CATEGORICAL_PALETTE[
+                      domainIndex % CATEGORICAL_PALETTE.length
+                    ],
               ),
             },
             legend: legend(categoryName, categoryField),
@@ -266,7 +292,10 @@ function compileLayer(
     compiled.push({
       name: `${name}-labels`,
       data,
-      transform: pointTransforms(),
+      transform: [
+        ...pointTransforms(),
+        ...missingTransforms(layer, primaryField(document, layer)),
+      ],
       mark: {
         type: 'text',
         align: 'left',
@@ -286,6 +315,20 @@ function compileLayer(
       path: `/layers/${index}/encoding/label`,
       value: { mark: 'text', field: labelName },
       reason: 'Point labels were compiled as a colocated Vega-Lite text layer.',
+    });
+  }
+
+  if (layer.constraints?.missing_data !== undefined) {
+    decisions.push({
+      code: `vega-lite.missing-data-${layer.constraints.missing_data}`,
+      path: `/layers/${index}/constraints/missing_data`,
+      value: layer.constraints.missing_data,
+      reason:
+        layer.constraints.missing_data === 'hide'
+          ? 'Invalid encoded values are removed with a deterministic Vega transform.'
+          : layer.constraints.missing_data === 'explicit'
+            ? 'Missing encoded values receive an explicit deterministic visual fallback.'
+            : 'The authored data contract requires encoded values to be present.',
     });
   }
 
@@ -328,8 +371,8 @@ function quantitativeColor(
   };
   return missingData === 'explicit'
     ? {
-        condition: {
-          test: `isValid(datum['properties']['${escapeExpression(field.path)}'])`,
+      condition: {
+          test: `isValid(${propertyExpression(field)})`,
           ...definition,
         },
         value: '#d1d5db',
@@ -344,11 +387,50 @@ function legend(name: string, field: Field): Record<string, unknown> {
 }
 
 function propertyField(field: Field): string {
-  return `properties.${field.path}`;
+  return `properties.${escapeVegaField(field.path)}`;
 }
 
-function escapeExpression(value: string): string {
+function propertyExpression(field: Field): string {
+  return `datum['properties']['${escapeExpressionString(field.path)}']`;
+}
+
+function escapeVegaField(value: string): string {
+  return value
+    .replaceAll('\\', '\\\\')
+    .replaceAll('.', '\\.')
+    .replaceAll('[', '\\[')
+    .replaceAll(']', '\\]');
+}
+
+function escapeExpressionString(value: string): string {
   return value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+}
+
+function missingTransforms(
+  layer: AtlaspecLayer,
+  field: Field,
+): Array<Record<string, string>> {
+  return layer.constraints?.missing_data === 'hide'
+    ? [{ filter: `isValid(${propertyExpression(field)})` }]
+    : [];
+}
+
+function optionalTransform(
+  transforms: Array<Record<string, string>>,
+): Record<string, unknown> {
+  return transforms.length === 0 ? {} : { transform: transforms };
+}
+
+function primaryField(
+  document: AtlaspecV02Document,
+  layer: AtlaspecLayer,
+): Field {
+  const name =
+    layer.encoding.color?.field ??
+    layer.encoding.size?.field ??
+    layer.encoding.category?.field ??
+    layer.encoding.weight?.field;
+  return document.data.fields[name!]!;
 }
 
 function capabilityDiagnostic(

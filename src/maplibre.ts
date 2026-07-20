@@ -1,5 +1,5 @@
 import type { Diagnostic } from './diagnostics.js';
-import type { AtlaspecDocument, DataSource, Field } from './schema.js';
+import type { AtlaspecV01Document, DataSource, Field } from './schema.js';
 import { validateAtlaspec } from './validate.js';
 
 export interface CompilationDecision {
@@ -49,7 +49,21 @@ export function compileMapLibre(value: unknown): CompilationResult {
     return { ok: false, diagnostics: validation.diagnostics };
   }
 
-  const document = value as AtlaspecDocument;
+  if ((value as { version?: unknown }).version !== '0.1') {
+    return {
+      ok: false,
+      diagnostics: [
+        {
+          code: 'compiler.v02-not-implemented',
+          severity: 'error',
+          message: 'MapLibre composition for Atlaspec 0.2 is not implemented yet.',
+          path: '/version',
+        },
+      ],
+    };
+  }
+
+  const document = value as AtlaspecV01Document;
   const decisions: CompilationDecision[] = [];
   const sources = compileSources(document, decisions);
   const layers = compileLayers(document, decisions);
@@ -79,7 +93,7 @@ export function compileMapLibre(value: unknown): CompilationResult {
 }
 
 function compileSources(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Record<string, Record<string, unknown>> {
   const result: Record<string, Record<string, unknown>> = {};
@@ -120,7 +134,7 @@ function compileSource(source: DataSource): Record<string, unknown> {
 }
 
 function compileLayers(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Array<Record<string, unknown>> {
   const layers: Array<Record<string, unknown>> = [];
@@ -148,7 +162,7 @@ function compileLayers(
 }
 
 function compileBackground(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Record<string, unknown> | undefined {
   const style = document.basemap?.style ?? 'minimal-light';
@@ -172,7 +186,7 @@ function compileBackground(
 }
 
 function compileChoropleth(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Array<Record<string, unknown>> {
   const colorName = document.encoding.color!.field;
@@ -226,7 +240,7 @@ function compileChoropleth(
 }
 
 function compileProportionalSymbols(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Array<Record<string, unknown>> {
   const sizeName = document.encoding.size!.field;
@@ -312,7 +326,7 @@ function compileProportionalSymbols(
 }
 
 function compileCategoricalPoints(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Array<Record<string, unknown>> {
   const categoryName = document.encoding.category!.field;
@@ -358,7 +372,7 @@ function compileCategoricalPoints(
 }
 
 function compileHeatmap(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   decisions: CompilationDecision[],
 ): Array<Record<string, unknown>> {
   const weightName = document.encoding.weight?.field;
@@ -413,7 +427,7 @@ function compileHeatmap(
 }
 
 function compileLabels(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   filter?: unknown,
 ): Record<string, unknown> | undefined {
   const labelName = document.encoding.label?.field;
@@ -443,7 +457,7 @@ function compileLabels(
 }
 
 function applyZoomRules(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   target: 'fill' | 'symbols' | 'labels' | 'heatmap',
   layer: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -487,7 +501,7 @@ function interpolateColor(
   ];
 }
 
-function compileLegend(document: AtlaspecDocument): Record<string, unknown> | undefined {
+function compileLegend(document: AtlaspecV01Document): Record<string, unknown> | undefined {
   const encoding = document.encoding.color ?? document.encoding.category ?? document.encoding.size;
   if (encoding === undefined) return undefined;
   const field = document.data.fields[encoding.field];

@@ -8,7 +8,7 @@ import {
 import { parse } from 'yaml';
 
 import { compileMapLibre } from '../src/maplibre.js';
-import type { AtlaspecDocument } from '../src/schema.js';
+import type { AtlaspecV01Document } from '../src/schema.js';
 import type {
   BenchmarkCheck,
   BenchmarkTask,
@@ -48,7 +48,7 @@ export async function evaluateTask(
     };
   }
 
-  const document = value as AtlaspecDocument;
+  const document = value as AtlaspecV01Document;
   const layerTypes = new Set(
     result.style.layers.map((layer) => String(layer['type'])),
   );

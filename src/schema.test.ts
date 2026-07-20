@@ -5,10 +5,16 @@ import { Ajv } from 'ajv';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 
-import { AtlaspecSchema } from './schema.js';
+import {
+  AtlaspecSchema,
+  AtlaspecV01Schema,
+  AtlaspecV02Schema,
+} from './schema.js';
+import { upgradeAtlaspec } from './migrate.js';
 
-const ajv = new Ajv({ allErrors: true, strict: false });
-const validate = ajv.compile(AtlaspecSchema);
+const validate = new Ajv({ allErrors: true, strict: false }).compile(AtlaspecSchema);
+const validateV01 = new Ajv({ allErrors: true, strict: false }).compile(AtlaspecV01Schema);
+const validateV02 = new Ajv({ allErrors: true, strict: false }).compile(AtlaspecV02Schema);
 
 async function readExample(name: string): Promise<unknown> {
   const contents = await readFile(
@@ -47,5 +53,16 @@ describe('AtlaspecSchema', () => {
         expect.objectContaining({ keyword: 'additionalProperties' }),
       ]),
     );
+  });
+
+  it('accepts explicit 0.1 and 0.2 branches without weakening either schema', async () => {
+    const v01 = await readExample('flood-risk.atlas.yaml');
+    const v02 = upgradeAtlaspec(v01 as Parameters<typeof upgradeAtlaspec>[0]);
+
+    expect(validateV01(v01)).toBe(true);
+    expect(validateV02(v02), JSON.stringify(validateV02.errors)).toBe(true);
+    expect(validate(v02), JSON.stringify(validate.errors)).toBe(true);
+    expect(validateV01(v02)).toBe(false);
+    expect(validateV02(v01)).toBe(false);
   });
 });

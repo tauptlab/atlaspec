@@ -8,11 +8,11 @@ import type { TopLevelSpec } from 'vega-lite';
 import { parse as parseYaml } from 'yaml';
 
 import { compileMapLibre } from '../src/maplibre.js';
-import type { AtlaspecDocument } from '../src/schema.js';
+import type { AtlaspecV01Document } from '../src/schema.js';
 import type { BenchmarkCondition, EvaluationCheck } from './protocol.js';
 
 export interface OutputRequirements {
-  family: AtlaspecDocument['family'];
+  family: AtlaspecV01Document['family'];
   maplibre_layer_types?: readonly string[];
   vega_lite_mark_types?: readonly string[];
   atlaspec_decisions?: readonly string[];
@@ -66,7 +66,7 @@ function evaluateAtlaspec(
     };
   }
 
-  const document = value as AtlaspecDocument;
+  const document = value as AtlaspecV01Document;
   const styleErrors = validateStyleMin(
     result.style as unknown as StyleSpecification,
   );

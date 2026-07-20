@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import {
-  AtlaspecSchema,
+  AtlaspecV01Schema,
   DataSourceSchema,
   EncodingSchema,
   FieldSchema,
@@ -19,7 +19,7 @@ interface SchemaNode {
 }
 
 export function renderAtlaspecReference(): string {
-  const root = node(AtlaspecSchema);
+  const root = node(AtlaspecV01Schema);
   const intent = property(root, 'intent');
   const constraints = property(root, 'constraints');
   const behavior = property(root, 'behavior');

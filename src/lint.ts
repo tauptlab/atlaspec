@@ -1,9 +1,20 @@
 import type { Diagnostic } from './diagnostics.js';
-import type { AtlaspecDocument, Field } from './schema.js';
+import type {
+  AtlaspecDocument,
+  AtlaspecV01Document,
+  AtlaspecV02Document,
+  Field,
+} from './schema.js';
 
 type EncodingChannel = 'color' | 'size' | 'category' | 'label' | 'weight';
 
 export function lintAtlaspec(document: AtlaspecDocument): Diagnostic[] {
+  return document.version === '0.1'
+    ? lintAtlaspecV01(document)
+    : lintAtlaspecV02(document);
+}
+
+function lintAtlaspecV01(document: AtlaspecV01Document): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const sourceIds = new Set<string>();
 
@@ -174,7 +185,7 @@ function lintField(
 }
 
 function lintFamily(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   diagnostics: Diagnostic[],
 ): void {
   const colorField = getField(document, document.encoding.color?.field);
@@ -283,7 +294,7 @@ function lintFamily(
 }
 
 function lintChoroplethColor(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   field: Field,
   diagnostics: Diagnostic[],
 ): void {
@@ -322,7 +333,7 @@ function lintChoroplethColor(
 }
 
 function lintZoomRules(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   diagnostics: Diagnostic[],
 ): void {
   for (const [index, rule] of (document.behavior?.zoom_rules ?? []).entries()) {
@@ -342,7 +353,7 @@ function lintZoomRules(
 }
 
 function getField(
-  document: AtlaspecDocument,
+  document: AtlaspecV01Document,
   name: string | undefined,
 ): Field | undefined {
   return name === undefined ? undefined : document.data.fields[name];
@@ -359,4 +370,100 @@ function familyError(diagnostics: Diagnostic[], message: string): void {
 
 function escapePointer(value: string): string {
   return value.replaceAll('~', '~0').replaceAll('/', '~1');
+}
+
+function lintAtlaspecV02(document: AtlaspecV02Document): Diagnostic[] {
+  const diagnostics: Diagnostic[] = [];
+  const layerIds = new Set<string>();
+  let primaryCount = 0;
+
+  for (const [index, layer] of document.layers.entries()) {
+    if (layerIds.has(layer.id)) {
+      diagnostics.push({
+        code: 'layers.duplicate-id',
+        severity: 'error',
+        message: `Layer id '${layer.id}' is declared more than once.`,
+        path: `/layers/${index}/id`,
+      });
+    }
+    layerIds.add(layer.id);
+    if (layer.purpose === 'primary') primaryCount += 1;
+
+    const compatibilityConstraints = {
+      ...layer.constraints,
+      ...(document.constraints?.colorblind_safe === undefined
+        ? {}
+        : { colorblind_safe: document.constraints.colorblind_safe }),
+      ...(document.constraints?.label_priority === undefined
+        ? {}
+        : { label_priority: document.constraints.label_priority }),
+      ...(document.constraints?.viewport === undefined
+        ? {}
+        : { viewport: document.constraints.viewport }),
+    };
+    const compatibilityDocument: AtlaspecV01Document = {
+      version: '0.1',
+      map: document.map,
+      title: document.title,
+      intent: document.intent,
+      data: document.data,
+      family: layer.family,
+      encoding: layer.encoding,
+      ...(Object.keys(compatibilityConstraints).length === 0
+        ? {}
+        : { constraints: compatibilityConstraints }),
+      ...(layer.behavior === undefined ? {} : { behavior: layer.behavior }),
+      ...(document.basemap === undefined ? {} : { basemap: document.basemap }),
+    };
+
+    diagnostics.push(
+      ...lintAtlaspecV01(compatibilityDocument).map((diagnostic) => ({
+        ...diagnostic,
+        path: layerPath(index, diagnostic.path),
+        message: diagnostic.message.replaceAll('Version 0.1 ', ''),
+      })),
+    );
+  }
+
+  if (primaryCount !== 1) {
+    diagnostics.push({
+      code: 'layers.primary-count',
+      severity: 'error',
+      message: `Atlaspec 0.2 requires exactly one primary layer; found ${primaryCount}.`,
+      path: '/layers',
+    });
+  }
+
+  for (const [index, layerId] of (
+    document.constraints?.protected_layers ?? []
+  ).entries()) {
+    if (!layerIds.has(layerId)) {
+      diagnostics.push({
+        code: 'constraints.unknown-protected-layer',
+        severity: 'error',
+        message: `Protected layer '${layerId}' is not declared.`,
+        path: `/constraints/protected_layers/${index}`,
+      });
+    }
+  }
+
+  return deduplicateDiagnostics(diagnostics);
+}
+
+function layerPath(index: number, path: string): string {
+  for (const root of ['/encoding', '/behavior', '/constraints']) {
+    if (path === root || path.startsWith(`${root}/`)) {
+      return `/layers/${index}${path}`;
+    }
+  }
+  return path;
+}
+
+function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+  const unique = new Map<string, Diagnostic>();
+  for (const diagnostic of diagnostics) {
+    const key = `${diagnostic.code}\u0000${diagnostic.path}\u0000${diagnostic.message}`;
+    unique.set(key, diagnostic);
+  }
+  return [...unique.values()];
 }

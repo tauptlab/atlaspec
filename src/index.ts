@@ -1,5 +1,8 @@
 export {
   AtlaspecSchema,
+  AtlaspecLayerSchema,
+  AtlaspecV01Schema,
+  AtlaspecV02Schema,
   DataSourceSchema,
   EncodingSchema,
   FieldSchema,
@@ -11,6 +14,9 @@ export {
 
 export type {
   AtlaspecDocument,
+  AtlaspecLayer,
+  AtlaspecV01Document,
+  AtlaspecV02Document,
   DataSource,
   Field,
   MapFamily,
@@ -20,6 +26,11 @@ export type {
 } from './schema.js';
 
 export { lintAtlaspec } from './lint.js';
+export {
+  AtlaspecMigrationError,
+  downgradeAtlaspec,
+  upgradeAtlaspec,
+} from './migrate.js';
 export { loadDocument, parseDocument } from './load.js';
 export { compileMapLibre } from './maplibre.js';
 export { validateAtlaspec } from './validate.js';

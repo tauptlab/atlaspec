@@ -140,7 +140,7 @@ export const EncodingSchema = Type.Object(
   Strict,
 );
 
-const IntentSchema = Type.Object(
+export const IntentSchema = Type.Object(
   {
     task: Type.Union([
       Type.Literal('locate'),
@@ -161,7 +161,7 @@ const IntentSchema = Type.Object(
   Strict,
 );
 
-const ZoomRuleSchema = Type.Object(
+export const ZoomRuleSchema = Type.Object(
   {
     min_zoom: Type.Optional(Type.Number({ minimum: 0, maximum: 24 })),
     max_zoom: Type.Optional(Type.Number({ minimum: 0, maximum: 24 })),
@@ -181,7 +181,7 @@ const ZoomRuleSchema = Type.Object(
   Strict,
 );
 
-const ConstraintsSchema = Type.Object(
+export const ConstraintsSchema = Type.Object(
   {
     colorblind_safe: Type.Optional(Type.Boolean()),
     missing_data: Type.Optional(
@@ -213,7 +213,14 @@ const ConstraintsSchema = Type.Object(
   Strict,
 );
 
-const BasemapSchema = Type.Object(
+export const BehaviorSchema = Type.Object(
+  {
+    zoom_rules: Type.Array(ZoomRuleSchema),
+  },
+  Strict,
+);
+
+export const BasemapSchema = Type.Object(
   {
     style: Type.Union([
       Type.Literal('minimal-light'),
@@ -231,7 +238,22 @@ const BasemapSchema = Type.Object(
   Strict,
 );
 
-export const AtlaspecSchema = Type.Object(
+const DataSchema = Type.Object(
+  {
+    sources: Type.Array(DataSourceSchema, { minItems: 1 }),
+    fields: Type.Record(Type.String({ minLength: 1 }), FieldSchema, {
+      minProperties: 1,
+    }),
+  },
+  Strict,
+);
+
+const MetadataSchema = Type.Record(
+  Type.String({ minLength: 1 }),
+  Type.Union([Type.String(), Type.Number(), Type.Boolean()]),
+);
+
+export const AtlaspecV01Schema = Type.Object(
   {
     version: Type.Literal('0.1'),
     map: Type.String({ minLength: 1, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' }),
@@ -239,32 +261,12 @@ export const AtlaspecSchema = Type.Object(
     description: Type.Optional(Type.String({ minLength: 1 })),
     family: MapFamilySchema,
     intent: IntentSchema,
-    data: Type.Object(
-      {
-        sources: Type.Array(DataSourceSchema, { minItems: 1 }),
-        fields: Type.Record(Type.String({ minLength: 1 }), FieldSchema, {
-          minProperties: 1,
-        }),
-      },
-      Strict,
-    ),
+    data: DataSchema,
     encoding: EncodingSchema,
     constraints: Type.Optional(ConstraintsSchema),
-    behavior: Type.Optional(
-      Type.Object(
-        {
-          zoom_rules: Type.Array(ZoomRuleSchema),
-        },
-        Strict,
-      ),
-    ),
+    behavior: Type.Optional(BehaviorSchema),
     basemap: Type.Optional(BasemapSchema),
-    metadata: Type.Optional(
-      Type.Record(
-        Type.String({ minLength: 1 }),
-        Type.Union([Type.String(), Type.Number(), Type.Boolean()]),
-      ),
-    ),
+    metadata: Type.Optional(MetadataSchema),
   },
   {
     $id: 'https://atlaspec.org/schema/0.1/atlaspec.json',
@@ -272,6 +274,92 @@ export const AtlaspecSchema = Type.Object(
   },
 );
 
+export const LayerPurposeSchema = Type.Union([
+  Type.Literal('primary'),
+  Type.Literal('supporting'),
+  Type.Literal('reference'),
+]);
+
+export const LayerConstraintsSchema = Type.Object(
+  {
+    missing_data: Type.Optional(
+      Type.Union([
+        Type.Literal('explicit'),
+        Type.Literal('hide'),
+        Type.Literal('error'),
+      ]),
+    ),
+    raw_count_choropleth: Type.Optional(
+      Type.Union([Type.Literal('reject'), Type.Literal('allow')]),
+    ),
+  },
+  Strict,
+);
+
+export const AtlaspecLayerSchema = Type.Object(
+  {
+    id: Type.String({
+      minLength: 1,
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$',
+    }),
+    purpose: LayerPurposeSchema,
+    family: MapFamilySchema,
+    encoding: EncodingSchema,
+    constraints: Type.Optional(LayerConstraintsSchema),
+    behavior: Type.Optional(BehaviorSchema),
+  },
+  Strict,
+);
+
+export const GlobalConstraintsSchema = Type.Object(
+  {
+    colorblind_safe: Type.Optional(Type.Boolean()),
+    protected_layers: Type.Optional(
+      Type.Array(Type.String({ minLength: 1 }), { uniqueItems: true }),
+    ),
+    label_priority: Type.Optional(
+      Type.Array(Type.String({ minLength: 1 }), { uniqueItems: true }),
+    ),
+    viewport: Type.Optional(
+      Type.Object(
+        {
+          width: Type.Integer({ minimum: 240, maximum: 7680 }),
+          height: Type.Integer({ minimum: 240, maximum: 4320 }),
+        },
+        Strict,
+      ),
+    ),
+  },
+  Strict,
+);
+
+export const AtlaspecV02Schema = Type.Object(
+  {
+    version: Type.Literal('0.2'),
+    map: Type.String({ minLength: 1, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' }),
+    title: Type.String({ minLength: 1 }),
+    description: Type.Optional(Type.String({ minLength: 1 })),
+    intent: IntentSchema,
+    data: DataSchema,
+    layers: Type.Array(AtlaspecLayerSchema, { minItems: 1 }),
+    constraints: Type.Optional(GlobalConstraintsSchema),
+    basemap: Type.Optional(BasemapSchema),
+    metadata: Type.Optional(MetadataSchema),
+  },
+  {
+    $id: 'https://atlaspec.org/schema/0.2/atlaspec.json',
+    additionalProperties: false,
+  },
+);
+
+export const AtlaspecSchema = Type.Union(
+  [AtlaspecV01Schema, AtlaspecV02Schema],
+  { $id: 'https://atlaspec.org/schema/atlaspec.json' },
+);
+
+export type AtlaspecV01Document = Static<typeof AtlaspecV01Schema>;
+export type AtlaspecV02Document = Static<typeof AtlaspecV02Schema>;
+export type AtlaspecLayer = Static<typeof AtlaspecLayerSchema>;
 export type AtlaspecDocument = Static<typeof AtlaspecSchema>;
 export type DataSource = Static<typeof DataSourceSchema>;
 export type Field = Static<typeof FieldSchema>;

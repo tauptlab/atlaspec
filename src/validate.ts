@@ -7,14 +7,34 @@ import {
   type ValidationReport,
 } from './diagnostics.js';
 import { lintAtlaspec } from './lint.js';
-import { AtlaspecSchema, type AtlaspecDocument } from './schema.js';
+import {
+  AtlaspecSchema,
+  AtlaspecV01Schema,
+  AtlaspecV02Schema,
+  type AtlaspecDocument,
+  type AtlaspecV01Document,
+  type AtlaspecV02Document,
+} from './schema.js';
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 const validateSchema = ajv.compile<AtlaspecDocument>(AtlaspecSchema);
+const validateV01Schema = new Ajv({ allErrors: true, strict: false }).compile<AtlaspecV01Document>(
+  AtlaspecV01Schema,
+);
+const validateV02Schema = new Ajv({ allErrors: true, strict: false }).compile<AtlaspecV02Document>(
+  AtlaspecV02Schema,
+);
 
 export function validateAtlaspec(value: unknown): ValidationReport {
-  if (!validateSchema(value)) {
-    const diagnostics = schemaErrorsToDiagnostics(validateSchema.errors ?? [])
+  const validator =
+    isVersion(value, '0.1')
+      ? validateV01Schema
+      : isVersion(value, '0.2')
+        ? validateV02Schema
+        : validateSchema;
+
+  if (!validator(value)) {
+    const diagnostics = schemaErrorsToDiagnostics(validator.errors ?? [])
       .sort(compareDiagnostics);
 
     return { valid: false, diagnostics };
@@ -25,6 +45,18 @@ export function validateAtlaspec(value: unknown): ValidationReport {
     valid: diagnostics.every((diagnostic) => diagnostic.severity !== 'error'),
     diagnostics,
   };
+}
+
+function isVersion(
+  value: unknown,
+  version: '0.1' | '0.2',
+): value is { version: typeof version } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'version' in value &&
+    value.version === version
+  );
 }
 
 function schemaErrorsToDiagnostics(errors: readonly ErrorObject[]): Diagnostic[] {

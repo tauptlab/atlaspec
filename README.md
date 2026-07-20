@@ -43,6 +43,8 @@ MapLibre style document
 
 - [Version 0.1 scope](docs/SCOPE.md)
 - [Benchmark and success criteria](docs/BENCHMARK.md)
+- [Failed initial local qualification](docs/LOCAL_QUALIFICATION_2026-07-20.md)
+- [Post-fix local R&D and closure probe](docs/LOCAL_POSTFIX_RND_2026-07-20.md)
 
 These documents are steering constraints. Changes to them must be explicit and
 must not be made merely to accommodate observed benchmark results.

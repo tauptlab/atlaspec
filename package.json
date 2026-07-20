@@ -36,7 +36,7 @@
     "benchmark:local:run-job": "tsx benchmark/local/run-job-cli.ts",
     "benchmark:local:status": "tsx benchmark/local/status-cli.ts",
     "build": "tsc -p tsconfig.build.json",
-    "check": "npm run typecheck && npm test",
+    "check": "npm run typecheck && npm test && npm run corpus:check && npm run reference:atlaspec:check",
     "corpus:check": "tsx benchmark/corpus/generate.ts --check",
     "corpus:generate": "tsx benchmark/corpus/generate.ts",
     "corpus:prepare": "tsx benchmark/corpus/prepare-cli.ts",

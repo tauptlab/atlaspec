@@ -3,6 +3,10 @@ import type {
   V02CorpusMatrix,
   V02CorpusTask,
 } from './corpus.js';
+import type {
+  AtlaspecV02Document,
+  Field,
+} from '../../src/schema.js';
 
 export type V02Condition =
   | 'direct-maplibre'
@@ -104,6 +108,78 @@ export function validateV02Manifest(
     }
   }
   return diagnostics.sort();
+}
+
+export function buildV02ReferenceDocument(
+  task: V02ManifestTask,
+): AtlaspecV02Document {
+  const fields: Record<string, Field> = {};
+  for (const layer of task.layers) {
+    for (const binding of layer.bindings) {
+      fields[binding.field] = referenceField(
+        layer.source,
+        binding.path,
+      );
+    }
+  }
+  return {
+    version: '0.2',
+    map: task.id,
+    title: task.id.replaceAll('-', ' '),
+    intent: {
+      task: 'compare',
+      audience: 'operations',
+      primary_message: 'Preserve the locked multi-layer operational map contract.',
+    },
+    data: {
+      sources: uniqueSources(task.layers).map((layer) => ({
+        id: layer.source,
+        type: 'geojson' as const,
+        url: layer.source_file,
+      })),
+      fields,
+    },
+    layers: task.layers.map((layer, index) => ({
+      id: layer.id,
+      purpose: layer.purpose,
+      family: layer.family,
+      encoding: {
+        geometry: { source: layer.source, support: layer.support },
+        ...Object.fromEntries(
+          layer.bindings.map((binding) => [
+            binding.channel,
+            { field: binding.field },
+          ]),
+        ),
+      },
+      constraints: {
+        missing_data: layer.missing_data,
+        ...(layer.family === 'choropleth'
+          ? { raw_count_choropleth: 'reject' as const }
+          : {}),
+      },
+      ...(task.portability === 'capability-negative' &&
+      !task.layers.some((candidate) => candidate.family === 'heatmap') &&
+      index === task.layers.length - 1
+        ? {
+            behavior: {
+              zoom_rules: [
+                {
+                  max_zoom: 9,
+                  target: 'symbols' as const,
+                  action: 'cluster' as const,
+                },
+              ],
+            },
+          }
+        : {}),
+    })),
+    constraints: {
+      colorblind_safe: true,
+      viewport: { width: 960, height: 640 },
+    },
+    basemap: { style: 'minimal-light', contrast: 'light' },
+  };
 }
 
 function manifest(
@@ -222,12 +298,79 @@ function pointLayer(
     support: 'point',
     bindings: [
       { channel, field, path: field },
-      { channel: 'label', field: 'name', path: 'name' },
+      { channel: 'label', field: `${source}_name`, path: 'name' },
     ],
     maplibre_types:
       family === 'heatmap' ? ['heatmap'] : ['circle', 'symbol'],
     vega_marks:
       family === 'heatmap' ? [] : ['circle', 'text'],
     missing_data: family === 'heatmap' ? 'hide' : 'error',
+  };
+}
+
+function uniqueSources(
+  layers: V02LayerRequirement[],
+): V02LayerRequirement[] {
+  return [
+    ...new Map(layers.map((layer) => [layer.source, layer])).values(),
+  ];
+}
+
+function referenceField(source: string, path: string): Field {
+  switch (path) {
+    case 'risk_rate':
+    case 'demand_rate':
+      return {
+        source,
+        path,
+        measurement: 'quantitative',
+        semantic_type: 'probability',
+        unit: 'ratio',
+        normalization: 'ratio',
+        range: [0, 1],
+      };
+    case 'capacity':
+      return {
+        source,
+        path,
+        measurement: 'quantitative',
+        semantic_type: 'capacity',
+        unit: 'people',
+        normalization: 'none',
+        range: [0, 10000],
+      };
+    case 'severity':
+      return {
+        source,
+        path,
+        measurement: 'ordinal',
+        semantic_type: 'uncertainty',
+        range: [1, 5],
+      };
+    case 'category':
+      return nominalField(source, path, ['clinic', 'shelter', 'depot']);
+    case 'reference_type':
+      return nominalField(source, path, ['hospital', 'school', 'station']);
+    case 'status':
+      return nominalField(source, path, ['open', 'limited', 'closed']);
+    case 'name':
+      return {
+        source,
+        path,
+        measurement: 'nominal',
+        semantic_type: 'label',
+      };
+    default:
+      throw new Error(`No AtlasBench 0.2 field contract for path '${path}'.`);
+  }
+}
+
+function nominalField(source: string, path: string, domain: string[]): Field {
+  return {
+    source,
+    path,
+    measurement: 'nominal',
+    semantic_type: 'category',
+    domain,
   };
 }

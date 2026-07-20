@@ -750,7 +750,7 @@
       "difficulty": "basic",
       "variant": "canonical",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -769,7 +769,7 @@
       "difficulty": "basic",
       "variant": "missing-and-skew",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -790,7 +790,7 @@
       "difficulty": "basic",
       "variant": "dense-multilingual-mobile",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -811,7 +811,7 @@
       "difficulty": "basic",
       "variant": "geographic-capability-boundary",
       "split": "holdout",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -832,7 +832,7 @@
       "difficulty": "intermediate",
       "variant": "canonical",
       "split": "holdout",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -852,7 +852,7 @@
       "difficulty": "intermediate",
       "variant": "missing-and-skew",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -874,7 +874,7 @@
       "difficulty": "intermediate",
       "variant": "dense-multilingual-mobile",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -896,7 +896,7 @@
       "difficulty": "intermediate",
       "variant": "geographic-capability-boundary",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -918,7 +918,7 @@
       "difficulty": "adversarial",
       "variant": "canonical",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -939,7 +939,7 @@
       "difficulty": "adversarial",
       "variant": "missing-and-skew",
       "split": "holdout",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [
@@ -962,7 +962,7 @@
       "difficulty": "adversarial",
       "variant": "dense-multilingual-mobile",
       "split": "development",
-      "portability": "representable",
+      "portability": "capability-negative",
       "layer_count": 3,
       "edit_target": "incidents",
       "data_files": [

@@ -10,7 +10,7 @@ The checked-in `matrix.json` locks:
 - 48 unique task cells with a deterministic 36/12 development/holdout split;
 - five planned repetitions;
 - a fixed bootstrap seed for task-clustered intervals;
-- 33 cross-renderer-representable tasks and 15 capability-negative controls;
+- 22 cross-renderer-representable tasks and 26 capability-negative controls;
 - stable localized-edit targets and planned data paths.
 
 The same generator now locks 36 fresh GeoJSON files covering missing values,

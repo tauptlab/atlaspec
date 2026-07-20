@@ -31,10 +31,10 @@ describe('AtlasBench 0.2 task matrix', () => {
 
     expect(
       matrix.tasks.filter((task) => task.portability === 'representable'),
-    ).toHaveLength(33);
+    ).toHaveLength(22);
     expect(
       matrix.tasks.filter((task) => task.portability === 'capability-negative'),
-    ).toHaveLength(15);
+    ).toHaveLength(26);
     expect(
       matrix.tasks
         .filter((task) => task.archetype === 'heatmap-reference-points')

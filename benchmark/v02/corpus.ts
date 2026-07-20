@@ -177,6 +177,7 @@ function portability(
   variant: V02Variant,
 ): V02CorpusTask['portability'] {
   return archetype === 'heatmap-reference-points' ||
+    archetype === 'operational-overview' ||
     (difficulty === 'adversarial' &&
       variant === 'geographic-capability-boundary')
     ? 'capability-negative'

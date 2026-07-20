@@ -4,7 +4,17 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { buildV02CorpusMatrix } from './corpus.js';
-import { buildV02Manifests, validateV02Manifest } from './manifest.js';
+import { compile as compileVegaLiteSpec } from 'vega-lite';
+import type { TopLevelSpec } from 'vega-lite';
+import { parse as parseVega } from 'vega';
+
+import { compileMapLibre } from '../../src/maplibre.js';
+import { compileVegaLite } from '../../src/vega-lite.js';
+import {
+  buildV02Manifests,
+  buildV02ReferenceDocument,
+  validateV02Manifest,
+} from './manifest.js';
 
 describe('AtlasBench 0.2 manifests', () => {
   it('locks complete multi-layer contracts and balanced conditions', () => {
@@ -40,5 +50,45 @@ describe('AtlasBench 0.2 manifests', () => {
 
     expect(development).toEqual(expected.development);
     expect(holdout).toEqual(expected.holdout);
+  });
+
+  it('dry-runs every locked contract through its declared compiler capabilities', () => {
+    const manifests = buildV02Manifests(buildV02CorpusMatrix());
+    for (const task of [
+      ...manifests.development.tasks,
+      ...manifests.holdout.tasks,
+    ]) {
+      const document = buildV02ReferenceDocument(task);
+      const maplibre = compileMapLibre(document);
+      expect(maplibre.ok, `${task.id} ${JSON.stringify(maplibre.diagnostics)}`).toBe(true);
+
+      const vegaLite = compileVegaLite(document);
+      if (task.portability === 'representable') {
+        expect(vegaLite.ok, `${task.id} ${JSON.stringify(vegaLite.diagnostics)}`).toBe(true);
+        if (!vegaLite.ok) continue;
+        const warnings: string[] = [];
+        const originalWarn = console.warn;
+        console.warn = (...args: unknown[]) => warnings.push(args.map(String).join(' '));
+        try {
+          parseVega(
+            compileVegaLiteSpec(
+              vegaLite.spec as unknown as TopLevelSpec,
+            ).spec,
+          );
+        } finally {
+          console.warn = originalWarn;
+        }
+        expect(warnings, task.id).toEqual([]);
+      } else {
+        expect(vegaLite.ok, task.id).toBe(false);
+        if (vegaLite.ok) continue;
+        expect(
+          vegaLite.diagnostics.every((diagnostic) =>
+            diagnostic.code.startsWith('vega-lite.unsupported-'),
+          ),
+          task.id,
+        ).toBe(true);
+      }
+    }
   });
 });

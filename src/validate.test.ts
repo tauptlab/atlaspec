@@ -84,4 +84,30 @@ describe('validateAtlaspec', () => {
       ],
     });
   });
+
+  it('collapses union branches into one actionable enum diagnostic', async () => {
+    const document = await example('flood-risk.atlas.yaml');
+    const intent = document['intent'] as Record<string, unknown>;
+    intent['task'] = 'explore';
+
+    const report = validateAtlaspec(document);
+
+    expect(report.valid).toBe(false);
+    expect(report.diagnostics).toEqual([
+      expect.objectContaining({
+        code: 'schema.enum',
+        path: '/intent/task',
+        message: expect.stringContaining('"compare"'),
+      }),
+    ]);
+  });
+
+  it('accepts ordinal heatmap weights declared by the benchmark corpus', async () => {
+    const document = await example('incident-density.atlas.yaml');
+    const data = document['data'] as Record<string, unknown>;
+    const fields = data['fields'] as Record<string, Record<string, unknown>>;
+    fields['severity']!['measurement'] = 'ordinal';
+
+    expect(validateAtlaspec(document).valid).toBe(true);
+  });
 });

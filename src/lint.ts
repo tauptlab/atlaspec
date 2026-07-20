@@ -266,13 +266,14 @@ function lintFamily(
       }
       if (
         document.encoding.weight !== undefined &&
-        getField(document, document.encoding.weight.field)?.measurement !==
-          'quantitative'
+        !['ordinal', 'quantitative'].includes(
+          getField(document, document.encoding.weight.field)?.measurement ?? '',
+        )
       ) {
         diagnostics.push({
-          code: 'heatmap.quantitative-weight',
+          code: 'heatmap.ordered-weight',
           severity: 'error',
-          message: 'Heatmap weight must use a quantitative field.',
+          message: 'Heatmap weight must use an ordinal or quantitative field.',
           path: '/encoding/weight/field',
         });
       }

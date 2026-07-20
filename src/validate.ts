@@ -14,8 +14,7 @@ const validateSchema = ajv.compile<AtlaspecDocument>(AtlaspecSchema);
 
 export function validateAtlaspec(value: unknown): ValidationReport {
   if (!validateSchema(value)) {
-    const diagnostics = (validateSchema.errors ?? [])
-      .map(schemaErrorToDiagnostic)
+    const diagnostics = schemaErrorsToDiagnostics(validateSchema.errors ?? [])
       .sort(compareDiagnostics);
 
     return { valid: false, diagnostics };
@@ -26,6 +25,39 @@ export function validateAtlaspec(value: unknown): ValidationReport {
     valid: diagnostics.every((diagnostic) => diagnostic.severity !== 'error'),
     diagnostics,
   };
+}
+
+function schemaErrorsToDiagnostics(errors: readonly ErrorObject[]): Diagnostic[] {
+  const enumValues = new Map<string, unknown[]>();
+  for (const error of errors) {
+    if (error.keyword !== 'const') continue;
+    const values = enumValues.get(error.instancePath) ?? [];
+    values.push(error.params['allowedValue']);
+    enumValues.set(error.instancePath, values);
+  }
+
+  const diagnostics: Diagnostic[] = [];
+  for (const [path, values] of enumValues) {
+    const unique = [...new Map(values.map((value) => [JSON.stringify(value), value])).values()];
+    diagnostics.push({
+      code: 'schema.enum',
+      severity: 'error',
+      message: `Must be one of: ${unique.map((value) => JSON.stringify(value)).join(', ')}.`,
+      path: path || '/',
+    });
+  }
+  for (const error of errors) {
+    if (error.keyword === 'const') continue;
+    if (error.keyword === 'anyOf' && enumValues.has(error.instancePath)) continue;
+    diagnostics.push(schemaErrorToDiagnostic(error));
+  }
+
+  const unique = new Map<string, Diagnostic>();
+  for (const diagnostic of diagnostics) {
+    const key = `${diagnostic.code}\u0000${diagnostic.path}\u0000${diagnostic.message}`;
+    unique.set(key, diagnostic);
+  }
+  return [...unique.values()];
 }
 
 function schemaErrorToDiagnostic(error: ErrorObject): Diagnostic {

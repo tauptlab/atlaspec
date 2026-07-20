@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { buildCorpusArtifacts, VARIANTS } from '../corpus/corpus.js';
 import {
   buildLocalQualificationBundle,
+  holdoutTaskIds,
   postFixTaskIds,
   qualificationTaskIds,
 } from './bundle.js';
@@ -28,6 +29,18 @@ describe('AtlasBench Local qualification bundle', () => {
     expect(selected).toHaveLength(12);
     expect(selected.every((task) => task.split === 'development')).toBe(true);
     expect([...postFix].every((id) => !qualification.has(id))).toBe(true);
+    for (const variant of VARIANTS) {
+      expect(selected.filter((task) => task.variant === variant)).toHaveLength(3);
+    }
+  });
+
+  it('identifies the complete balanced frozen holdout', () => {
+    const artifacts = buildCorpusArtifacts();
+    const ids = holdoutTaskIds(artifacts.matrix);
+    const selected = artifacts.matrix.tasks.filter((task) => ids.has(task.id));
+
+    expect(selected).toHaveLength(12);
+    expect(selected.every((task) => task.split === 'holdout')).toBe(true);
     for (const variant of VARIANTS) {
       expect(selected.filter((task) => task.variant === variant)).toHaveLength(3);
     }
@@ -116,6 +129,44 @@ describe('AtlasBench Local qualification bundle', () => {
         manifest.suite.startsWith('atlasbench-local-postfix-'),
       ),
     ).toBe(true);
+  });
+
+  it('freezes five repetitions and 450 runs for the local holdout', () => {
+    const artifacts = buildCorpusArtifacts();
+    const bundle = buildLocalQualificationBundle(
+      artifacts.holdout,
+      artifacts.matrix,
+      {
+        phase: 'holdout',
+        agents: testAgents(),
+        source_manifest_raw: JSON.stringify(artifacts.holdout),
+        matrix_raw: JSON.stringify(artifacts.matrix),
+        source_directory: 'C:/repo/benchmark/corpus',
+        output_directory: 'C:/repo/work/local-holdout',
+        lockfile_raw: '{}',
+        compiler_commit: 'commit',
+        generated_at: '2026-07-20T00:00:00Z',
+      },
+    );
+
+    expect(bundle.ledger.benchmark_id).toBe('atlasbench-local-holdout-v1');
+    expect(bundle.ledger.holdout_exposed).toBe(true);
+    expect(bundle.ledger.qualification).toEqual({
+      task_count: 12,
+      repetitions: 5,
+      selection: 'frozen-rotated-holdout',
+      execution_order: 'balanced',
+    });
+    expect(bundle.ledger.totals).toEqual({
+      jobs: 6,
+      expected_runs: 450,
+      base_generation_calls: 450,
+      max_generation_calls: 570,
+    });
+    for (const manifest of bundle.manifests.values()) {
+      expect(manifest.repetitions).toBe(5);
+      expect(manifest.tasks).toHaveLength(4);
+    }
   });
 });
 

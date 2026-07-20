@@ -36,19 +36,21 @@ export interface LocalQualificationLedger {
   schema_version: '0.1';
   benchmark_id:
     | 'atlasbench-local-qualification-v1'
-    | 'atlasbench-local-postfix-v1';
+    | 'atlasbench-local-postfix-v1'
+    | 'atlasbench-local-holdout-v1';
   generated_at: string;
   compiler_commit: string;
   lockfile_sha256: string;
   claim_scope: 'local-coding-agent-within-agent-comparison';
-  holdout_exposed: false;
+  holdout_exposed: boolean;
   cross_agent_absolute_token_comparison: 'prohibited';
   qualification: {
     task_count: 12;
-    repetitions: 2;
+    repetitions: 2 | 5;
     selection:
       | 'next-development-variant-after-rotated-holdout'
-      | 'second-development-variant-after-rotated-holdout';
+      | 'second-development-variant-after-rotated-holdout'
+      | 'frozen-rotated-holdout';
     execution_order: 'balanced';
   };
   thresholds: LocalTokenThresholds;
@@ -83,7 +85,7 @@ export interface LocalQualificationBundle {
 }
 
 export interface BuildLocalQualificationOptions {
-  phase?: 'qualification' | 'postfix';
+  phase?: 'qualification' | 'postfix' | 'holdout';
   agents: readonly LocalAgentIdentity[];
   source_manifest_raw: string;
   matrix_raw: string;
@@ -102,7 +104,10 @@ export function buildLocalQualificationBundle(
   assertSource(source, matrix);
   assertAgents(options.agents);
   const phase = options.phase ?? 'qualification';
-  const selectedIds = localTaskIds(matrix, phase === 'qualification' ? 1 : 2);
+  const selectedIds =
+    phase === 'holdout'
+      ? holdoutTaskIds(matrix)
+      : localTaskIds(matrix, phase === 'qualification' ? 1 : 2);
   const selected = new Map(
     source.tasks
       .filter((task) => selectedIds.has(task.id))
@@ -114,6 +119,7 @@ export function buildLocalQualificationBundle(
 
   const manifests = new Map<string, ExperimentManifest>();
   const jobs: LocalQualificationJob[] = [];
+  const repetitions = phase === 'holdout' ? 5 : 2;
   for (const agent of options.agents) {
     for (const difficulty of DIFFICULTIES) {
       const tasks = FAMILIES.map((family) => {
@@ -133,7 +139,7 @@ export function buildLocalQualificationBundle(
         {
           ...structuredClone(source),
           suite: `atlasbench-local-${phase}-${agent.id}-${difficulty}`,
-          repetitions: 2,
+          repetitions,
           execution_order: 'balanced',
           model: structuredClone(agent.model),
           tasks,
@@ -143,8 +149,8 @@ export function buildLocalQualificationBundle(
       );
       const serialized = serializeLocalManifest(manifest);
       manifests.set(relativeManifest, manifest);
-      const expectedRuns = sum(tasks.map((task) => task.conditions.length)) * 2;
-      const repairCalls = tasks.length * 2;
+      const expectedRuns = sum(tasks.map((task) => task.conditions.length)) * repetitions;
+      const repairCalls = tasks.length * repetitions;
       jobs.push({
         job_id: `${agent.id}/${difficulty}`,
         agent_id: agent.id,
@@ -166,20 +172,24 @@ export function buildLocalQualificationBundle(
       benchmark_id:
         phase === 'qualification'
           ? 'atlasbench-local-qualification-v1'
-          : 'atlasbench-local-postfix-v1',
+          : phase === 'postfix'
+            ? 'atlasbench-local-postfix-v1'
+            : 'atlasbench-local-holdout-v1',
       generated_at: options.generated_at,
       compiler_commit: options.compiler_commit,
       lockfile_sha256: sha256(options.lockfile_raw),
       claim_scope: 'local-coding-agent-within-agent-comparison',
-      holdout_exposed: false,
+      holdout_exposed: phase === 'holdout',
       cross_agent_absolute_token_comparison: 'prohibited',
       qualification: {
         task_count: 12,
-        repetitions: 2,
+        repetitions,
         selection:
           phase === 'qualification'
             ? 'next-development-variant-after-rotated-holdout'
-            : 'second-development-variant-after-rotated-holdout',
+            : phase === 'postfix'
+              ? 'second-development-variant-after-rotated-holdout'
+              : 'frozen-rotated-holdout',
         execution_order: 'balanced',
       },
       thresholds: {
@@ -217,6 +227,14 @@ export function postFixTaskIds(matrix: CorpusMatrix): Set<string> {
   return localTaskIds(matrix, 2);
 }
 
+export function holdoutTaskIds(matrix: CorpusMatrix): Set<string> {
+  return new Set(
+    matrix.tasks
+      .filter((task) => task.split === 'holdout')
+      .map((task) => task.id),
+  );
+}
+
 function localTaskIds(matrix: CorpusMatrix, variantOffset: 1 | 2): Set<string> {
   const ids = new Set<string>();
   for (const [familyIndex, family] of FAMILIES.entries()) {
@@ -245,8 +263,11 @@ export function serializeLocalManifest(manifest: ExperimentManifest): string {
 }
 
 function assertSource(source: ExperimentManifest, matrix: CorpusMatrix): void {
-  if (source.suite !== 'atlasbench-48-development' || source.tasks.length !== 36) {
-    throw new Error('Local qualification requires the frozen 36-task development manifest.');
+  const validSource =
+    (source.suite === 'atlasbench-48-development' && source.tasks.length === 36) ||
+    (source.suite === 'atlasbench-48-holdout' && source.tasks.length === 12);
+  if (!validSource) {
+    throw new Error('Local benchmark requires a frozen atlasbench-48 source manifest.');
   }
   if (matrix.corpus !== 'atlasbench-48' || matrix.tasks.length !== 48) {
     throw new Error('Local qualification requires the frozen atlasbench-48 matrix.');

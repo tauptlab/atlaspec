@@ -14,7 +14,7 @@ import {
 
 interface Options {
   output: string;
-  phase: 'qualification' | 'postfix';
+  phase: 'qualification' | 'postfix' | 'holdout';
   codexVersion: string;
   claudeCliVersion: string;
   claudeModel: string;
@@ -26,7 +26,7 @@ const program = new Command()
   .name('atlasbench-local-prepare')
   .description('Prepare a pre-committed local Codex and Claude benchmark slice')
   .requiredOption('--output <directory>', 'new local qualification directory')
-  .option('--phase <phase>', 'qualification or postfix', 'qualification')
+  .option('--phase <phase>', 'qualification, postfix, or holdout', 'qualification')
   .requiredOption('--codex-version <version>', 'exact Codex CLI version output')
   .requiredOption('--claude-cli-version <version>', 'exact Claude Code version output')
   .requiredOption('--claude-model <model>', 'Claude model selector')
@@ -34,12 +34,20 @@ const program = new Command()
 
 program.action(async (options: Options) => {
   try {
-    if (options.phase !== 'qualification' && options.phase !== 'postfix') {
+    if (
+      options.phase !== 'qualification' &&
+      options.phase !== 'postfix' &&
+      options.phase !== 'holdout'
+    ) {
       throw new Error(`Unknown local benchmark phase: ${String(options.phase)}`);
     }
     const outputDirectory = resolve(options.output);
     await assertEmptyOutput(outputDirectory);
-    const sourcePath = resolve('benchmark/corpus/development.manifest.json');
+    const sourcePath = resolve(
+      options.phase === 'holdout'
+        ? 'benchmark/corpus/holdout.manifest.json'
+        : 'benchmark/corpus/development.manifest.json',
+    );
     const matrixPath = resolve('benchmark/corpus/matrix.json');
     const sourceRaw = await readFile(sourcePath, 'utf8');
     const matrixRaw = await readFile(matrixPath, 'utf8');
@@ -95,7 +103,8 @@ program.action(async (options: Options) => {
     );
     console.log(
       `PREPARED ${bundle.ledger.totals.jobs} jobs, ${bundle.ledger.totals.expected_runs} runs, ` +
-        `${bundle.ledger.totals.max_generation_calls} maximum calls; holdout not exposed`,
+        `${bundle.ledger.totals.max_generation_calls} maximum calls; ` +
+        `holdout exposed=${bundle.ledger.holdout_exposed}`,
     );
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));

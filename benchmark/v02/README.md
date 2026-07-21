@@ -114,3 +114,13 @@ The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked
 matrix after model output has been inspected; create a new corpus version if a
 material task-design change is required.
+
+## Completed local qualification
+
+The locked 12-task, two-repetition local qualification completed 216/216 runs
+on 2026-07-21. Both agents received an overall fail. Claude passed reliability
+and token-efficiency gates but failed portability and capability fail-closed;
+Codex also failed reliability. The v0.2 holdout remains sealed.
+
+See the full result, immutable report hashes, and claim boundary in the
+[multi-task qualification report](../../docs/V02_MULTI_TASK_QUALIFICATION_2026-07-21.md).

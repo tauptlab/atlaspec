@@ -9,6 +9,8 @@ Key notation: `*` means required; all unmarked keys are optional.
 - document: `version*`, `map*`, `title*`, `description`, `intent*`, `data*`, `layers*`, `constraints`, `basemap`, `metadata`
   - version: `0.2`
 - intent: `task*`, `audience*`, `primary_message*`
+  - task: `locate`, `compare`, `rank`, `distribution`, `distinguish`
+  - audience: `general-public`, `analyst`, `expert`, `operations`, `student`
 - data: `sources*`, `fields*`
 - each source, exactly one shape:
   - `id*`, `type*`, `url*`; type: `geojson`
@@ -23,7 +25,9 @@ Key notation: `*` means required; all unmarked keys are optional.
   - family: `choropleth`, `proportional-symbol`, `categorical-point`, `heatmap`
   - encoding: `geometry*`, `color`, `size`, `category`, `label`, `weight`
   - geometry: `source*`, `support*`
+  - geometry support: `point`, `line`, `polygon`, `grid`
   - color: `field*`, `scheme`, `classification`, `classes`
+  - color classification: `continuous`, `equal-interval`, `quantile`, `natural-breaks`
   - size, category, label, and weight contain only `field`
   - constraints: `missing_data`, `raw_count_choropleth`
   - missing_data: `explicit`, `hide`, `error`
@@ -33,13 +37,22 @@ Key notation: `*` means required; all unmarked keys are optional.
   - zoom action: `show`, `hide`, `cluster`, `show-labels`
 - global constraints: `colorblind_safe`, `allow_duplicate_labels`, `protected_layers`, `label_priority`, `viewport`
   - viewport: `width*`, `height*`
+  - protected_layers and label_priority are arrays of strings
 - basemap: `style*`, `contrast`
+  - style: `minimal-light`, `minimal-dark`, `none`
+  - contrast: `light`, `dark`, `auto`
+- metadata values may only be a string, number, or boolean. Do not put arrays
+  or nested objects in metadata. Stress requirements describe evaluation
+  context; do not copy them into metadata.
 
 Every field reference in a layer must name a key in `data.fields`; that field's
 `source` must match the layer geometry source. Keep layer IDs stable and keep
 the authored layer order. Put `missing_data` and `raw_count_choropleth` on
 the layer, while viewport and colorblind safety are global constraints. Put
 semantic zoom only in the relevant layer's `behavior.zoom_rules`.
+Do not invent zoom rules. Omit `behavior` unless the request explicitly gives
+zoom thresholds and actions; a viewport or layer-visibility stress label alone
+does not require a zoom rule.
 
 Family requirements:
 

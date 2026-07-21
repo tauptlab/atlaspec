@@ -28,6 +28,19 @@ describe('schema-derived Atlaspec generation reference', () => {
     expect(reference).toContain('ordered `layers` array');
     expect(reference).toContain('purpose: `primary`, `supporting`, `reference`');
     expect(reference).toContain('Put `missing_data` and `raw_count_choropleth` on');
+    expect(reference).toContain(
+      'task: `locate`, `compare`, `rank`, `distribution`, `distinguish`',
+    );
+    expect(reference).toContain(
+      'audience: `general-public`, `analyst`, `expert`, `operations`, `student`',
+    );
+    expect(reference).toContain(
+      'color classification: `continuous`, `equal-interval`, `quantile`, `natural-breaks`',
+    );
+    expect(reference).toContain('Do not put arrays');
+    expect(reference).toContain('do not copy them into metadata');
+    expect(reference).toContain('Do not invent zoom rules.');
+    expect(reference).toContain('layer-visibility stress label alone');
     expect(reference).toContain('version: "0.2"');
   });
 });

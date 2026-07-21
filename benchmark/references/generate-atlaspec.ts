@@ -179,12 +179,15 @@ derives MapLibre \`metadata["atlaspec:legend"]\`.
 
 export function renderAtlaspecV02Reference(): string {
   const root = node(AtlaspecV02Schema);
+  const intent = property(root, 'intent');
   const layer = node(AtlaspecLayerSchema);
   const encoding = property(layer, 'encoding');
+  const color = property(encoding, 'color');
   const layerConstraints = property(layer, 'constraints');
   const behavior = property(layer, 'behavior');
   const zoomRule = property(behavior, 'zoom_rules').items!;
   const globalConstraints = property(root, 'constraints');
+  const basemap = property(root, 'basemap');
   const sourceAlternatives = node(DataSourceSchema).anyOf ?? [];
 
   return `# Atlaspec 0.2 generation reference
@@ -197,7 +200,9 @@ Key notation: \`*\` means required; all unmarked keys are optional.
 
 - document: ${keyList(root)}
   - version: \`0.2\`
-- intent: ${keyList(property(root, 'intent'))}
+- intent: ${keyList(intent)}
+  - task: ${values(enumValues(property(intent, 'task')))}
+  - audience: ${values(enumValues(property(intent, 'audience')))}
 - data: ${keyList(property(root, 'data'))}
 - each source, exactly one shape:
 ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enumValues(property(schema, 'type')))}`).join('\n')}
@@ -211,7 +216,9 @@ ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enu
   - family: ${values(enumValues(node(MapFamilySchema)))}
   - encoding: ${keyList(encoding)}
   - geometry: ${keyList(property(encoding, 'geometry'))}
-  - color: ${keyList(property(encoding, 'color'))}
+  - geometry support: ${values(enumValues(property(property(encoding, 'geometry'), 'support')))}
+  - color: ${keyList(color)}
+  - color classification: ${values(enumValues(property(color, 'classification')))}
   - size, category, label, and weight contain only \`field\`
   - constraints: ${keyList(layerConstraints)}
   - missing_data: ${values(enumValues(property(layerConstraints, 'missing_data')))}
@@ -221,13 +228,22 @@ ${sourceAlternatives.map((schema) => `  - ${keyList(schema)}; type: ${values(enu
   - zoom action: ${values(enumValues(property(zoomRule, 'action')))}
 - global constraints: ${keyList(globalConstraints)}
   - viewport: ${keyList(property(globalConstraints, 'viewport'))}
-- basemap: ${keyList(property(root, 'basemap'))}
+  - protected_layers and label_priority are arrays of strings
+- basemap: ${keyList(basemap)}
+  - style: ${values(enumValues(property(basemap, 'style')))}
+  - contrast: ${values(enumValues(property(basemap, 'contrast')))}
+- metadata values may only be a string, number, or boolean. Do not put arrays
+  or nested objects in metadata. Stress requirements describe evaluation
+  context; do not copy them into metadata.
 
 Every field reference in a layer must name a key in \`data.fields\`; that field's
 \`source\` must match the layer geometry source. Keep layer IDs stable and keep
 the authored layer order. Put \`missing_data\` and \`raw_count_choropleth\` on
 the layer, while viewport and colorblind safety are global constraints. Put
 semantic zoom only in the relevant layer's \`behavior.zoom_rules\`.
+Do not invent zoom rules. Omit \`behavior\` unless the request explicitly gives
+zoom thresholds and actions; a viewport or layer-visibility stress label alone
+does not require a zoom rule.
 
 Family requirements:
 

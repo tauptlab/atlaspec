@@ -1,0 +1,78 @@
+{
+  "schema_version": "0.2-rnd.1",
+  "experiment_id": "atlasbench-v02-reference-hardening-rnd-v1",
+  "purpose": "Test whether the hardened schema-derived generation reference generalizes beyond five post-selected regressions.",
+  "evidence_scope": "post-qualification-development-rnd",
+  "official_qualification": false,
+  "holdout_exposed": false,
+  "execution_commit_policy": "Use the git commit containing this plan without source changes between agents.",
+  "source": {
+    "manifest": "benchmark/v02/development.manifest.json",
+    "manifest_sha256": "36a7adf1e5a8535723fa05a3da0b7cdd4556cf7d6ec9a8b22470ec42880492da",
+    "matrix": "benchmark/v02/matrix.json",
+    "matrix_sha256": "699af1e1414987fa118a4485dbdbbcd599462b2938fa90f32b3b288ed36131b2",
+    "reference": "benchmark/references/atlaspec-v02.md",
+    "reference_sha256": "acecbcc4aca9c84dde559793b3ccb0b7ce6b49491efba8b15936f0f01f389ec5",
+    "lockfile_sha256": "3e7dbbc86a3b580a613f2429cadc301b88999bb33f9b80870183c6a975f867dc"
+  },
+  "agents": [
+    {
+      "id": "codex",
+      "provider": "codex-cli",
+      "model": "default",
+      "version": "codex-cli 0.144.4;model=unreported",
+      "output": "work/v02-rnd/reference-hardening-matrix-v1-codex.json"
+    },
+    {
+      "id": "claude",
+      "provider": "claude-cli",
+      "model": "opus",
+      "version": "claude-opus-4-5-20251101",
+      "output": "work/v02-rnd/reference-hardening-matrix-v1-claude.json"
+    }
+  ],
+  "task_ids": [
+    "choropleth-proportional-symbols-basic-geographic-capability-boundary",
+    "choropleth-categorical-facilities-basic-canonical",
+    "heatmap-reference-points-basic-missing-and-skew",
+    "operational-overview-basic-dense-multilingual-mobile",
+    "choropleth-proportional-symbols-intermediate-canonical",
+    "choropleth-categorical-facilities-intermediate-missing-and-skew",
+    "heatmap-reference-points-intermediate-dense-multilingual-mobile",
+    "operational-overview-intermediate-geographic-capability-boundary",
+    "choropleth-proportional-symbols-adversarial-missing-and-skew",
+    "choropleth-categorical-facilities-adversarial-dense-multilingual-mobile",
+    "heatmap-reference-points-adversarial-geographic-capability-boundary",
+    "operational-overview-adversarial-canonical"
+  ],
+  "conditions": [
+    "atlaspec-maplibre",
+    "atlaspec-vega-lite",
+    "vega-capability-negative"
+  ],
+  "repetitions": 1,
+  "expected": {
+    "tasks": 12,
+    "runs_per_agent": 24,
+    "runs_total": 48,
+    "maplibre_runs_per_agent": 12,
+    "representable_vega_runs_per_agent": 6,
+    "capability_negative_runs_per_agent": 6,
+    "maximum_model_calls": 72
+  },
+  "locked_diagnostic_thresholds": {
+    "maplibre_first_attempt_yield": 0.9,
+    "representable_vega_portability": 0.95,
+    "capability_fail_closed": 1.0,
+    "eligible_maplibre_edit_survival": 0.95
+  },
+  "analysis_rules": [
+    "Transport and schema failures remain in first-attempt denominators.",
+    "Portability counts only representable atlaspec-vega-lite tasks.",
+    "Capability accuracy counts only vega-capability-negative tasks.",
+    "Edit survival is conditional on an accepted Atlaspec MapLibre generation.",
+    "Token and cost results are descriptive and may only be compared within one agent.",
+    "No direct baseline is present, so this experiment cannot establish Atlaspec superiority.",
+    "The tasks were reused after failure inspection, so this experiment cannot replace the official qualification."
+  ]
+}

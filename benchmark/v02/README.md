@@ -98,7 +98,14 @@ npm run benchmark:v02:local:status -- `
 Each job refuses compiler, dependency-lock, source-manifest, or matrix drift;
 prints progress after every completed run; and writes its report atomically.
 The status command rejects missing, duplicate, unexpected, wrong-model, or
-wrong-commit runs instead of silently aggregating them.
+wrong-commit runs instead of silently aggregating them. Once all three jobs for
+an agent are complete, it also reports task-clustered bootstrap intervals and
+separate gates for first-attempt reliability, uncached generation tokens,
+generation output tokens, Atlaspec edit survival, cross-renderer portability,
+and capability fail-closed accuracy. Missing response usage keeps reliability
+failures in the denominator but makes token evidence insufficient. Repair
+recovery is descriptive because the direct baseline has no symmetric repair
+condition.
 
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked

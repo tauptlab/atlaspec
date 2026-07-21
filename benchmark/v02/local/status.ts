@@ -1,6 +1,8 @@
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { promisify } from 'node:util';
 
 import type { V02ExperimentReport } from '../experiment.js';
 import type { V02EvaluationManifest } from '../manifest.js';
@@ -8,6 +10,12 @@ import type {
   V02LocalJob,
   V02LocalQualificationLedger,
 } from './bundle.js';
+import {
+  analyzeV02LocalAgent,
+  type V02AgentAnalysis,
+} from './analysis.js';
+
+const executeFile = promisify(execFile);
 
 export interface V02LocalJobReport {
   schema_version: '0.2';
@@ -31,6 +39,12 @@ export interface V02LocalQualificationStatus {
   runs: { expected: number; observed: number };
   source_diagnostics: string[];
   job_statuses: V02LocalJobStatus[];
+  agent_results: Array<{
+    agent_id: 'codex' | 'claude';
+    jobs_complete: number;
+    runs: number;
+    analysis: V02AgentAnalysis | null;
+  }>;
 }
 
 export async function inspectV02LocalQualification(
@@ -43,6 +57,14 @@ export async function inspectV02LocalQualification(
   const matrixRaw = await readFile(resolve(ledger.source.matrix), 'utf8');
   const lockfileRaw = await readFile(resolve('package-lock.json'), 'utf8');
   const sourceDiagnostics: string[] = [];
+  try {
+    const { stdout } = await executeFile('git', ['rev-parse', 'HEAD']);
+    if (stdout.trim() !== ledger.compiler_commit) {
+      sourceDiagnostics.push('compiler commit drift from plan');
+    }
+  } catch (error) {
+    sourceDiagnostics.push(`cannot read compiler commit: ${errorMessage(error)}`);
+  }
   if (sha256(manifestRaw) !== ledger.source.manifest_sha256) {
     sourceDiagnostics.push('development manifest digest mismatch');
   }
@@ -54,12 +76,15 @@ export async function inspectV02LocalQualification(
   }
   const manifest = JSON.parse(manifestRaw) as V02EvaluationManifest;
   const statuses: V02LocalJobStatus[] = [];
+  const reports = new Map<string, V02LocalJobReport>();
   for (const job of ledger.jobs) {
     try {
       const report = JSON.parse(
         await readFile(resolve(bundleDirectory, job.report), 'utf8'),
       ) as V02LocalJobReport;
-      statuses.push(verifyV02LocalJob(ledger, job, manifest, report));
+      const status = verifyV02LocalJob(ledger, job, manifest, report);
+      statuses.push(status);
+      if (status.state === 'complete') reports.set(job.job_id, report);
     } catch (error) {
       statuses.push(
         isMissing(error)
@@ -71,6 +96,23 @@ export async function inspectV02LocalQualification(
   const complete = statuses.filter((status) => status.state === 'complete').length;
   const missing = statuses.filter((status) => status.state === 'missing').length;
   const invalid = statuses.filter((status) => status.state === 'invalid').length;
+  const agentResults = ledger.agents.map((agent) => {
+    const jobs = ledger.jobs.filter(
+      (job) => job.agent_id === agent.id && reports.has(job.job_id),
+    );
+    const runs = jobs.flatMap(
+      (job) => reports.get(job.job_id)?.experiment.runs ?? [],
+    );
+    return {
+      agent_id: agent.id,
+      jobs_complete: jobs.length,
+      runs: runs.length,
+      analysis:
+        jobs.length === 3
+          ? analyzeV02LocalAgent(runs, manifest, ledger.thresholds)
+          : null,
+    };
+  });
   return {
     schema_version: '0.2',
     benchmark_id: ledger.benchmark_id,
@@ -88,6 +130,7 @@ export async function inspectV02LocalQualification(
     },
     source_diagnostics: sourceDiagnostics,
     job_statuses: statuses,
+    agent_results: agentResults,
   };
 }
 

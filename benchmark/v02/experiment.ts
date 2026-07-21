@@ -43,7 +43,9 @@ export interface V02ExperimentOptions {
   on_run_complete?: (
     run: V02RunRecord,
     completedRuns: number,
+    allRuns: readonly V02RunRecord[],
   ) => void | Promise<void>;
+  prior_runs?: readonly V02RunRecord[];
 }
 
 export interface V02AttemptRecord {
@@ -124,7 +126,8 @@ export async function runV02Experiment(
   }
   const tasks = selectTasks(manifest.tasks, options.task_ids);
   const compilerCommit = await readCommit();
-  const runs: V02RunRecord[] = [];
+  const runs: V02RunRecord[] = [...(options.prior_runs ?? [])];
+  const completedRunIds = new Set(runs.map((run) => run.run_id));
   const repetitions = options.repetitions ?? manifest.repetitions;
   if (!Number.isInteger(repetitions) || repetitions < 1) {
     throw new Error('repetitions must be a positive integer.');
@@ -143,6 +146,8 @@ export async function runV02Experiment(
       const offset = (manifestIndex + repetition - 1) % conditions.length;
       for (let conditionIndex = 0; conditionIndex < conditions.length; conditionIndex += 1) {
         const condition = conditions[(conditionIndex + offset) % conditions.length]!;
+        const expectedRunId = `${manifest.suite}/${task.id}/${condition}/${repetition}`;
+        if (completedRunIds.has(expectedRunId)) continue;
         const reference = await referenceInput(dirname(absoluteManifest), condition);
         const run = await runCondition(
             manifest.suite,
@@ -155,8 +160,9 @@ export async function runV02Experiment(
             adapter,
           );
         runs.push(run);
+        completedRunIds.add(run.run_id);
         if (options.on_run_complete !== undefined) {
-          await options.on_run_complete(run, runs.length);
+          await options.on_run_complete(run, runs.length, runs);
         }
       }
     }

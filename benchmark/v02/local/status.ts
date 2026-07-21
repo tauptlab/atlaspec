@@ -25,7 +25,7 @@ export interface V02LocalJobReport {
 
 export interface V02LocalJobStatus {
   job_id: string;
-  state: 'complete' | 'missing' | 'invalid';
+  state: 'complete' | 'partial' | 'missing' | 'invalid';
   observed_runs: number;
   diagnostics: string[];
 }
@@ -35,7 +35,13 @@ export interface V02LocalQualificationStatus {
   benchmark_id: string;
   status: 'complete' | 'incomplete' | 'invalid';
   holdout_exposed: false;
-  jobs: { total: number; complete: number; missing: number; invalid: number };
+  jobs: {
+    total: number;
+    complete: number;
+    partial: number;
+    missing: number;
+    invalid: number;
+  };
   runs: { expected: number; observed: number };
   source_diagnostics: string[];
   job_statuses: V02LocalJobStatus[];
@@ -86,14 +92,36 @@ export async function inspectV02LocalQualification(
       statuses.push(status);
       if (status.state === 'complete') reports.set(job.job_id, report);
     } catch (error) {
-      statuses.push(
-        isMissing(error)
-          ? missingStatus(job)
-          : invalidStatus(job, errorMessage(error)),
-      );
+      if (!isMissing(error)) {
+        statuses.push(invalidStatus(job, errorMessage(error)));
+        continue;
+      }
+      try {
+        const checkpoint = JSON.parse(
+          await readFile(
+            resolve(bundleDirectory, checkpointReportPath(job.report)),
+            'utf8',
+          ),
+        ) as V02LocalJobReport;
+        const status = verifyV02LocalJob(ledger, job, manifest, checkpoint, {
+          allowPartial: true,
+        });
+        statuses.push(
+          status.state === 'complete'
+            ? { ...status, state: 'partial' }
+            : status,
+        );
+      } catch (checkpointError) {
+        statuses.push(
+          isMissing(checkpointError)
+            ? missingStatus(job)
+            : invalidStatus(job, errorMessage(checkpointError)),
+        );
+      }
     }
   }
   const complete = statuses.filter((status) => status.state === 'complete').length;
+  const partial = statuses.filter((status) => status.state === 'partial').length;
   const missing = statuses.filter((status) => status.state === 'missing').length;
   const invalid = statuses.filter((status) => status.state === 'invalid').length;
   const agentResults = ledger.agents.map((agent) => {
@@ -119,11 +147,11 @@ export async function inspectV02LocalQualification(
     status:
       sourceDiagnostics.length > 0 || invalid > 0
         ? 'invalid'
-        : missing > 0
+        : missing > 0 || partial > 0
           ? 'incomplete'
           : 'complete',
     holdout_exposed: false,
-    jobs: { total: statuses.length, complete, missing, invalid },
+    jobs: { total: statuses.length, complete, partial, missing, invalid },
     runs: {
       expected: ledger.totals.expected_runs,
       observed: sum(statuses.map((status) => status.observed_runs)),
@@ -139,6 +167,7 @@ export function verifyV02LocalJob(
   job: V02LocalJob,
   manifest: V02EvaluationManifest,
   report: V02LocalJobReport,
+  options: { allowPartial?: boolean } = {},
 ): V02LocalJobStatus {
   const diagnostics: string[] = [];
   if (report.schema_version !== '0.2') diagnostics.push('report schema mismatch');
@@ -159,7 +188,7 @@ export function verifyV02LocalJob(
   } else if (!sameModel(experiment.model, agent.model)) {
     diagnostics.push('experiment model mismatch');
   }
-  if (experiment.runs.length !== job.expected_runs) {
+  if (options.allowPartial !== true && experiment.runs.length !== job.expected_runs) {
     diagnostics.push(
       `run count expected=${job.expected_runs} actual=${experiment.runs.length}`,
     );
@@ -190,7 +219,9 @@ export function verifyV02LocalJob(
       }
     }
   }
-  for (const id of expected) if (!observed.has(id)) diagnostics.push(`missing run id ${id}`);
+  if (options.allowPartial !== true) {
+    for (const id of expected) if (!observed.has(id)) diagnostics.push(`missing run id ${id}`);
+  }
   for (const id of observed) if (!expected.has(id)) diagnostics.push(`unexpected run id ${id}`);
   return {
     job_id: job.job_id,
@@ -198,6 +229,12 @@ export function verifyV02LocalJob(
     observed_runs: experiment.runs.length,
     diagnostics,
   };
+}
+
+export function checkpointReportPath(reportPath: string): string {
+  return reportPath.endsWith('.json')
+    ? `${reportPath.slice(0, -5)}.checkpoint.json`
+    : `${reportPath}.checkpoint.json`;
 }
 
 function expectedRunIds(

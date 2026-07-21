@@ -97,6 +97,9 @@ npm run benchmark:v02:local:status -- `
 
 Each job refuses compiler, dependency-lock, source-manifest, or matrix drift;
 prints progress after every completed run; and writes its report atomically.
+It also writes an atomic checkpoint after every run. Repeating the same command
+with the same plan resumes only missing run IDs, while status reports the job as
+`partial`; invalid or foreign checkpoint records are rejected.
 The status command rejects missing, duplicate, unexpected, wrong-model, or
 wrong-commit runs instead of silently aggregating them. Once all three jobs for
 an agent are complete, it also reports task-clustered bootstrap intervals and

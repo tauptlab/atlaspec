@@ -43,9 +43,20 @@ describe('AtlasBench 0.2 local job verification', () => {
       diagnostics: [],
     });
 
-    report.experiment.runs.pop();
-    report.experiment.model.version = 'drifted';
-    const invalid = verifyV02LocalJob(ledger, job, manifest, report);
+    const partial = structuredClone(report);
+    partial.experiment.runs.pop();
+    expect(
+      verifyV02LocalJob(ledger, job, manifest, partial, { allowPartial: true }),
+    ).toEqual({
+      job_id: 'codex/basic',
+      state: 'complete',
+      observed_runs: 35,
+      diagnostics: [],
+    });
+
+    const drifted = structuredClone(partial);
+    drifted.experiment.model.version = 'drifted';
+    const invalid = verifyV02LocalJob(ledger, job, manifest, drifted);
     expect(invalid.state).toBe('invalid');
     expect(invalid.diagnostics).toEqual(
       expect.arrayContaining([

@@ -103,6 +103,44 @@ describe('AtlasBench 0.2 model runner', () => {
       'direct-maplibre',
     ]);
   });
+
+  it('resumes from completed run records without repeating model calls', async () => {
+    const manifest = await developmentManifest();
+    const task = manifest.tasks[0]!;
+    const firstAdapter = new ReferenceAdapter(new Map([[task.id, task]]), false);
+    const first = await runV02Experiment(
+      resolve('benchmark/v02/development.manifest.json'),
+      firstAdapter,
+      {
+        model: { provider: 'fixture', model: 'reference', version: '1' },
+        sampling: { temperature: 0 },
+        repetitions: 1,
+        task_ids: [task.id],
+        conditions: ['direct-vega-lite'],
+      },
+    );
+    const resumedAdapter = new ReferenceAdapter(new Map([[task.id, task]]), false);
+    let callbacks = 0;
+    const resumed = await runV02Experiment(
+      resolve('benchmark/v02/development.manifest.json'),
+      resumedAdapter,
+      {
+        model: { provider: 'fixture', model: 'reference', version: '1' },
+        sampling: { temperature: 0 },
+        repetitions: 1,
+        task_ids: [task.id],
+        conditions: ['direct-vega-lite'],
+        prior_runs: first.runs,
+        on_run_complete: () => {
+          callbacks += 1;
+        },
+      },
+    );
+
+    expect(resumed.runs).toEqual(first.runs);
+    expect(resumedAdapter.calls).toBe(0);
+    expect(callbacks).toBe(0);
+  });
 });
 
 class ReferenceAdapter implements GenerationAdapter {

@@ -14,3 +14,8 @@ conditions, once per local agent:
 
 That is 24 condition runs per agent and 48 total, with at most 72 model calls.
 The fresh v0.2 holdout is explicitly out of scope and must remain sealed.
+
+The matrix completed 48/48 condition runs and 24/24 localized edits on
+2026-07-21. Both agents passed every locked diagnostic threshold. See the
+[expanded R&D report](../../../docs/V02_REFERENCE_HARDENING_MATRIX_RND_2026-07-21.md)
+for immutable hashes, token accounting, and the post-selected evidence boundary.

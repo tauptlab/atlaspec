@@ -12,7 +12,7 @@ import {
 
 describe('AtlasBench 0.2 local qualification bundle', () => {
   it('locks an unseen 12-task development slice and exact call budget', async () => {
-    const { manifest, manifestRaw, matrix, matrixRaw } = await sources();
+    const { manifest, manifestRaw, matrix, matrixRaw, referenceRaw } = await sources();
     const selected = qualificationTaskIds(matrix);
     expect(selected.size).toBe(12);
     expect(
@@ -26,13 +26,17 @@ describe('AtlasBench 0.2 local qualification bundle', () => {
       agents: agents(),
       source_manifest_raw: manifestRaw,
       matrix_raw: matrixRaw,
+      reference_raw: referenceRaw,
       lockfile_raw: 'lock',
       compiler_commit: 'abc123',
       generated_at: '2026-07-21T00:00:00.000Z',
     });
 
     expect(ledger.holdout_exposed).toBe(false);
+    expect(ledger.benchmark_id).toBe('atlasbench-v02-local-qualification-v2');
+    expect(ledger.supersedes).toBe('atlasbench-v02-local-qualification-v1');
     expect(ledger.qualification).toEqual({
+      revision: 'reference-hardening-v2',
       task_count: 12,
       repetitions: 2,
       selection: 'third-development-variant-after-rotated-holdout',
@@ -48,6 +52,10 @@ describe('AtlasBench 0.2 local qualification bundle', () => {
       base_generation_calls: 216,
       max_generation_calls: 408,
     });
+    expect(ledger.source).toMatchObject({
+      reference: 'benchmark/references/atlaspec-v02.md',
+      reference_sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+    });
   });
 });
 
@@ -56,17 +64,23 @@ async function sources(): Promise<{
   manifestRaw: string;
   matrix: V02CorpusMatrix;
   matrixRaw: string;
+  referenceRaw: string;
 }> {
   const manifestRaw = await readFile(
     resolve('benchmark/v02/development.manifest.json'),
     'utf8',
   );
   const matrixRaw = await readFile(resolve('benchmark/v02/matrix.json'), 'utf8');
+  const referenceRaw = await readFile(
+    resolve('benchmark/references/atlaspec-v02.md'),
+    'utf8',
+  );
   return {
     manifest: JSON.parse(manifestRaw) as V02EvaluationManifest,
     manifestRaw,
     matrix: JSON.parse(matrixRaw) as V02CorpusMatrix,
     matrixRaw,
+    referenceRaw,
   };
 }
 

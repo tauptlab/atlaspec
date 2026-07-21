@@ -45,7 +45,10 @@ export interface V02LocalJob {
 
 export interface V02LocalQualificationLedger {
   schema_version: '0.2';
-  benchmark_id: 'atlasbench-v02-local-qualification-v1';
+  benchmark_id:
+    | 'atlasbench-v02-local-qualification-v1'
+    | 'atlasbench-v02-local-qualification-v2';
+  supersedes?: 'atlasbench-v02-local-qualification-v1';
   generated_at: string;
   compiler_commit: string;
   lockfile_sha256: string;
@@ -53,6 +56,7 @@ export interface V02LocalQualificationLedger {
   holdout_exposed: false;
   cross_agent_absolute_token_comparison: 'prohibited';
   qualification: {
+    revision?: 'reference-hardening-v2';
     task_count: 12;
     repetitions: 2;
     selection: 'third-development-variant-after-rotated-holdout';
@@ -64,6 +68,8 @@ export interface V02LocalQualificationLedger {
     manifest_sha256: string;
     matrix: 'benchmark/v02/matrix.json';
     matrix_sha256: string;
+    reference?: 'benchmark/references/atlaspec-v02.md';
+    reference_sha256?: string;
   };
   agents: V02LocalAgentIdentity[];
   jobs: V02LocalJob[];
@@ -79,6 +85,7 @@ export interface BuildV02LocalBundleOptions {
   agents: readonly V02LocalAgentIdentity[];
   source_manifest_raw: string;
   matrix_raw: string;
+  reference_raw: string;
   lockfile_raw: string;
   compiler_commit: string;
   generated_at: string;
@@ -137,7 +144,8 @@ export function buildV02LocalQualificationLedger(
 
   return {
     schema_version: '0.2',
-    benchmark_id: 'atlasbench-v02-local-qualification-v1',
+    benchmark_id: 'atlasbench-v02-local-qualification-v2',
+    supersedes: 'atlasbench-v02-local-qualification-v1',
     generated_at: options.generated_at,
     compiler_commit: options.compiler_commit,
     lockfile_sha256: sha256(options.lockfile_raw),
@@ -145,6 +153,7 @@ export function buildV02LocalQualificationLedger(
     holdout_exposed: false,
     cross_agent_absolute_token_comparison: 'prohibited',
     qualification: {
+      revision: 'reference-hardening-v2',
       task_count: 12,
       repetitions: 2,
       selection: 'third-development-variant-after-rotated-holdout',
@@ -168,6 +177,8 @@ export function buildV02LocalQualificationLedger(
       manifest_sha256: sha256(options.source_manifest_raw),
       matrix: 'benchmark/v02/matrix.json',
       matrix_sha256: sha256(options.matrix_raw),
+      reference: 'benchmark/references/atlaspec-v02.md',
+      reference_sha256: sha256(options.reference_raw),
     },
     agents: options.agents.map((agent) => structuredClone(agent)),
     jobs,

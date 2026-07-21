@@ -50,6 +50,13 @@ program.action(async (options: Options) => {
     if (stdout.trim() !== ledger.compiler_commit) {
       throw new Error('Compiler commit drift from v0.2 local plan.');
     }
+    const { stdout: worktreeStatus } = await executeFile(
+      'git',
+      ['status', '--porcelain', '--untracked-files=no'],
+    );
+    if (worktreeStatus.trim() !== '') {
+      throw new Error('Tracked worktree drift from v0.2 local plan.');
+    }
     if (sha256(await readFile(resolve('package-lock.json'), 'utf8')) !== ledger.lockfile_sha256) {
       throw new Error('Dependency lockfile drift from v0.2 local plan.');
     }
@@ -61,6 +68,13 @@ program.action(async (options: Options) => {
     }
     if (sha256(await readFile(resolve(ledger.source.matrix), 'utf8')) !== ledger.source.matrix_sha256) {
       throw new Error('Corpus matrix drift from v0.2 local plan.');
+    }
+    if (
+      ledger.source.reference !== undefined &&
+      sha256(await readFile(resolve(ledger.source.reference), 'utf8')) !==
+        ledger.source.reference_sha256
+    ) {
+      throw new Error('Generation reference drift from v0.2 local plan.');
     }
 
     const reportPath = resolve(bundle, job.report);

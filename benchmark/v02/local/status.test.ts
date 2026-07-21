@@ -22,6 +22,10 @@ describe('AtlasBench 0.2 local job verification', () => {
       'utf8',
     );
     const matrixRaw = await readFile(resolve('benchmark/v02/matrix.json'), 'utf8');
+    const referenceRaw = await readFile(
+      resolve('benchmark/references/atlaspec-v02.md'),
+      'utf8',
+    );
     const manifest = JSON.parse(manifestRaw) as V02EvaluationManifest;
     const matrix = JSON.parse(matrixRaw) as V02CorpusMatrix;
     const agents = fixtureAgents();
@@ -29,6 +33,7 @@ describe('AtlasBench 0.2 local job verification', () => {
       agents,
       source_manifest_raw: manifestRaw,
       matrix_raw: matrixRaw,
+      reference_raw: referenceRaw,
       lockfile_raw: 'lock',
       compiler_commit: 'abc123',
       generated_at: '2026-07-21T00:00:00.000Z',

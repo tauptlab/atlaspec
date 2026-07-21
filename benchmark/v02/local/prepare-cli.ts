@@ -39,7 +39,18 @@ program.action(async (options: Options) => {
       'utf8',
     );
     const matrixRaw = await readFile(resolve('benchmark/v02/matrix.json'), 'utf8');
+    const referenceRaw = await readFile(
+      resolve('benchmark/references/atlaspec-v02.md'),
+      'utf8',
+    );
     const lockfileRaw = await readFile(resolve('package-lock.json'), 'utf8');
+    const { stdout: worktreeStatus } = await executeFile(
+      'git',
+      ['status', '--porcelain', '--untracked-files=no'],
+    );
+    if (worktreeStatus.trim() !== '') {
+      throw new Error('v0.2 local qualification requires a clean tracked worktree.');
+    }
     const { stdout } = await executeFile('git', ['rev-parse', 'HEAD']);
     const ledger = buildV02LocalQualificationLedger(
       JSON.parse(manifestRaw) as V02EvaluationManifest,
@@ -69,6 +80,7 @@ program.action(async (options: Options) => {
         ],
         source_manifest_raw: manifestRaw,
         matrix_raw: matrixRaw,
+        reference_raw: referenceRaw,
         lockfile_raw: lockfileRaw,
         compiler_commit: stdout.trim(),
         generated_at: new Date().toISOString(),

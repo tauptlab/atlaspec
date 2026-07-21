@@ -62,11 +62,22 @@ export async function inspectV02LocalQualification(
   const manifestRaw = await readFile(resolve(ledger.source.manifest), 'utf8');
   const matrixRaw = await readFile(resolve(ledger.source.matrix), 'utf8');
   const lockfileRaw = await readFile(resolve('package-lock.json'), 'utf8');
+  const referenceRaw =
+    ledger.source.reference === undefined
+      ? undefined
+      : await readFile(resolve(ledger.source.reference), 'utf8');
   const sourceDiagnostics: string[] = [];
   try {
     const { stdout } = await executeFile('git', ['rev-parse', 'HEAD']);
     if (stdout.trim() !== ledger.compiler_commit) {
       sourceDiagnostics.push('compiler commit drift from plan');
+    }
+    const { stdout: worktreeStatus } = await executeFile(
+      'git',
+      ['status', '--porcelain', '--untracked-files=no'],
+    );
+    if (worktreeStatus.trim() !== '') {
+      sourceDiagnostics.push('tracked worktree drift from plan');
     }
   } catch (error) {
     sourceDiagnostics.push(`cannot read compiler commit: ${errorMessage(error)}`);
@@ -79,6 +90,12 @@ export async function inspectV02LocalQualification(
   }
   if (sha256(lockfileRaw) !== ledger.lockfile_sha256) {
     sourceDiagnostics.push('lockfile digest mismatch');
+  }
+  if (
+    referenceRaw !== undefined &&
+    sha256(referenceRaw) !== ledger.source.reference_sha256
+  ) {
+    sourceDiagnostics.push('generation reference digest mismatch');
   }
   const manifest = JSON.parse(manifestRaw) as V02EvaluationManifest;
   const statuses: V02LocalJobStatus[] = [];

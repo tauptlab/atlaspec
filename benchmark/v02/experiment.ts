@@ -40,6 +40,10 @@ export interface V02ExperimentOptions {
   repetitions?: number;
   task_ids?: readonly string[];
   conditions?: readonly V02Condition[];
+  on_run_complete?: (
+    run: V02RunRecord,
+    completedRuns: number,
+  ) => void | Promise<void>;
 }
 
 export interface V02AttemptRecord {
@@ -140,8 +144,7 @@ export async function runV02Experiment(
       for (let conditionIndex = 0; conditionIndex < conditions.length; conditionIndex += 1) {
         const condition = conditions[(conditionIndex + offset) % conditions.length]!;
         const reference = await referenceInput(dirname(absoluteManifest), condition);
-        runs.push(
-          await runCondition(
+        const run = await runCondition(
             manifest.suite,
             task,
             condition,
@@ -150,8 +153,11 @@ export async function runV02Experiment(
             [...dataInputs, reference],
             compilerCommit,
             adapter,
-          ),
-        );
+          );
+        runs.push(run);
+        if (options.on_run_complete !== undefined) {
+          await options.on_run_complete(run, runs.length);
+        }
       }
     }
   }

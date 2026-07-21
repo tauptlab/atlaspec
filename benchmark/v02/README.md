@@ -84,6 +84,22 @@ maximum of 408 calls including edits and possible repairs. This larger budget
 is deliberate and visible before execution; preparing it does not call a model
 or expose holdout data.
 
+After committing the prepared-run code and creating the bundle, execute and
+inspect one immutable shard at a time:
+
+```powershell
+npm run benchmark:v02:local:run-job -- `
+  --bundle work/v02-qualification --job codex/basic
+
+npm run benchmark:v02:local:status -- `
+  --bundle work/v02-qualification
+```
+
+Each job refuses compiler, dependency-lock, source-manifest, or matrix drift;
+prints progress after every completed run; and writes its report atomically.
+The status command rejects missing, duplicate, unexpected, wrong-model, or
+wrong-commit runs instead of silently aggregating them.
+
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked
 matrix after model output has been inspected; create a new corpus version if a

@@ -19,3 +19,10 @@ The matrix completed 48/48 condition runs and 24/24 localized edits on
 2026-07-21. Both agents passed every locked diagnostic threshold. See the
 [expanded R&D report](../../../docs/V02_REFERENCE_HARDENING_MATRIX_RND_2026-07-21.md)
 for immutable hashes, token accounting, and the post-selected evidence boundary.
+
+`compact-reference-v1.json` locks a MapLibre-only diagnostic for the
+schema-derived compact reference. It compares token accounting to the immutable
+post-hardening qualification reports while treating that comparison as
+historical, not concurrently randomized evidence. Reliability and edit
+survival remain mandatory gates; token savings cannot compensate for invalid
+or unstable Atlaspec output.

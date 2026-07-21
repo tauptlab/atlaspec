@@ -25,8 +25,10 @@ export interface V02AgentAnalysis {
     relative_failure_reduction_ci: V02ConfidenceInterval | null;
     gate: V02GateStatus;
   };
+  generation_uncached_input_tokens_per_accepted_map: ComparativeTokenMetric;
   generation_uncached_tokens_per_accepted_map: TokenMetric;
   generation_output_tokens_per_accepted_map: TokenMetric;
+  uncached_token_gate_feasibility: TokenGateFeasibility;
   edit_survival: {
     direct: RateMetric;
     atlaspec: RateMetric;
@@ -53,6 +55,23 @@ interface TokenMetric {
   gate: V02GateStatus;
 }
 
+interface ComparativeTokenMetric {
+  direct: number | null;
+  atlaspec: number | null;
+  reduction: number | null;
+  complete: boolean;
+}
+
+interface TokenGateFeasibility {
+  threshold: number;
+  required_atlaspec_total: number | null;
+  required_atlaspec_uncached_input: number | null;
+  observed_atlaspec_uncached_input: number | null;
+  additional_uncached_input_reduction_required: number | null;
+  output_only_ceiling_at_equal_input: number | null;
+  gate_reachable_at_equal_input: boolean | null;
+}
+
 interface RateMetric {
   eligible: number;
   passed: number;
@@ -72,6 +91,9 @@ interface Estimate {
   atlaspecYield: number;
   yieldDelta: number;
   relativeFailureReduction: number | null;
+  directUncachedInputPerAccepted: number | null;
+  atlaspecUncachedInputPerAccepted: number | null;
+  uncachedInputReduction: number | null;
   directUncachedPerAccepted: number | null;
   atlaspecUncachedPerAccepted: number | null;
   uncachedReduction: number | null;
@@ -98,6 +120,7 @@ export function analyzeV02LocalAgent(
       taskIds.length,
       'At least two task clusters with paired direct and Atlaspec runs are required.',
       reasons,
+      thresholds.uncached_token_reduction,
     );
   }
 
@@ -166,6 +189,16 @@ export function analyzeV02LocalAgent(
     tokensComplete,
     thresholds.output_token_reduction,
   );
+  const uncachedInputMetric: ComparativeTokenMetric = {
+    direct: point.directUncachedInputPerAccepted,
+    atlaspec: point.atlaspecUncachedInputPerAccepted,
+    reduction: point.uncachedInputReduction,
+    complete: tokensComplete,
+  };
+  const tokenGateFeasibility = computeTokenGateFeasibility(
+    point,
+    thresholds.uncached_token_reduction,
+  );
   const edit = editMetrics(runs);
   const atlaspecEditGate = rateGate(edit.atlaspec, thresholds.edit_survival);
   const portability = portabilityMetric(runs, manifest);
@@ -205,8 +238,10 @@ export function analyzeV02LocalAgent(
       relative_failure_reduction_ci: relativeCi,
       gate: reliabilityGate,
     },
+    generation_uncached_input_tokens_per_accepted_map: uncachedInputMetric,
     generation_uncached_tokens_per_accepted_map: uncachedMetric,
     generation_output_tokens_per_accepted_map: outputMetric,
+    uncached_token_gate_feasibility: tokenGateFeasibility,
     edit_survival: {
       direct: edit.direct,
       atlaspec: edit.atlaspec,
@@ -256,6 +291,18 @@ function estimate(pairs: readonly Pair[]): Estimate {
   const directFailure = 1 - directYield;
   const directUncached = perAccepted(pairs, directAccepted, 'direct', uncachedTokens);
   const atlaspecUncached = perAccepted(pairs, atlaspecAccepted, 'atlaspec', uncachedTokens);
+  const directUncachedInput = perAccepted(
+    pairs,
+    directAccepted,
+    'direct',
+    uncachedInputTokens,
+  );
+  const atlaspecUncachedInput = perAccepted(
+    pairs,
+    atlaspecAccepted,
+    'atlaspec',
+    uncachedInputTokens,
+  );
   const directOutput = perAccepted(pairs, directAccepted, 'direct', outputTokens);
   const atlaspecOutput = perAccepted(pairs, atlaspecAccepted, 'atlaspec', outputTokens);
   return {
@@ -266,6 +313,9 @@ function estimate(pairs: readonly Pair[]): Estimate {
       directFailure === 0
         ? null
         : (directFailure - (1 - atlaspecYield)) / directFailure,
+    directUncachedInputPerAccepted: directUncachedInput,
+    atlaspecUncachedInputPerAccepted: atlaspecUncachedInput,
+    uncachedInputReduction: reduction(directUncachedInput, atlaspecUncachedInput),
     directUncachedPerAccepted: directUncached,
     atlaspecUncachedPerAccepted: atlaspecUncached,
     uncachedReduction: reduction(directUncached, atlaspecUncached),
@@ -294,11 +344,13 @@ function perAccepted(
 }
 
 function uncachedTokens(response: GenerationResponse): number {
-  return (
-    Math.max(
-      0,
-      response.usage.input_tokens - (response.usage.cached_input_tokens ?? 0),
-    ) + response.usage.output_tokens
+  return uncachedInputTokens(response) + response.usage.output_tokens;
+}
+
+function uncachedInputTokens(response: GenerationResponse): number {
+  return Math.max(
+    0,
+    response.usage.input_tokens - (response.usage.cached_input_tokens ?? 0),
   );
 }
 
@@ -327,6 +379,50 @@ function tokenMetric(
     reduction_ci: reductionCi,
     complete,
     gate,
+  };
+}
+
+function computeTokenGateFeasibility(
+  point: Estimate,
+  threshold: number,
+): TokenGateFeasibility {
+  const directTotal = point.directUncachedPerAccepted;
+  const directInput = point.directUncachedInputPerAccepted;
+  const directOutput = point.directOutputPerAccepted;
+  const atlaspecInput = point.atlaspecUncachedInputPerAccepted;
+  const atlaspecOutput = point.atlaspecOutputPerAccepted;
+  if (
+    directTotal === null ||
+    directTotal === 0 ||
+    directInput === null ||
+    directOutput === null ||
+    atlaspecInput === null ||
+    atlaspecOutput === null
+  ) {
+    return {
+      threshold,
+      required_atlaspec_total: null,
+      required_atlaspec_uncached_input: null,
+      observed_atlaspec_uncached_input: atlaspecInput,
+      additional_uncached_input_reduction_required: null,
+      output_only_ceiling_at_equal_input: null,
+      gate_reachable_at_equal_input: null,
+    };
+  }
+  const requiredTotal = directTotal * (1 - threshold);
+  const requiredInput = requiredTotal - atlaspecOutput;
+  const outputOnlyCeiling = directOutput / directTotal;
+  return {
+    threshold,
+    required_atlaspec_total: requiredTotal,
+    required_atlaspec_uncached_input: requiredInput,
+    observed_atlaspec_uncached_input: atlaspecInput,
+    additional_uncached_input_reduction_required: Math.max(
+      0,
+      atlaspecInput - requiredInput,
+    ),
+    output_only_ceiling_at_equal_input: outputOnlyCeiling,
+    gate_reachable_at_equal_input: outputOnlyCeiling >= threshold,
   };
 }
 
@@ -480,6 +576,7 @@ function insufficientAnalysis(
   taskClusters: number,
   reason: string,
   reasons: string[],
+  uncachedTokenThreshold: number,
 ): V02AgentAnalysis {
   const emptyRate = { eligible: 0, passed: 0, rate: null };
   const emptyToken: TokenMetric = {
@@ -504,8 +601,23 @@ function insufficientAnalysis(
       relative_failure_reduction_ci: null,
       gate: 'insufficient',
     },
+    generation_uncached_input_tokens_per_accepted_map: {
+      direct: null,
+      atlaspec: null,
+      reduction: null,
+      complete: false,
+    },
     generation_uncached_tokens_per_accepted_map: emptyToken,
     generation_output_tokens_per_accepted_map: { ...emptyToken },
+    uncached_token_gate_feasibility: {
+      threshold: uncachedTokenThreshold,
+      required_atlaspec_total: null,
+      required_atlaspec_uncached_input: null,
+      observed_atlaspec_uncached_input: null,
+      additional_uncached_input_reduction_required: null,
+      output_only_ceiling_at_equal_input: null,
+      gate_reachable_at_equal_input: null,
+    },
     edit_survival: {
       direct: emptyRate,
       atlaspec: { ...emptyRate },

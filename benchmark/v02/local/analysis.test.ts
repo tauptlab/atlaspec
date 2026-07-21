@@ -29,6 +29,21 @@ describe('AtlasBench 0.2 task-clustered local analysis', () => {
     );
     expect(analysis.generation_uncached_tokens_per_accepted_map.gate).toBe('pass');
     expect(analysis.generation_output_tokens_per_accepted_map.gate).toBe('pass');
+    expect(analysis.generation_uncached_input_tokens_per_accepted_map).toEqual({
+      direct: 1600,
+      atlaspec: 150,
+      reduction: 0.90625,
+      complete: true,
+    });
+    expect(analysis.uncached_token_gate_feasibility).toEqual({
+      threshold: 0.25,
+      required_atlaspec_total: 1500,
+      required_atlaspec_uncached_input: 1450,
+      observed_atlaspec_uncached_input: 150,
+      additional_uncached_input_reduction_required: 0,
+      output_only_ceiling_at_equal_input: 0.2,
+      gate_reachable_at_equal_input: false,
+    });
     expect(analysis.edit_survival.atlaspec).toEqual({
       eligible: 20,
       passed: 20,
@@ -68,6 +83,43 @@ describe('AtlasBench 0.2 task-clustered local analysis', () => {
     expect(analysis.reasons).toEqual(
       expect.arrayContaining([expect.stringContaining('no response usage')]),
     );
+  });
+
+  it('quantifies when output compression alone cannot satisfy the total-token gate', () => {
+    const { manifest, runs } = fixture();
+    for (const run of runs) {
+      if (run.condition === 'direct-maplibre') {
+        run.first_attempt_accepted = true;
+        run.final_accepted = true;
+        run.attempts[0]!.accepted = true;
+      }
+      const response = run.attempts[0]!.response!;
+      if (run.condition === 'direct-maplibre') {
+        response.usage.input_tokens = 800;
+        response.usage.output_tokens = 200;
+      } else if (run.condition === 'atlaspec-maplibre') {
+        response.usage.input_tokens = 900;
+        response.usage.output_tokens = 50;
+      }
+    }
+
+    const analysis = analyzeV02LocalAgent(runs, manifest, thresholds());
+
+    expect(analysis.generation_uncached_tokens_per_accepted_map).toEqual(
+      expect.objectContaining({ direct: 1000, atlaspec: 950, reduction: 0.05, gate: 'fail' }),
+    );
+    expect(analysis.generation_output_tokens_per_accepted_map).toEqual(
+      expect.objectContaining({ direct: 200, atlaspec: 50, reduction: 0.75, gate: 'pass' }),
+    );
+    expect(analysis.uncached_token_gate_feasibility).toEqual({
+      threshold: 0.25,
+      required_atlaspec_total: 750,
+      required_atlaspec_uncached_input: 700,
+      observed_atlaspec_uncached_input: 900,
+      additional_uncached_input_reduction_required: 200,
+      output_only_ceiling_at_equal_input: 0.2,
+      gate_reachable_at_equal_input: false,
+    });
   });
 });
 

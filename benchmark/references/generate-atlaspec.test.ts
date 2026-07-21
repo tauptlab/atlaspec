@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   renderAtlaspecReference,
+  renderAtlaspecV02CompactReference,
   renderAtlaspecV02Reference,
 } from './generate-atlaspec.js';
 
@@ -42,5 +43,25 @@ describe('schema-derived Atlaspec generation reference', () => {
     expect(reference).toContain('Do not invent zoom rules.');
     expect(reference).toContain('layer-visibility stress label alone');
     expect(reference).toContain('version: "0.2"');
+  });
+
+  it('emits a materially smaller 0.2 reference without dropping hardened constraints', () => {
+    const full = renderAtlaspecV02Reference();
+    const compact = renderAtlaspecV02CompactReference();
+
+    expect(compact.length).toBeLessThan(full.length * 0.7);
+    expect(compact).toContain('document{version*,map*,title*');
+    expect(compact).toContain('task=locate|compare|rank|distribution|distinguish');
+    expect(compact).toContain(
+      'audience=general-public|analyst|expert|operations|student',
+    );
+    expect(compact).toContain(
+      'classification=continuous|equal-interval|quantile|natural-breaks',
+    );
+    expect(compact).toContain('metadata values are scalar string|number|boolean only');
+    expect(compact).toContain('Do not copy stress labels into metadata.');
+    expect(compact).toContain('Do not invent zoom rules; omit behavior');
+    expect(compact).toContain('Never author legend, scale, palette');
+    expect(compact).toContain('version: "0.2"');
   });
 });

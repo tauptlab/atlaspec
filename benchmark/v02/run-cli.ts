@@ -20,6 +20,7 @@ interface CliOptions {
   repetitions?: string;
   taskId?: string[];
   condition?: string[];
+  atlaspecReference?: string;
   maxOutputTokens: string;
 }
 
@@ -43,6 +44,10 @@ const program = new Command()
   .option('--repetitions <count>', 'override only for development qualification')
   .option('--task-id <id>', 'run one task ID; repeat for multiple tasks', collect)
   .option('--condition <name>', 'run one declared condition; repeat for multiple conditions', collect)
+  .option(
+    '--atlaspec-reference <path>',
+    'Atlaspec reference path relative to the manifest directory; R&D only',
+  )
   .option('--max-output-tokens <count>', 'recorded output-token ceiling', '8000');
 
 program.action(async (options: CliOptions) => {
@@ -77,6 +82,9 @@ program.action(async (options: CliOptions) => {
       ...(repetitions === undefined ? {} : { repetitions }),
       ...(options.taskId === undefined ? {} : { task_ids: options.taskId }),
       ...(conditions === undefined ? {} : { conditions }),
+      ...(options.atlaspecReference === undefined
+        ? {}
+        : { atlaspec_reference_path: options.atlaspecReference }),
     });
     await mkdir(dirname(output), { recursive: true });
     const temporary = `${output}.tmp-${process.pid}`;

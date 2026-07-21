@@ -40,6 +40,7 @@ export interface V02ExperimentOptions {
   repetitions?: number;
   task_ids?: readonly string[];
   conditions?: readonly V02Condition[];
+  atlaspec_reference_path?: string;
   on_run_complete?: (
     run: V02RunRecord,
     completedRuns: number,
@@ -148,7 +149,11 @@ export async function runV02Experiment(
         const condition = conditions[(conditionIndex + offset) % conditions.length]!;
         const expectedRunId = `${manifest.suite}/${task.id}/${condition}/${repetition}`;
         if (completedRunIds.has(expectedRunId)) continue;
-        const reference = await referenceInput(dirname(absoluteManifest), condition);
+        const reference = await referenceInput(
+          dirname(absoluteManifest),
+          condition,
+          options.atlaspec_reference_path,
+        );
         const run = await runCondition(
             manifest.suite,
             task,
@@ -522,14 +527,18 @@ function selectTasks(
 async function referenceInput(
   manifestDirectory: string,
   condition: V02Condition,
+  atlaspecReferencePath?: string,
 ): Promise<InputArtifact> {
   const name =
     condition === 'direct-maplibre'
       ? 'maplibre.md'
       : condition === 'direct-vega-lite'
         ? 'vega-lite.md'
-        : 'atlaspec-v02.md';
-  return (await loadInputs(manifestDirectory, [`../references/${name}`], 'reference'))[0]!;
+        : undefined;
+  const path = name === undefined
+    ? (atlaspecReferencePath ?? '../references/atlaspec-v02.md')
+    : `../references/${name}`;
+  return (await loadInputs(manifestDirectory, [path], 'reference'))[0]!;
 }
 
 async function loadInputs(

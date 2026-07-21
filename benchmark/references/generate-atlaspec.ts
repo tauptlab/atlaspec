@@ -296,9 +296,84 @@ basemap: {style: minimal-light, contrast: light}
 `;
 }
 
+export function renderAtlaspecV02CompactReference(): string {
+  const root = node(AtlaspecV02Schema);
+  const intent = property(root, 'intent');
+  const layer = node(AtlaspecLayerSchema);
+  const encoding = property(layer, 'encoding');
+  const layerConstraints = property(layer, 'constraints');
+  const behavior = property(layer, 'behavior');
+  const zoomRule = property(behavior, 'zoom_rules').items!;
+  const globalConstraints = property(root, 'constraints');
+  const basemap = property(root, 'basemap');
+  const field = node(FieldSchema);
+  const sources = node(DataSourceSchema).anyOf ?? [];
+
+  return `# Atlaspec 0.2 compact generation reference
+
+OUTPUT: exactly one YAML document starting with \`version:\`; no prose, fence,
+backticks, heading, or \`---\`. Unknown keys are invalid. \`*\` means required.
+
+GRAMMAR:
+- document{${compactKeyList(root)}}; version=0.2
+- intent{${compactKeyList(intent)}}
+- data{${compactKeyList(property(root, 'data'))}}
+- source is exactly ${sources.map((source) => `{${compactKeyList(source)}}`).join(' OR ')}
+- field{${compactKeyList(field)}}; range=[number,number]; domain=[unique strings]
+- layer{${compactKeyList(layer)}}
+- encoding{${compactKeyList(encoding)}}; geometry{${compactKeyList(property(encoding, 'geometry'))}};
+  color{${compactKeyList(property(encoding, 'color'))}}; size/category/label/weight{field*} only
+- layer.constraints{${compactKeyList(layerConstraints)}}
+- behavior{${compactKeyList(behavior)}}; zoom_rule{${compactKeyList(zoomRule)}}
+- constraints{${compactKeyList(globalConstraints)}}; viewport{${compactKeyList(property(globalConstraints, 'viewport'))}}
+- basemap{${compactKeyList(basemap)}}; metadata values are scalar string|number|boolean only
+
+ENUMS:
+- task=${compactValues(enumValues(property(intent, 'task')))}
+- audience=${compactValues(enumValues(property(intent, 'audience')))}
+- measurement=${compactValues(enumValues(property(field, 'measurement')))}
+- semantic_type=${compactValues(enumValues(property(field, 'semantic_type')))}
+- normalization=${compactValues(enumValues(property(field, 'normalization')))}
+- purpose=${compactValues(enumValues(node(LayerPurposeSchema)))}
+- family=${compactValues(enumValues(node(MapFamilySchema)))}
+- support=${compactValues(enumValues(property(property(encoding, 'geometry'), 'support')))}
+- classification=${compactValues(enumValues(property(property(encoding, 'color'), 'classification')))}
+- missing_data=${compactValues(enumValues(property(layerConstraints, 'missing_data')))}
+- zoom target=${compactValues(enumValues(property(zoomRule, 'target')))}; action=${compactValues(enumValues(property(zoomRule, 'action')))}
+- basemap style=${compactValues(enumValues(property(basemap, 'style')))}; contrast=${compactValues(enumValues(property(basemap, 'contrast')))}
+
+RULES:
+- Preserve requested layer IDs/order and exact data paths. Every encoding field
+  names data.fields; its source equals the layer geometry source.
+- Per-layer: missing_data, raw_count_choropleth, behavior. Global: viewport,
+  colorblind_safe, protected_layers, label_priority; the last two are string arrays.
+- Do not copy stress labels into metadata. Do not invent zoom rules; omit behavior
+  unless explicit zoom thresholds/actions are requested.
+- choropleth=polygon+ordered color; raw count needs normalization or
+  raw_count_choropleth: allow. proportional-symbol=point+quantitative size.
+  categorical-point=point+nominal category with string domain.
+  heatmap=point|grid plus optional ordinal|quantitative weight.
+- Never author legend, scale, palette, symbol radius, or heatmap kernel; the
+  compiler derives them.
+
+SHAPE:
+version: "0.2"
+map: stable-id
+title: Human title
+intent: {task: compare, audience: operations, primary_message: Message}
+data: {sources: [{id: areas, type: geojson, url: data/areas.geojson}], fields: {value: {source: areas, path: value, measurement: quantitative, semantic_type: rate, normalization: ratio}}}
+layers: [{id: areas, purpose: primary, family: choropleth, encoding: {geometry: {source: areas, support: polygon}, color: {field: value}}, constraints: {missing_data: error}}]
+constraints: {colorblind_safe: true, viewport: {width: 960, height: 640}}
+`;
+}
+
 const targets = [
   [resolve('benchmark', 'references', 'atlaspec.md'), renderAtlaspecReference()],
   [resolve('benchmark', 'references', 'atlaspec-v02.md'), renderAtlaspecV02Reference()],
+  [
+    resolve('benchmark', 'references', 'atlaspec-v02-compact.md'),
+    renderAtlaspecV02CompactReference(),
+  ],
 ] as const;
 if (process.argv[1]?.endsWith('generate-atlaspec.ts')) {
   if (process.argv.includes('--check')) {
@@ -347,4 +422,15 @@ function keyList(schema: SchemaNode): string {
 
 function values(items: readonly unknown[]): string {
   return items.map((item) => `\`${String(item)}\``).join(', ');
+}
+
+function compactKeyList(schema: SchemaNode): string {
+  const required = new Set(schema.required ?? []);
+  return Object.keys(schema.properties ?? {})
+    .map((key) => `${key}${required.has(key) ? '*' : ''}`)
+    .join(',');
+}
+
+function compactValues(items: readonly unknown[]): string {
+  return items.map(String).join('|');
 }

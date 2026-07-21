@@ -104,6 +104,30 @@ describe('AtlasBench 0.2 model runner', () => {
     ]);
   });
 
+  it('can select a compact Atlaspec reference for an explicit R&D run', async () => {
+    const manifest = await developmentManifest();
+    const task = manifest.tasks[0]!;
+    const adapter = new ReferenceAdapter(new Map([[task.id, task]]), false);
+    await runV02Experiment(
+      resolve('benchmark/v02/development.manifest.json'),
+      adapter,
+      {
+        model: { provider: 'fixture', model: 'reference', version: '1' },
+        sampling: { temperature: 0 },
+        repetitions: 1,
+        task_ids: [task.id],
+        conditions: ['atlaspec-maplibre'],
+        atlaspec_reference_path: '../references/atlaspec-v02-compact.md',
+      },
+    );
+
+    const reference = adapter.requests[0]!.inputs.find(
+      (input) => input.role === 'reference',
+    )!;
+    expect(reference.path).toBe('../references/atlaspec-v02-compact.md');
+    expect(reference.content).toContain('# Atlaspec 0.2 compact generation reference');
+  });
+
   it('resumes from completed run records without repeating model calls', async () => {
     const manifest = await developmentManifest();
     const task = manifest.tasks[0]!;
@@ -145,6 +169,7 @@ describe('AtlasBench 0.2 model runner', () => {
 
 class ReferenceAdapter implements GenerationAdapter {
   public calls = 0;
+  public requests: GenerationRequest[] = [];
 
   public constructor(
     private readonly tasks: ReadonlyMap<string, V02ManifestTask>,
@@ -153,6 +178,7 @@ class ReferenceAdapter implements GenerationAdapter {
 
   public async generate(request: GenerationRequest): Promise<GenerationResponse> {
     this.calls += 1;
+    this.requests.push(structuredClone(request));
     const task = this.tasks.get(request.task_id)!;
     if (
       this.failFirstRepair &&

@@ -434,6 +434,7 @@ Start with:
 - [AtlasBench 0.2 multi-task qualification](docs/V02_MULTI_TASK_QUALIFICATION_2026-07-21.md)
 - [AtlasBench 0.2 post-qualification R&D](docs/V02_POST_QUALIFICATION_RND_2026-07-21.md)
 - [AtlasBench 0.2 reference-hardening matrix R&D](docs/V02_REFERENCE_HARDENING_MATRIX_RND_2026-07-21.md)
+- [AtlasBench 0.2 post-hardening qualification and token-feasibility R&D](docs/V02_POST_HARDENING_QUALIFICATION_2026-07-21.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. It does not substitute for human accuracy, expert review, edit

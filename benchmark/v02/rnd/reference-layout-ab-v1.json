@@ -1,0 +1,93 @@
+{
+  "schema_version": "0.2-rnd.2",
+  "experiment_id": "atlasbench-v02-reference-layout-ab-v1",
+  "purpose": "Separate reference length from prompt layout and cache state using concurrent counterbalanced arms at one frozen commit.",
+  "evidence_scope": "post-qualification-development-rnd",
+  "official_qualification": false,
+  "holdout_exposed": false,
+  "execution_commit_policy": "Use the git commit containing this plan without tracked source changes between agents.",
+  "source": {
+    "manifest": "benchmark/v02/development.manifest.json",
+    "manifest_sha256": "36a7adf1e5a8535723fa05a3da0b7cdd4556cf7d6ec9a8b22470ec42880492da",
+    "lockfile_sha256": "3e7dbbc86a3b580a613f2429cadc301b88999bb33f9b80870183c6a975f867dc",
+    "references": [
+      {
+        "path": "benchmark/references/atlaspec-v02.md",
+        "sha256": "acecbcc4aca9c84dde559793b3ccb0b7ce6b49491efba8b15936f0f01f389ec5"
+      },
+      {
+        "path": "benchmark/references/atlaspec-v02-compact.md",
+        "sha256": "3c19fe96a977659df434bd8f5168d7a997a69967c7c43efffc22b8048b74ea8f"
+      }
+    ]
+  },
+  "agents": [
+    {
+      "id": "codex",
+      "provider": "codex-cli",
+      "model": "default",
+      "version": "codex-cli 0.144.4;model=unreported",
+      "output": "work/v02-rnd/reference-layout-ab-v1-codex.json"
+    },
+    {
+      "id": "claude",
+      "provider": "claude-cli",
+      "model": "opus",
+      "version": "claude-opus-4-5-20251101",
+      "output": "work/v02-rnd/reference-layout-ab-v1-claude.json"
+    }
+  ],
+  "task_ids": [
+    "choropleth-proportional-symbols-basic-geographic-capability-boundary",
+    "choropleth-categorical-facilities-intermediate-missing-and-skew",
+    "heatmap-reference-points-adversarial-geographic-capability-boundary",
+    "operational-overview-intermediate-geographic-capability-boundary"
+  ],
+  "arms": [
+    {
+      "id": "full-data-first",
+      "reference_path_from_manifest": "../references/atlaspec-v02.md",
+      "prompt_layout": "task-data-reference"
+    },
+    {
+      "id": "full-reference-first",
+      "reference_path_from_manifest": "../references/atlaspec-v02.md",
+      "prompt_layout": "reference-task-data"
+    },
+    {
+      "id": "compact-data-first",
+      "reference_path_from_manifest": "../references/atlaspec-v02-compact.md",
+      "prompt_layout": "task-data-reference"
+    },
+    {
+      "id": "compact-reference-first",
+      "reference_path_from_manifest": "../references/atlaspec-v02-compact.md",
+      "prompt_layout": "reference-task-data"
+    }
+  ],
+  "repetitions": 1,
+  "expected": {
+    "tasks": 4,
+    "arms": 4,
+    "runs_per_agent": 16,
+    "runs_total": 32,
+    "maximum_model_calls": 64
+  },
+  "locked_diagnostic_thresholds": {
+    "first_attempt_yield_per_arm": 0.9,
+    "eligible_edit_survival_per_arm": 0.9,
+    "compact_uncached_input_reduction_within_layout": 0.1,
+    "reference_first_uncached_input_noninferiority_margin": 0.05,
+    "output_token_regression_margin": 0.1
+  },
+  "analysis_rules": [
+    "Every arm occupies each ordinal call position exactly once per agent.",
+    "Transport and schema failures remain in the first-attempt denominator.",
+    "Edit survival is conditional on an accepted Atlaspec MapLibre generation.",
+    "Token comparisons are paired by task and remain within one agent only.",
+    "Reference-length effects compare compact and full arms only within the same prompt layout.",
+    "Layout effects compare reference-first and data-first arms only at the same reference length.",
+    "A token diagnostic fails if its paired reliability or edit-survival threshold fails.",
+    "This reused four-task development diagnostic cannot replace the official qualification or estimate unseen-task performance."
+  ]
+}

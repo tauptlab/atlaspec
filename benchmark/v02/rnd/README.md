@@ -32,3 +32,9 @@ The compact-reference matrix completed 24/24 condition runs and 24/24 edits on
 diagnostic failed and the historical Claude comparison exposed a cache-state
 confound. The compact artifact therefore remains R&D-only. See the
 [compact-reference R&D report](../../../docs/V02_COMPACT_REFERENCE_RND_2026-07-21.md).
+
+`reference-layout-ab-v1.json` is the follow-up cache-isolation plan. It crosses
+the full and compact references with the existing and reference-first prompt
+layouts, then rotates four arms across four ordinal call positions. Its token
+comparisons are paired within task and agent; it remains a reused development
+diagnostic rather than qualification evidence.

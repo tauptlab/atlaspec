@@ -38,3 +38,10 @@ the full and compact references with the existing and reference-first prompt
 layouts, then rotates four arms across four ordinal call positions. Its token
 comparisons are paired within task and agent; it remains a reused development
 diagnostic rather than qualification evidence.
+
+The A/B matrix completed 32/32 condition runs on 2026-07-21. Codex preserved
+16/16 generations and edits; reference-first delivery passed while compacting
+missed both input-reduction gates. Claude authentication expired during its
+run, so transport failures remain in its reliability denominator and token
+comparisons are insufficient. See the
+[reference-layout A/B report](../../../docs/V02_REFERENCE_LAYOUT_AB_RND_2026-07-21.md).

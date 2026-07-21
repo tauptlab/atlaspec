@@ -5,6 +5,7 @@ import {
   formatCliPrompt,
   parseClaudeOutput,
   parseCodexOutput,
+  runProcess,
 } from './local-cli.js';
 
 describe('local agent CLI adapters', () => {
@@ -134,6 +135,16 @@ describe('local agent CLI adapters', () => {
     expect(prompt.indexOf('Return an artifact only.')).toBeLessThan(
       prompt.indexOf('FeatureCollection'),
     );
+  });
+
+  it('preserves stdout diagnostics when a local CLI exits unsuccessfully', async () => {
+    await expect(
+      runProcess(
+        process.execPath,
+        ['-e', 'process.stdout.write("structured provider error"); process.exit(1)'],
+        '',
+      ),
+    ).rejects.toThrow('stdout=structured provider error');
   });
 });
 

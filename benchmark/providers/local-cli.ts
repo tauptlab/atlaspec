@@ -325,9 +325,15 @@ export async function runProcess(
     child.once('close', (code) => {
       if (settled) return;
       if (code !== 0) {
+        const stderrText = diagnosticText(stderr);
+        const stdoutText = diagnosticText(stdout);
+        const detail = [
+          stderrText === '' ? '' : `stderr=${stderrText}`,
+          stdoutText === '' ? '' : `stdout=${stdoutText}`,
+        ].filter(Boolean).join(' ');
         finish(
           new Error(
-            `Local CLI exited with code ${String(code)}: ${Buffer.concat(stderr).toString('utf8').trim()}`,
+            `Local CLI exited with code ${String(code)}${detail === '' ? '' : `: ${detail}`}`,
           ),
         );
       } else finish();
@@ -403,4 +409,9 @@ function serverToolCalls(value: unknown): number {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function diagnosticText(chunks: readonly Buffer[]): string {
+  const value = Buffer.concat(chunks).toString('utf8').trim();
+  return value.length <= 4096 ? value : `${value.slice(0, 4096)}...[truncated]`;
 }

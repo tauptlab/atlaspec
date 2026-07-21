@@ -432,6 +432,7 @@ Start with:
 - [One-time local holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md)
 - [AtlasBench 0.2 local qualification](docs/V02_LOCAL_QUALIFICATION_2026-07-20.md)
 - [AtlasBench 0.2 multi-task qualification](docs/V02_MULTI_TASK_QUALIFICATION_2026-07-21.md)
+- [AtlasBench 0.2 post-qualification R&D](docs/V02_POST_QUALIFICATION_RND_2026-07-21.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. It does not substitute for human accuracy, expert review, edit

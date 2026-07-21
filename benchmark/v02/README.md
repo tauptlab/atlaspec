@@ -67,6 +67,23 @@ and pass the exact resolved model ID reported by Claude Code with `--version`.
 Development repetition overrides are qualification-only. The one-time holdout
 must use the committed five repetitions and must never be used for tuning.
 
+The next multi-task local qualification is prepared separately before calls:
+
+```powershell
+npm run benchmark:v02:local:prepare -- `
+  --output work/v02-qualification `
+  --codex-version "codex-cli 0.144.4" `
+  --claude-cli-version "2.1.17 (Claude Code)" `
+  --claude-model opus `
+  --claude-version claude-opus-4-5-20251101
+```
+
+The ledger deterministically selects 12 development-only tasks, two
+repetitions, and six agent/difficulty jobs. It locks 216 condition runs and a
+maximum of 408 calls including edits and possible repairs. This larger budget
+is deliberate and visible before execution; preparing it does not call a model
+or expose holdout data.
+
 The controlling hypotheses, gates, and analysis rules are in
 [`docs/BENCHMARK_0.2.md`](../../docs/BENCHMARK_0.2.md). Do not change the locked
 matrix after model output has been inspected; create a new corpus version if a

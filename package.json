@@ -30,6 +30,7 @@
     "benchmark:smoke": "tsx benchmark/run.ts --manifest benchmark/pilot.manifest.json --json",
     "benchmark:v02:dry-run": "tsx benchmark/v02/dry-run.ts",
     "benchmark:v02:run": "tsx benchmark/v02/run-cli.ts",
+    "benchmark:v02:local:prepare": "tsx benchmark/v02/local/prepare-cli.ts",
     "benchmark:official:prepare": "tsx benchmark/official/prepare-cli.ts",
     "benchmark:official:run-job": "tsx benchmark/official/run-job-cli.ts",
     "benchmark:official:status": "tsx benchmark/official/status-cli.ts",

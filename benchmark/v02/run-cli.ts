@@ -21,6 +21,8 @@ interface CliOptions {
   taskId?: string[];
   condition?: string[];
   atlaspecReference?: string;
+  promptLayout?: 'task-data-reference' | 'reference-task-data';
+  runVariant?: string;
   maxOutputTokens: string;
 }
 
@@ -48,6 +50,11 @@ const program = new Command()
     '--atlaspec-reference <path>',
     'Atlaspec reference path relative to the manifest directory; R&D only',
   )
+  .option(
+    '--prompt-layout <layout>',
+    'task-data-reference or reference-task-data; R&D only',
+  )
+  .option('--run-variant <id>', 'append a distinct R&D variant to run IDs')
   .option('--max-output-tokens <count>', 'recorded output-token ceiling', '8000');
 
 program.action(async (options: CliOptions) => {
@@ -66,6 +73,13 @@ program.action(async (options: CliOptions) => {
       'max-output-tokens',
     );
     const conditions = options.condition?.map(parseCondition);
+    if (
+      options.promptLayout !== undefined &&
+      options.promptLayout !== 'task-data-reference' &&
+      options.promptLayout !== 'reference-task-data'
+    ) {
+      throw new Error(`Unknown prompt layout: ${options.promptLayout}`);
+    }
     const adapter: GenerationAdapter = {
       generate:
         options.provider === 'codex-cli'
@@ -85,6 +99,10 @@ program.action(async (options: CliOptions) => {
       ...(options.atlaspecReference === undefined
         ? {}
         : { atlaspec_reference_path: options.atlaspecReference }),
+      ...(options.promptLayout === undefined
+        ? {}
+        : { prompt_layout: options.promptLayout }),
+      ...(options.runVariant === undefined ? {} : { run_variant: options.runVariant }),
     });
     await mkdir(dirname(output), { recursive: true });
     const temporary = `${output}.tmp-${process.pid}`;

@@ -41,6 +41,8 @@ export interface V02ExperimentOptions {
   task_ids?: readonly string[];
   conditions?: readonly V02Condition[];
   atlaspec_reference_path?: string;
+  prompt_layout?: GenerationRequest['prompt_layout'];
+  run_variant?: string;
   on_run_complete?: (
     run: V02RunRecord,
     completedRuns: number,
@@ -69,6 +71,7 @@ export interface V02EditRecord {
 export interface V02RunRecord {
   schema_version: '0.2';
   run_id: string;
+  variant_id?: string;
   task_id: string;
   condition: V02Condition;
   repetition: number;
@@ -147,7 +150,13 @@ export async function runV02Experiment(
       const offset = (manifestIndex + repetition - 1) % conditions.length;
       for (let conditionIndex = 0; conditionIndex < conditions.length; conditionIndex += 1) {
         const condition = conditions[(conditionIndex + offset) % conditions.length]!;
-        const expectedRunId = `${manifest.suite}/${task.id}/${condition}/${repetition}`;
+        const expectedRunId = runId(
+          manifest.suite,
+          task.id,
+          condition,
+          repetition,
+          options.run_variant,
+        );
         if (completedRunIds.has(expectedRunId)) continue;
         const reference = await referenceInput(
           dirname(absoluteManifest),
@@ -272,7 +281,8 @@ async function runCondition(
   const generationAttempts = attempts.filter((attempt) => attempt.stage !== 'edit');
   return {
     schema_version: '0.2',
-    run_id: `${suite}/${task.id}/${condition}/${repetition}`,
+    run_id: runId(suite, task.id, condition, repetition, options.run_variant),
+    ...(options.run_variant === undefined ? {} : { variant_id: options.run_variant }),
     task_id: task.id,
     condition,
     repetition,
@@ -405,7 +415,7 @@ function requestFor(
 ): GenerationRequest {
   const request: GenerationRequest = {
     schema_version: '0.1',
-    request_id: `${suite}/${task.id}/${condition}/${repetition}/${attempt}`,
+    request_id: `${runId(suite, task.id, condition, repetition, options.run_variant)}/${attempt}`,
     suite,
     task_id: task.id,
     condition,
@@ -415,6 +425,9 @@ function requestFor(
     sampling: structuredClone(options.sampling),
     prompt,
     prompt_sha256: sha256(prompt),
+    ...(options.prompt_layout === undefined
+      ? {}
+      : { prompt_layout: options.prompt_layout }),
     inputs: structuredClone(inputs),
   };
   if (diagnostics !== undefined) request.diagnostics = diagnostics;
@@ -631,6 +644,17 @@ function sha256(value: string): string {
 
 function sum(values: readonly number[]): number {
   return values.reduce((total, value) => total + value, 0);
+}
+
+function runId(
+  suite: string,
+  taskId: string,
+  condition: V02Condition,
+  repetition: number,
+  variant?: string,
+): string {
+  const base = `${suite}/${taskId}/${condition}/${repetition}`;
+  return variant === undefined ? base : `${base}/${variant}`;
 }
 
 async function readCommit(): Promise<string> {

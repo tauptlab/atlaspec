@@ -236,18 +236,28 @@ export function parseClaudeOutput(
 }
 
 export function formatCliPrompt(request: GenerationRequest): string {
+  const renderedInputs = request.inputs.map(renderInput);
+  const content =
+    request.prompt_layout === 'reference-task-data'
+      ? [
+          ...renderedInputs.filter((_, index) => request.inputs[index]?.role === 'reference'),
+          request.prompt,
+          ...renderedInputs.filter((_, index) => request.inputs[index]?.role !== 'reference'),
+        ]
+      : [request.prompt, ...renderedInputs];
   return [
     'Do not use tools, inspect the filesystem, or add commentary.',
-    request.prompt,
-    ...request.inputs.map((input) =>
-      [
-        `<atlasbench-input role=${JSON.stringify(input.role)} path=${JSON.stringify(input.path)} media-type=${JSON.stringify(input.media_type)} sha256=${JSON.stringify(input.sha256)}>`,
-        input.content,
-        '</atlasbench-input>',
-      ].join('\n'),
-    ),
+    ...content,
     artifactOutputContract(request.condition),
   ].join('\n\n');
+}
+
+function renderInput(input: GenerationRequest['inputs'][number]): string {
+  return [
+    `<atlasbench-input role=${JSON.stringify(input.role)} path=${JSON.stringify(input.path)} media-type=${JSON.stringify(input.media_type)} sha256=${JSON.stringify(input.sha256)}>`,
+    input.content,
+    '</atlasbench-input>',
+  ].join('\n');
 }
 
 function artifactOutputContract(condition: GenerationRequest['condition']): string {

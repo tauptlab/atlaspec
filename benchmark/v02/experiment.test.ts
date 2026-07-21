@@ -118,6 +118,8 @@ describe('AtlasBench 0.2 model runner', () => {
         task_ids: [task.id],
         conditions: ['atlaspec-maplibre'],
         atlaspec_reference_path: '../references/atlaspec-v02-compact.md',
+        prompt_layout: 'reference-task-data',
+        run_variant: 'compact-reference-first',
       },
     );
 
@@ -126,6 +128,8 @@ describe('AtlasBench 0.2 model runner', () => {
     )!;
     expect(reference.path).toBe('../references/atlaspec-v02-compact.md');
     expect(reference.content).toContain('# Atlaspec 0.2 compact generation reference');
+    expect(adapter.requests[0]!.prompt_layout).toBe('reference-task-data');
+    expect(adapter.requests[0]!.request_id).toContain('/compact-reference-first/');
   });
 
   it('resumes from completed run records without repeating model calls', async () => {

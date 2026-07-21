@@ -70,6 +70,12 @@ export const GenerationRequestSchema = Type.Object(
     sampling: SamplingSchema,
     prompt: Type.String({ minLength: 1 }),
     prompt_sha256: Type.String({ pattern: '^[a-f0-9]{64}$' }),
+    prompt_layout: Type.Optional(
+      Type.Union([
+        Type.Literal('task-data-reference'),
+        Type.Literal('reference-task-data'),
+      ]),
+    ),
     inputs: Type.Array(InputArtifactSchema),
     diagnostics: Type.Optional(Type.Array(Type.String({ minLength: 1 }))),
   },

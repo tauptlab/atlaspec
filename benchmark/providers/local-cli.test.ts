@@ -114,6 +114,27 @@ describe('local agent CLI adapters', () => {
       prompt.lastIndexOf('</atlasbench-input>'),
     );
   });
+
+  it('can place a static reference before the task prompt for cache experiments', () => {
+    const request = fixtureRequest('claude-cli', 'opus', 'version');
+    request.prompt_layout = 'reference-task-data';
+    request.inputs.push({
+      path: 'reference.md',
+      role: 'reference',
+      media_type: 'text/markdown',
+      content: 'STATIC REFERENCE',
+      sha256: 'c'.repeat(64),
+    });
+
+    const prompt = formatCliPrompt(request);
+
+    expect(prompt.indexOf('STATIC REFERENCE')).toBeLessThan(
+      prompt.indexOf('Return an artifact only.'),
+    );
+    expect(prompt.indexOf('Return an artifact only.')).toBeLessThan(
+      prompt.indexOf('FeatureCollection'),
+    );
+  });
 });
 
 function fixtureRequest(

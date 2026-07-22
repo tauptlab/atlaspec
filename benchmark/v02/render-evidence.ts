@@ -25,6 +25,13 @@ import type {
   V02ExperimentReport,
   V02RunRecord,
 } from './experiment.js';
+import { buildV02CorpusMatrix, type V02Variant } from './corpus.js';
+import {
+  evaluateMapLibreVisualGates,
+  loadV02VisualGateLock,
+  type V02VisualGateCheck,
+  type V02VisualGateLock,
+} from './visual-gates.js';
 
 const RENDERABLE_CONDITIONS = new Set([
   'direct-maplibre',
@@ -50,7 +57,7 @@ export interface V02RenderEvidenceEntry {
   repetition: number;
   source_attempt: 'initial' | 'repair';
   accepted: boolean;
-  checks: Array<VegaLiteRenderCheck | MapLibreRenderCheck>;
+  checks: Array<VegaLiteRenderCheck | MapLibreRenderCheck | V02VisualGateCheck>;
   metrics: VegaLiteRenderMetrics | MapLibreRenderMetrics | null;
   warnings: string[];
   artifact: string | null;
@@ -58,12 +65,17 @@ export interface V02RenderEvidenceEntry {
 }
 
 export interface V02RenderEvidenceReport {
-  schema_version: '0.2';
+  schema_version: '0.3';
   evidence_kind: 'renderer-health';
   generated_at: string;
   evaluator: {
     commit: string;
     dirty: boolean;
+  };
+  visual_gate_lock: {
+    path: string;
+    sha256: string;
+    gate_id: string;
   };
   source_reports: Array<{
     path: string;
@@ -115,6 +127,10 @@ export async function writeV02RenderEvidence(
     const entries: V02RenderEvidenceEntry[] = [];
     const sources: V02RenderEvidenceReport['source_reports'] = [];
     const evaluator = await readGitState();
+    const visualGate = await loadV02VisualGateLock();
+    const taskVariants = new Map(
+      buildV02CorpusMatrix().tasks.map((task) => [task.id, task.variant]),
+    );
     let experimentRuns = 0;
     let renderableRuns = 0;
     let sourceAcceptedRuns = 0;
@@ -140,11 +156,15 @@ export async function writeV02RenderEvidence(
         const attempt = acceptedGenerationAttempt(run);
         if (attempt?.response === undefined) continue;
         sourceAcceptedRuns += 1;
+        const variant = taskVariants.get(run.task_id);
+        if (variant === undefined) throw new Error(`Unknown v0.2 task: ${run.task_id}`);
         try {
           const rendered = await renderAttempt(
             run.condition,
             attempt.response.output,
             attempt.request.inputs,
+            variant,
+            visualGate.lock,
             async () => {
               maplibreSession ??= await createMapLibreRenderSession({
                 ...(options.browser_path === undefined
@@ -209,10 +229,15 @@ export async function writeV02RenderEvidence(
     );
     const vegaEntries = entries.filter((entry) => entry.renderer === 'vega-lite-svg');
     const result: V02RenderEvidenceReport = {
-      schema_version: '0.2',
+      schema_version: '0.3',
       evidence_kind: 'renderer-health',
       generated_at: new Date().toISOString(),
       evaluator,
+      visual_gate_lock: {
+        path: visualGate.path,
+        sha256: visualGate.sha256,
+        gate_id: visualGate.lock.gate_id,
+      },
       source_reports: sources,
       summary: {
         source_reports: sources.length,
@@ -237,7 +262,7 @@ export async function writeV02RenderEvidence(
         },
       },
       claim_boundary:
-        'A pass proves that preserved inputs produced visible geometry through the real MapLibre or Vega runtime. MapLibre symbol layers are intentionally excluded until local glyph fixtures exist. This does not prove cartographic correctness, label non-overlap, perceptual quality, or human task accuracy.',
+        'A pass proves that preserved inputs produced visible geometry through the real MapLibre or Vega runtime and that MapLibre labels met the preregistered development-calibrated coverage, pixel, edge, and duplicate gates. This does not prove semantic label priority, perceptual quality, or human task accuracy.',
       entries,
     };
     await writeFile(
@@ -316,17 +341,20 @@ async function renderAttempt(
   condition: V02RenderableCondition,
   output: string,
   inputs: readonly InputArtifact[],
+  variant: V02Variant,
+  visualGateLock: V02VisualGateLock,
   maplibreSession: () => Promise<MapLibreRenderSession>,
 ): Promise<RenderedArtifact> {
   if (condition === 'direct-maplibre' || condition === 'atlaspec-maplibre') {
     const style = maplibreStyle(condition, output);
     const rendered = await (await maplibreSession()).render(style, inputs);
+    const visual = evaluateMapLibreVisualGates(rendered.metrics, variant, visualGateLock);
     return {
       renderer: 'maplibre-browser-png',
       extension: 'png',
       artifact: rendered.png,
-      accepted: rendered.accepted,
-      checks: rendered.checks,
+      accepted: rendered.accepted && visual.accepted,
+      checks: [...rendered.checks, ...visual.checks],
       metrics: rendered.metrics,
       warnings: rendered.warnings,
     };

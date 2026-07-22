@@ -440,6 +440,7 @@ Start with:
 - [AtlasBench render-evidence contract](docs/RENDER_EVIDENCE.md)
 - [AtlasBench 0.2 Vega-Lite render-health evidence](docs/V02_RENDER_HEALTH_2026-07-22.md)
 - [AtlasBench 0.2 cross-renderer health evidence](docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md)
+- [AtlasBench 0.2 MapLibre label-gate lock](docs/V02_LABEL_GATE_LOCK_2026-07-22.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can now export non-empty SVG evidence for Vega-Lite and

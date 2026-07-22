@@ -73,6 +73,8 @@ npm run benchmark:v02:render:calibrate -- `
 The calibration command hard-codes `split: development` and records
 `holdout_exposed: false`. Reference calibration describes the compiler's
 current behavior; it does not by itself prove that the behavior is good.
+The currently locked noninferiority thresholds and their rationale are in the
+[label-gate lock](V02_LABEL_GATE_LOCK_2026-07-22.md).
 
 ## Claim boundary
 

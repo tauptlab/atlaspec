@@ -12,6 +12,11 @@ import {
 import type { InputArtifact } from '../protocol.js';
 import { buildV02CorpusMatrix, type V02Variant } from './corpus.js';
 import { buildV02Manifests, buildV02ReferenceDocument } from './manifest.js';
+import {
+  evaluateMapLibreVisualGates,
+  loadV02VisualGateLock,
+  type V02VisualGateCheck,
+} from './visual-gates.js';
 
 const executeFile = promisify(execFile);
 
@@ -21,7 +26,9 @@ export interface V02RenderCalibrationEntry {
   difficulty: string;
   variant: V02Variant;
   accepted: boolean;
-  checks: Array<{ code: string; passed: boolean; detail: string }>;
+  checks: Array<
+    { code: string; passed: boolean; detail: string } | V02VisualGateCheck
+  >;
   metrics: MapLibreRenderMetrics;
   warnings: string[];
   artifact: string;
@@ -35,6 +42,7 @@ export interface V02RenderCalibrationReport {
   split: 'development';
   holdout_exposed: false;
   browser_version: string;
+  visual_gate_lock: { path: string; sha256: string; gate_id: string };
   summary: {
     tasks: number;
     passed: number;
@@ -65,6 +73,7 @@ export async function writeV02RenderCalibration(
   const matrix = buildV02CorpusMatrix();
   const manifest = buildV02Manifests(matrix).development;
   const taskMetadata = new Map(matrix.tasks.map((task) => [task.id, task]));
+  const visualGate = await loadV02VisualGateLock();
   const session = await createMapLibreRenderSession({
     ...(options.browser_path === undefined ? {} : { browser_path: options.browser_path }),
   });
@@ -83,6 +92,11 @@ export async function writeV02RenderCalibration(
       }
       const inputs = await readInputs(task.data_files);
       const rendered = await session.render(compiled.style, inputs);
+      const visual = evaluateMapLibreVisualGates(
+        rendered.metrics,
+        metadata.variant,
+        visualGate.lock,
+      );
       const artifact = `artifacts/${safeName(task.id)}.png`;
       await mkdir(join(temporary, 'artifacts'), { recursive: true });
       await writeFile(join(temporary, artifact), rendered.png);
@@ -91,8 +105,8 @@ export async function writeV02RenderCalibration(
         archetype: metadata.archetype,
         difficulty: metadata.difficulty,
         variant: metadata.variant,
-        accepted: rendered.accepted,
-        checks: rendered.checks,
+        accepted: rendered.accepted && visual.accepted,
+        checks: [...rendered.checks, ...visual.checks],
         metrics: rendered.metrics,
         warnings: rendered.warnings,
         artifact,
@@ -108,6 +122,11 @@ export async function writeV02RenderCalibration(
       split: 'development',
       holdout_exposed: false,
       browser_version: session.browser_version,
+      visual_gate_lock: {
+        path: visualGate.path,
+        sha256: visualGate.sha256,
+        gate_id: visualGate.lock.gate_id,
+      },
       summary: {
         tasks: entries.length,
         passed: entries.filter((entry) => entry.accepted).length,

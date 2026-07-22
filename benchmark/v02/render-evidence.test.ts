@@ -59,8 +59,9 @@ describe('AtlasBench 0.2 render evidence bundle', () => {
       model: { provider: 'test', model: 'fixture', version: '1' },
       runs: [
         {
-          run_id: 'test/task/direct-vega-lite/1',
-          task_id: 'task',
+          run_id:
+            'test/choropleth-proportional-symbols-basic-missing-and-skew/direct-vega-lite/1',
+          task_id: 'choropleth-proportional-symbols-basic-missing-and-skew',
           condition: 'direct-vega-lite',
           repetition: 1,
           attempts: [

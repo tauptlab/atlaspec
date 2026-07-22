@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "gate_id": "atlasbench-v02-maplibre-label-gates-v1",
+  "status": "locked-before-model-render-reclassification",
+  "scope": "development-qualification-maplibre-label-rendering",
+  "calibration": {
+    "split": "development",
+    "holdout_exposed": false,
+    "evaluator_commit": "d833ad9f09f3a8a03ece067d69b9e371889bf7ee",
+    "report_sha256": "b10a423ea3901b8debc93a22fd62a2e81734d2faab29756e1300d1877645361d"
+  },
+  "thresholds": {
+    "minimum_label_coverage_by_variant": {
+      "canonical": 0.3333333333333333,
+      "missing-and-skew": 0.3333333333333333,
+      "dense-multilingual-mobile": 0.16666666666666666,
+      "geographic-capability-boundary": 0.16666666666666666
+    },
+    "minimum_label_pixels_by_variant": {
+      "canonical": 31,
+      "missing-and-skew": 31,
+      "dense-multilingual-mobile": 63,
+      "geographic-capability-boundary": 10
+    },
+    "maximum_edge_label_ratio": 0.02,
+    "maximum_duplicate_rendered_labels": 0,
+    "cluster_fallback": {
+      "allowed_variant": "geographic-capability-boundary",
+      "minimum_rendered_cluster_labels": 1,
+      "minimum_label_pixels": 1
+    }
+  },
+  "claim_boundary": "These gates establish non-empty, source-bounded, collision-aware label rendering relative to development compiler references. They do not establish semantic label priority, human readability, or expert cartographic quality."
+}

@@ -144,3 +144,5 @@ source-accepted Vega-Lite outputs; see the
 The browser-backed extension produced 86/88 healthy MapLibre geometry PNGs,
 retaining two direct-generation runtime warning failures; see the
 [cross-renderer evidence](../../docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md).
+The next label-aware reclassification is governed by the preregistered
+[MapLibre label-gate lock](../../docs/V02_LABEL_GATE_LOCK_2026-07-22.md).

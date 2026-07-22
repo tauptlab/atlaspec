@@ -140,3 +140,6 @@ and the remaining visual-quality boundary.
 The first clean post-hardening render run produced 39/39 healthy SVGs from the
 source-accepted Vega-Lite outputs; see the
 [render-health evidence](../../docs/V02_RENDER_HEALTH_2026-07-22.md).
+The browser-backed extension produced 86/88 healthy MapLibre geometry PNGs,
+retaining two direct-generation runtime warning failures; see the
+[cross-renderer evidence](../../docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md).

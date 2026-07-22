@@ -439,6 +439,7 @@ Start with:
 - [AtlasBench 0.2 reference-layout A/B R&D](docs/V02_REFERENCE_LAYOUT_AB_RND_2026-07-21.md)
 - [AtlasBench render-evidence contract](docs/RENDER_EVIDENCE.md)
 - [AtlasBench 0.2 Vega-Lite render-health evidence](docs/V02_RENDER_HEALTH_2026-07-22.md)
+- [AtlasBench 0.2 cross-renderer health evidence](docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can now export non-empty SVG evidence for Vega-Lite and
@@ -469,6 +470,13 @@ uncached-token gate. All 39 source-accepted Vega-Lite runs in that qualification
 also produced non-empty SVGs through the real Vega runtime. The v0.2 holdout
 remains sealed, so these results are qualification evidence rather than a final
 release claim.
+
+The same frozen reports now have cross-renderer runtime evidence: all 72
+Atlaspec MapLibre/Vega-Lite comparison outputs passed renderer health, while
+direct generation produced 53/72 renderer-healthy outputs. Two direct MapLibre
+styles that passed static checks emitted numeric-`null` warnings only in the
+browser. MapLibre label layers remain intentionally outside this result until
+the benchmark has local glyph fixtures.
 
 Work still required before a stable release includes:
 

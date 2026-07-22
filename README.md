@@ -437,10 +437,13 @@ Start with:
 - [AtlasBench 0.2 post-hardening qualification and token-feasibility R&D](docs/V02_POST_HARDENING_QUALIFICATION_2026-07-21.md)
 - [AtlasBench 0.2 compact-reference R&D](docs/V02_COMPACT_REFERENCE_RND_2026-07-21.md)
 - [AtlasBench 0.2 reference-layout A/B R&D](docs/V02_REFERENCE_LAYOUT_AB_RND_2026-07-21.md)
+- [AtlasBench render-evidence contract](docs/RENDER_EVIDENCE.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
-contract. It does not substitute for human accuracy, expert review, edit
-survival, hosted-model reproduction, or comprehensive visual evaluation.
+contract. AtlasBench can now export non-empty SVG health evidence for accepted
+Vega-Lite runs, but that does not substitute for human accuracy, expert review,
+hosted-model reproduction, MapLibre browser screenshots, or comprehensive
+visual-quality evaluation.
 
 ## Repository map
 

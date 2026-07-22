@@ -25,6 +25,7 @@ npm run corpus:v02:generate
 npm run corpus:v02:check
 npm run benchmark:v02:dry-run
 npm run benchmark:v02:run -- --help
+npm run benchmark:v02:render -- --help
 ```
 
 The deterministic dry-run currently replays all 48 tasks and 214 declared
@@ -124,3 +125,14 @@ Codex also failed reliability. The v0.2 holdout remains sealed.
 
 See the full result, immutable report hashes, and claim boundary in the
 [multi-task qualification report](../../docs/V02_MULTI_TASK_QUALIFICATION_2026-07-21.md).
+
+The hardened follow-up qualification supersedes that initial verdict for the
+current generated reference: Claude passed every locked gate, while Codex
+failed only the total uncached-token gate. The fresh holdout remains sealed.
+See the
+[post-hardening qualification](../../docs/V02_POST_HARDENING_QUALIFICATION_2026-07-21.md).
+
+Accepted Vega-Lite conditions can be executed through the real renderer and
+exported as immutable SVG evidence with `npm run benchmark:v02:render`. The
+[render-evidence contract](../../docs/RENDER_EVIDENCE.md) explains its checks
+and the remaining visual-quality boundary.

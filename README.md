@@ -441,18 +441,15 @@ Start with:
 - [AtlasBench 0.2 Vega-Lite render-health evidence](docs/V02_RENDER_HEALTH_2026-07-22.md)
 - [AtlasBench 0.2 cross-renderer health evidence](docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md)
 - [AtlasBench 0.2 MapLibre label-gate lock](docs/V02_LABEL_GATE_LOCK_2026-07-22.md)
+- [AtlasBench 0.2 label-aware cross-renderer evidence](docs/V02_LABEL_AWARE_RENDER_2026-07-22.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
-contract. AtlasBench can now export non-empty SVG evidence for Vega-Lite and
-geometry-only browser PNG evidence for MapLibre, but that does not substitute
-for human accuracy, expert review, hosted-model reproduction, label rendering,
-or comprehensive visual-quality evaluation.
-
-The current renderer can now generate MapLibre glyphs locally and measure label
-coverage, duplicates, label-only pixels, and viewport-edge pixels. Those metrics
-must be calibrated and locked on development references before they are used to
-reclassify model outputs; the published cross-renderer result below remains the
-earlier geometry-only run.
+contract. AtlasBench can export non-empty SVG evidence for Vega-Lite and
+offline browser PNG evidence with locally rendered MapLibre labels. It measures
+candidate-backed label coverage, duplicates, label-only pixels, and sampled
+viewport-edge pixels against preregistered variant-specific gates. This still
+does not substitute for human accuracy, expert review, hosted-model
+reproduction, or comprehensive visual-quality evaluation.
 
 ## Repository map
 
@@ -478,17 +475,19 @@ also produced non-empty SVGs through the real Vega runtime. The v0.2 holdout
 remains sealed, so these results are qualification evidence rather than a final
 release claim.
 
-The same frozen reports now have cross-renderer runtime evidence: all 72
-Atlaspec MapLibre/Vega-Lite comparison outputs passed renderer health, while
-direct generation produced 53/72 renderer-healthy outputs. Two direct MapLibre
+The same frozen reports now have label-aware cross-renderer runtime evidence:
+all 72 Atlaspec MapLibre/Vega-Lite comparison outputs passed the locked gates,
+while direct generation produced 52/72 healthy outputs. Two direct MapLibre
 styles that passed static checks emitted numeric-`null` warnings only in the
-browser. MapLibre label layers remain intentionally outside this result until
-the benchmark has local glyph fixtures.
+browser, and one additional direct style rendered geometry but zero labels.
+The prior geometry-only result was 72/72 versus 53/72. The holdout remains
+sealed, so the observed 27.78 percentage-point development difference is not a
+final generalization claim.
 
 Work still required before a stable release includes:
 
 - hosted raw-API reproduction across pre-committed model strata;
-- local-glyph MapLibre label screenshots and calibrated geometry-level gates;
+- deterministic label-overlap, symbol-occlusion, contrast, and priority gates;
 - blind human map-reading and cartographer review;
 - larger edit-survival and feature-ablation studies;
 - package publication and a stable compatibility policy;

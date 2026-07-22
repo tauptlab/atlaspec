@@ -144,5 +144,9 @@ source-accepted Vega-Lite outputs; see the
 The browser-backed extension produced 86/88 healthy MapLibre geometry PNGs,
 retaining two direct-generation runtime warning failures; see the
 [cross-renderer evidence](../../docs/V02_CROSS_RENDERER_HEALTH_2026-07-22.md).
-The next label-aware reclassification is governed by the preregistered
-[MapLibre label-gate lock](../../docs/V02_LABEL_GATE_LOCK_2026-07-22.md).
+The preregistered
+[MapLibre label-gate lock](../../docs/V02_LABEL_GATE_LOCK_2026-07-22.md) was
+then applied without exposing the holdout. Atlaspec retained 72/72 healthy
+comparison outputs while direct generation changed from 53/72 geometry-only
+passes to 52/72 label-aware passes; see the
+[label-aware evidence](../../docs/V02_LABEL_AWARE_RENDER_2026-07-22.md).

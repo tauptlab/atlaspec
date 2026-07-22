@@ -88,6 +88,18 @@ describe('AtlasBench 0.2 render evidence bundle', () => {
         passed: 1,
         failed: 0,
         skipped_source_failures: 0,
+        by_renderer: {
+          maplibre_browser_png: {
+            source_accepted: 0,
+            passed: 0,
+            failed: 0,
+          },
+          vega_lite_svg: {
+            source_accepted: 1,
+            passed: 1,
+            failed: 0,
+          },
+        },
       });
       expect(evidence.evaluator.commit).toMatch(/^[a-f0-9]{40}$/);
       const artifact = evidence.entries[0]?.artifact;

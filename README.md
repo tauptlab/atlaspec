@@ -441,10 +441,10 @@ Start with:
 - [AtlasBench 0.2 Vega-Lite render-health evidence](docs/V02_RENDER_HEALTH_2026-07-22.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
-contract. AtlasBench can now export non-empty SVG health evidence for accepted
-Vega-Lite runs, but that does not substitute for human accuracy, expert review,
-hosted-model reproduction, MapLibre browser screenshots, or comprehensive
-visual-quality evaluation.
+contract. AtlasBench can now export non-empty SVG evidence for Vega-Lite and
+geometry-only browser PNG evidence for MapLibre, but that does not substitute
+for human accuracy, expert review, hosted-model reproduction, label rendering,
+or comprehensive visual-quality evaluation.
 
 ## Repository map
 
@@ -473,7 +473,7 @@ release claim.
 Work still required before a stable release includes:
 
 - hosted raw-API reproduction across pre-committed model strata;
-- browser-backed MapLibre screenshots and geometry-level visual validation;
+- local-glyph MapLibre label screenshots and calibrated geometry-level gates;
 - blind human map-reading and cartographer review;
 - larger edit-survival and feature-ablation studies;
 - package publication and a stable compatibility policy;

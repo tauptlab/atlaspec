@@ -6,7 +6,14 @@ import { promisify } from 'node:util';
 
 import { parse as parseYaml } from 'yaml';
 
+import { compileMapLibre, type MapLibreStyle } from '../../src/maplibre.js';
 import { compileVegaLite, type VegaLiteSpec } from '../../src/vega-lite.js';
+import {
+  createMapLibreRenderSession,
+  type MapLibreRenderCheck,
+  type MapLibreRenderMetrics,
+  type MapLibreRenderSession,
+} from '../render/maplibre.js';
 import {
   renderVegaLiteSvg,
   type VegaLiteRenderCheck,
@@ -20,6 +27,8 @@ import type {
 } from './experiment.js';
 
 const RENDERABLE_CONDITIONS = new Set([
+  'direct-maplibre',
+  'atlaspec-maplibre',
   'direct-vega-lite',
   'atlaspec-vega-lite',
 ]);
@@ -32,20 +41,25 @@ export interface V02RenderEvidenceEntry {
   compiler_commit: string;
   run_id: string;
   task_id: string;
-  condition: 'direct-vega-lite' | 'atlaspec-vega-lite';
+  condition:
+    | 'direct-maplibre'
+    | 'atlaspec-maplibre'
+    | 'direct-vega-lite'
+    | 'atlaspec-vega-lite';
+  renderer: 'maplibre-browser-png' | 'vega-lite-svg';
   repetition: number;
   source_attempt: 'initial' | 'repair';
   accepted: boolean;
-  checks: VegaLiteRenderCheck[];
-  metrics: VegaLiteRenderMetrics | null;
+  checks: Array<VegaLiteRenderCheck | MapLibreRenderCheck>;
+  metrics: VegaLiteRenderMetrics | MapLibreRenderMetrics | null;
   warnings: string[];
   artifact: string | null;
   error: string | null;
 }
 
 export interface V02RenderEvidenceReport {
-  schema_version: '0.1';
-  evidence_kind: 'vega-lite-svg-render-health';
+  schema_version: '0.2';
+  evidence_kind: 'renderer-health';
   generated_at: string;
   evaluator: {
     commit: string;
@@ -67,6 +81,18 @@ export interface V02RenderEvidenceReport {
     passed: number;
     failed: number;
     skipped_source_failures: number;
+    by_renderer: {
+      maplibre_browser_png: {
+        source_accepted: number;
+        passed: number;
+        failed: number;
+      };
+      vega_lite_svg: {
+        source_accepted: number;
+        passed: number;
+        failed: number;
+      };
+    };
   };
   claim_boundary: string;
   entries: V02RenderEvidenceEntry[];
@@ -75,6 +101,7 @@ export interface V02RenderEvidenceReport {
 export async function writeV02RenderEvidence(
   reportPaths: readonly string[],
   outputDirectory: string,
+  options: { browser_path?: string } = {},
 ): Promise<V02RenderEvidenceReport> {
   if (reportPaths.length === 0) throw new Error('At least one source report is required.');
   const output = resolve(outputDirectory);
@@ -82,6 +109,7 @@ export async function writeV02RenderEvidence(
   await assertMissing(output);
   await assertMissing(temporary);
   await mkdir(temporary, { recursive: true });
+  let maplibreSession: MapLibreRenderSession | undefined;
 
   try {
     const entries: V02RenderEvidenceEntry[] = [];
@@ -112,17 +140,28 @@ export async function writeV02RenderEvidence(
         const attempt = acceptedGenerationAttempt(run);
         if (attempt?.response === undefined) continue;
         sourceAcceptedRuns += 1;
-        const artifact = join(
-          'artifacts',
-          sourceTag,
-          `${safeName(run.run_id)}.svg`,
-        ).replaceAll('\\', '/');
-        const artifactPath = join(temporary, artifact);
         try {
-          const spec = renderSpec(run.condition, attempt.response.output);
-          const render = await renderVegaLiteSvg(spec, attempt.request.inputs);
+          const rendered = await renderAttempt(
+            run.condition,
+            attempt.response.output,
+            attempt.request.inputs,
+            async () => {
+              maplibreSession ??= await createMapLibreRenderSession({
+                ...(options.browser_path === undefined
+                  ? {}
+                  : { browser_path: options.browser_path }),
+              });
+              return maplibreSession;
+            },
+          );
+          const artifact = join(
+            'artifacts',
+            sourceTag,
+            `${safeName(run.run_id)}.${rendered.extension}`,
+          ).replaceAll('\\', '/');
+          const artifactPath = join(temporary, artifact);
           await mkdir(dirname(artifactPath), { recursive: true });
-          await writeFile(artifactPath, `${render.svg}\n`, 'utf8');
+          await writeFile(artifactPath, rendered.artifact);
           entries.push({
             source_report: absolute,
             source_report_sha256: sourceHash,
@@ -131,12 +170,13 @@ export async function writeV02RenderEvidence(
             run_id: run.run_id,
             task_id: run.task_id,
             condition: run.condition,
+            renderer: rendered.renderer,
             repetition: run.repetition,
             source_attempt: attempt.stage,
-            accepted: render.accepted,
-            checks: render.checks,
-            metrics: render.metrics,
-            warnings: render.warnings,
+            accepted: rendered.accepted,
+            checks: rendered.checks,
+            metrics: rendered.metrics,
+            warnings: rendered.warnings,
             artifact,
             error: null,
           });
@@ -149,6 +189,7 @@ export async function writeV02RenderEvidence(
             run_id: run.run_id,
             task_id: run.task_id,
             condition: run.condition,
+            renderer: rendererFor(run.condition),
             repetition: run.repetition,
             source_attempt: attempt.stage,
             accepted: false,
@@ -163,9 +204,13 @@ export async function writeV02RenderEvidence(
     }
 
     const passed = entries.filter((entry) => entry.accepted).length;
+    const maplibreEntries = entries.filter(
+      (entry) => entry.renderer === 'maplibre-browser-png',
+    );
+    const vegaEntries = entries.filter((entry) => entry.renderer === 'vega-lite-svg');
     const result: V02RenderEvidenceReport = {
-      schema_version: '0.1',
-      evidence_kind: 'vega-lite-svg-render-health',
+      schema_version: '0.2',
+      evidence_kind: 'renderer-health',
       generated_at: new Date().toISOString(),
       evaluator,
       source_reports: sources,
@@ -178,9 +223,21 @@ export async function writeV02RenderEvidence(
         passed,
         failed: entries.length - passed,
         skipped_source_failures: renderableRuns - sourceAcceptedRuns,
+        by_renderer: {
+          maplibre_browser_png: {
+            source_accepted: maplibreEntries.length,
+            passed: maplibreEntries.filter((entry) => entry.accepted).length,
+            failed: maplibreEntries.filter((entry) => !entry.accepted).length,
+          },
+          vega_lite_svg: {
+            source_accepted: vegaEntries.length,
+            passed: vegaEntries.filter((entry) => entry.accepted).length,
+            failed: vegaEntries.filter((entry) => !entry.accepted).length,
+          },
+        },
       },
       claim_boundary:
-        'A pass proves that preserved inputs produced a non-empty, accessible SVG through Vega-Lite and Vega. It does not prove cartographic correctness, label non-overlap, perceptual quality, or human task accuracy.',
+        'A pass proves that preserved inputs produced visible geometry through the real MapLibre or Vega runtime. MapLibre symbol layers are intentionally excluded until local glyph fixtures exist. This does not prove cartographic correctness, label non-overlap, perceptual quality, or human task accuracy.',
       entries,
     };
     await writeFile(
@@ -193,6 +250,8 @@ export async function writeV02RenderEvidence(
   } catch (error) {
     await rm(temporary, { recursive: true, force: true });
     throw error;
+  } finally {
+    await maplibreSession?.close();
   }
 }
 
@@ -220,11 +279,15 @@ function readExperimentReport(raw: string, path: string): V02ExperimentReport {
   return candidate as unknown as V02ExperimentReport;
 }
 
+type V02RenderableCondition =
+  | 'direct-maplibre'
+  | 'atlaspec-maplibre'
+  | 'direct-vega-lite'
+  | 'atlaspec-vega-lite';
+
 function isRenderableRun(
   run: V02RunRecord,
-): run is V02RunRecord & {
-  condition: 'direct-vega-lite' | 'atlaspec-vega-lite';
-} {
+): run is V02RunRecord & { condition: V02RenderableCondition } {
   return RENDERABLE_CONDITIONS.has(run.condition);
 }
 
@@ -239,7 +302,68 @@ function acceptedGenerationAttempt(run: V02RunRecord): V02GenerationAttempt | un
     );
 }
 
-function renderSpec(
+interface RenderedArtifact {
+  renderer: V02RenderEvidenceEntry['renderer'];
+  extension: 'png' | 'svg';
+  artifact: Uint8Array | string;
+  accepted: boolean;
+  checks: V02RenderEvidenceEntry['checks'];
+  metrics: Exclude<V02RenderEvidenceEntry['metrics'], null>;
+  warnings: string[];
+}
+
+async function renderAttempt(
+  condition: V02RenderableCondition,
+  output: string,
+  inputs: readonly InputArtifact[],
+  maplibreSession: () => Promise<MapLibreRenderSession>,
+): Promise<RenderedArtifact> {
+  if (condition === 'direct-maplibre' || condition === 'atlaspec-maplibre') {
+    const style = maplibreStyle(condition, output);
+    const rendered = await (await maplibreSession()).render(style, inputs);
+    return {
+      renderer: 'maplibre-browser-png',
+      extension: 'png',
+      artifact: rendered.png,
+      accepted: rendered.accepted,
+      checks: rendered.checks,
+      metrics: rendered.metrics,
+      warnings: rendered.warnings,
+    };
+  }
+  const rendered = await renderVegaLiteSvg(vegaLiteSpec(condition, output), inputs);
+  return {
+    renderer: 'vega-lite-svg',
+    extension: 'svg',
+    artifact: `${rendered.svg}\n`,
+    accepted: rendered.accepted,
+    checks: rendered.checks,
+    metrics: rendered.metrics,
+    warnings: rendered.warnings,
+  };
+}
+
+function maplibreStyle(
+  condition: 'direct-maplibre' | 'atlaspec-maplibre',
+  output: string,
+): MapLibreStyle {
+  if (condition === 'direct-maplibre') {
+    const value = JSON.parse(output) as unknown;
+    if (!isRecord(value)) throw new Error('Direct MapLibre output is not an object.');
+    return value as unknown as MapLibreStyle;
+  }
+  const compiled = compileMapLibre(parseYaml(output) as unknown);
+  if (!compiled.ok) {
+    throw new Error(
+      `Accepted Atlaspec output no longer compiles to MapLibre: ${compiled.diagnostics
+        .map((diagnostic) => diagnostic.code)
+        .join(', ')}`,
+    );
+  }
+  return compiled.style;
+}
+
+function vegaLiteSpec(
   condition: 'direct-vega-lite' | 'atlaspec-vega-lite',
   output: string,
 ): VegaLiteSpec {
@@ -257,6 +381,14 @@ function renderSpec(
     );
   }
   return compiled.spec;
+}
+
+function rendererFor(
+  condition: V02RenderableCondition,
+): V02RenderEvidenceEntry['renderer'] {
+  return condition === 'direct-maplibre' || condition === 'atlaspec-maplibre'
+    ? 'maplibre-browser-png'
+    : 'vega-lite-svg';
 }
 
 async function assertMissing(path: string): Promise<void> {

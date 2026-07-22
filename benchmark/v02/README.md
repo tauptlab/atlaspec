@@ -132,8 +132,9 @@ failed only the total uncached-token gate. The fresh holdout remains sealed.
 See the
 [post-hardening qualification](../../docs/V02_POST_HARDENING_QUALIFICATION_2026-07-21.md).
 
-Accepted Vega-Lite conditions can be executed through the real renderer and
-exported as immutable SVG evidence with `npm run benchmark:v02:render`. The
+Accepted MapLibre and Vega-Lite conditions can be executed through real
+renderers and exported as immutable PNG/SVG evidence with
+`npm run benchmark:v02:render`. The
 [render-evidence contract](../../docs/RENDER_EVIDENCE.md) explains its checks
 and the remaining visual-quality boundary.
 The first clean post-hardening render run produced 39/39 healthy SVGs from the

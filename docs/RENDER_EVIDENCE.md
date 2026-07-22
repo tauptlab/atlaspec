@@ -50,12 +50,29 @@ generation failure into a pass. Known SwiftShader readback-performance noise
 is retained but excluded from the warning gate. Data-expression warnings such
 as a numeric expression receiving `null` remain actionable failures.
 
-MapLibre runs remove symbol layers and their external glyph URL before entering
-the offline browser. The PNG evidence therefore covers geometry layers only:
-fill, circle, heatmap, and other non-symbol layers. Every suppressed layer ID is
-recorded per artifact. This avoids turning a network-dependent public font
-service into benchmark evidence while keeping the missing label-rendering gate
-explicit.
+MapLibre runs remove the external glyph URL and use MapLibre 5's TinySDF local
+glyph generation with a deterministic `sans-serif` fallback. Symbol layers
+therefore remain in the offline browser without turning a public font service
+into benchmark evidence. The report records:
+
+- candidate and actually rendered labels per text layer;
+- candidate-backed label coverage;
+- unique and duplicate rendered label counts;
+- label-only pixel count, measured by toggling symbol visibility;
+- label pixels touching a four-pixel sampled viewport edge;
+- all symbol-layer IDs and local-renderer warnings.
+
+Before applying visual thresholds to model outputs, calibrate these metrics on
+development-only compiler references:
+
+```powershell
+npm run benchmark:v02:render:calibrate -- `
+  --output work/v02-label-calibration
+```
+
+The calibration command hard-codes `split: development` and records
+`holdout_exposed: false`. Reference calibration describes the compiler's
+current behavior; it does not by itself prove that the behavior is good.
 
 ## Claim boundary
 
@@ -68,7 +85,6 @@ through the real MapLibre or Vega runtime. It does not prove:
 - equality between MapLibre and Vega-Lite pixels;
 - human map-reading accuracy or expert preference.
 
-Those stronger questions require local glyph fixtures, label/symbol geometry
-checks, calibrated screenshot thresholds, and blinded human or cartographer
-review. Render health is a prerequisite and an artifact-generation layer for
-those later evaluations.
+Those stronger questions require preregistered label/symbol geometry thresholds
+and blinded human or cartographer review. Render health is a prerequisite and
+an artifact-generation layer for those later evaluations.

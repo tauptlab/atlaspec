@@ -24,6 +24,17 @@ export interface MapLibreLayerMetric {
   rendered_features: number;
 }
 
+export interface MapLibreLabelLayerMetric {
+  id: string;
+  source: string | null;
+  text_field: string | null;
+  candidate_labels: number | null;
+  rendered_labels: number;
+  unique_rendered_labels: number | null;
+  duplicate_rendered_labels: number | null;
+  coverage: number | null;
+}
+
 export interface MapLibreRenderMetrics {
   requested_width: number;
   requested_height: number;
@@ -34,7 +45,14 @@ export interface MapLibreRenderMetrics {
   total_sources: number;
   rendered_features: number;
   geometry_layers: MapLibreLayerMetric[];
-  suppressed_symbol_layers: string[];
+  symbol_layers: string[];
+  label_layers: MapLibreLabelLayerMetric[];
+  candidate_labels: number;
+  rendered_labels: number;
+  label_coverage: number | null;
+  label_pixels: number;
+  edge_label_pixels: number;
+  edge_label_ratio: number | null;
   sampled_pixels: number;
   non_background_pixels: number;
   non_background_ratio: number;
@@ -142,6 +160,8 @@ export async function renderMapLibrePng(
             options?: { layers: string[] },
           ): unknown[];
           getCanvas(): HTMLCanvasElement;
+          getLayoutProperty(layerId: string, name: string): unknown;
+          setLayoutProperty(layerId: string, name: string, value: unknown): void;
         }
         interface MapLibreGlobal {
           Map: new (options: Record<string, unknown>) => BrowserMap;
@@ -158,6 +178,7 @@ export async function renderMapLibrePng(
           preserveDrawingBuffer: true,
           fadeDuration: 0,
           renderWorldCopies: true,
+          localIdeographFontFamily: 'sans-serif',
         });
         map.on('error', (event) => {
           runtimeErrors.push(event.error?.message ?? 'unknown MapLibre error');
@@ -181,6 +202,9 @@ export async function renderMapLibrePng(
         const geometryLayers = styleValue.layers.filter(
           (layer) => layer['type'] !== 'background' && layer['type'] !== 'symbol',
         );
+        const symbolLayers = styleValue.layers.filter(
+          (layer) => layer['type'] === 'symbol' && hasTextField(layer['layout']),
+        );
         const layerMetrics = geometryLayers.map((layer) => ({
           id: String(layer['id']),
           type: String(layer['type']),
@@ -189,6 +213,57 @@ export async function renderMapLibrePng(
           }).length,
         }));
         const canvas = map.getCanvas();
+        const labelMetrics = symbolLayers.map((layer) => {
+          const id = String(layer['id']);
+          const sourceId = typeof layer['source'] === 'string' ? layer['source'] : null;
+          const field = textField(layer['layout']);
+          const source = sourceId === null ? undefined : styleValue.sources[sourceId];
+          const data = source?.['data'];
+          const features = isObject(data) && Array.isArray(data['features'])
+            ? data['features']
+            : null;
+          const rawCandidateValues =
+            field === null || features === null
+              ? null
+              : features
+                  .map((feature) =>
+                    isObject(feature) && isObject(feature['properties'])
+                      ? feature['properties'][field]
+                      : undefined,
+                  )
+                  .filter((value) => value !== null && value !== undefined)
+                  .map(String);
+          const rendered = map.queryRenderedFeatures(undefined, { layers: [id] });
+          const candidateValues =
+            field?.startsWith('point_count') === true ? null : rawCandidateValues;
+          const renderedValues =
+            field === null
+              ? null
+              : rendered
+                  .map((feature) =>
+                    isObject(feature) && isObject(feature['properties'])
+                      ? feature['properties'][field]
+                      : undefined,
+                  )
+                  .filter((value) => value !== null && value !== undefined)
+                  .map(String);
+          const uniqueRendered =
+            renderedValues === null ? null : new Set(renderedValues).size;
+          return {
+            id,
+            source: sourceId,
+            text_field: field,
+            candidate_labels: candidateValues?.length ?? null,
+            rendered_labels: rendered.length,
+            unique_rendered_labels: uniqueRendered,
+            duplicate_rendered_labels:
+              uniqueRendered === null ? null : rendered.length - uniqueRendered,
+            coverage:
+              candidateValues === null || candidateValues.length === 0
+                ? null
+                : rendered.length / candidateValues.length,
+          };
+        });
         const sample = document.createElement('canvas');
         sample.width = Math.min(240, canvas.width);
         sample.height = Math.min(160, canvas.height);
@@ -203,6 +278,45 @@ export async function renderMapLibrePng(
         }
         const sampledPixels = pixels.length / 4;
         const dominantPixels = Math.max(...buckets.values());
+        const fullPixels = context.getImageData(0, 0, sample.width, sample.height).data;
+        const originalVisibility = symbolLayers.map((layer) => ({
+          id: String(layer['id']),
+          visibility: map.getLayoutProperty(String(layer['id']), 'visibility'),
+        }));
+        if (symbolLayers.length > 0) {
+          const idle = new Promise<void>((resolveIdle) => map.once('idle', resolveIdle));
+          for (const layer of symbolLayers) {
+            map.setLayoutProperty(String(layer['id']), 'visibility', 'none');
+          }
+          await idle;
+        }
+        context.clearRect(0, 0, sample.width, sample.height);
+        context.drawImage(canvas, 0, 0, sample.width, sample.height);
+        const geometryPixels = context.getImageData(0, 0, sample.width, sample.height).data;
+        let labelPixels = 0;
+        let edgeLabelPixels = 0;
+        const edge = 4;
+        for (let index = 0; index < fullPixels.length; index += 4) {
+          const difference =
+            Math.abs(fullPixels[index]! - geometryPixels[index]!) +
+            Math.abs(fullPixels[index + 1]! - geometryPixels[index + 1]!) +
+            Math.abs(fullPixels[index + 2]! - geometryPixels[index + 2]!);
+          if (difference < 24) continue;
+          labelPixels += 1;
+          const pixel = index / 4;
+          const x = pixel % sample.width;
+          const y = Math.floor(pixel / sample.width);
+          if (x < edge || x >= sample.width - edge || y < edge || y >= sample.height - edge) {
+            edgeLabelPixels += 1;
+          }
+        }
+        if (symbolLayers.length > 0) {
+          const idle = new Promise<void>((resolveIdle) => map.once('idle', resolveIdle));
+          for (const layer of originalVisibility) {
+            map.setLayoutProperty(layer.id, 'visibility', layer.visibility ?? 'visible');
+          }
+          await idle;
+        }
         const result = {
           loadedSources: sources.filter((source) => map.isSourceLoaded(source)).length,
           totalSources: sources.length,
@@ -211,12 +325,40 @@ export async function renderMapLibrePng(
             0,
           ),
           layerMetrics,
+          labelMetrics,
+          labelPixels,
+          edgeLabelPixels,
           sampledPixels,
           nonBackgroundPixels: sampledPixels - dominantPixels,
           colorBuckets: buckets.size,
           runtimeErrors,
         };
         return result;
+
+        function textField(layout: unknown): string | null {
+          if (!isObject(layout)) return null;
+          const value = layout['text-field'];
+          if (
+            Array.isArray(value) &&
+            value[0] === 'get' &&
+            typeof value[1] === 'string'
+          ) {
+            return value[1];
+          }
+          if (typeof value === 'string') {
+            const token = value.match(/^\{([^{}]+)\}$/);
+            return token?.[1] ?? null;
+          }
+          return null;
+        }
+
+        function hasTextField(layout: unknown): boolean {
+          return isObject(layout) && layout['text-field'] !== undefined;
+        }
+
+        function isObject(value: unknown): value is Record<string, unknown> {
+          return typeof value === 'object' && value !== null && !Array.isArray(value);
+        }
       },
       {
         styleValue: hydrated.style,
@@ -228,6 +370,19 @@ export async function renderMapLibrePng(
     await context.close();
     const uniqueWarnings = [...new Set(warnings)];
     const actionableWarnings = actionableMapLibreWarnings(uniqueWarnings);
+    const candidateLabels = browserMetrics.labelMetrics.reduce(
+      (total, layer) => total + (layer.candidate_labels ?? 0),
+      0,
+    );
+    const renderedLabels = browserMetrics.labelMetrics.reduce(
+      (total, layer) => total + layer.rendered_labels,
+      0,
+    );
+    const candidateBackedRenderedLabels = browserMetrics.labelMetrics.reduce(
+      (total, layer) =>
+        total + (layer.candidate_labels === null ? 0 : layer.rendered_labels),
+      0,
+    );
 
     const metrics: MapLibreRenderMetrics = {
       requested_width: width,
@@ -239,7 +394,18 @@ export async function renderMapLibrePng(
       total_sources: browserMetrics.totalSources,
       rendered_features: browserMetrics.renderedFeatures,
       geometry_layers: browserMetrics.layerMetrics,
-      suppressed_symbol_layers: hydrated.suppressedSymbolLayers,
+      symbol_layers: hydrated.symbolLayers,
+      label_layers: browserMetrics.labelMetrics,
+      candidate_labels: candidateLabels,
+      rendered_labels: renderedLabels,
+      label_coverage:
+        candidateLabels === 0 ? null : candidateBackedRenderedLabels / candidateLabels,
+      label_pixels: browserMetrics.labelPixels,
+      edge_label_pixels: browserMetrics.edgeLabelPixels,
+      edge_label_ratio:
+        browserMetrics.labelPixels === 0
+          ? null
+          : browserMetrics.edgeLabelPixels / browserMetrics.labelPixels,
       sampled_pixels: browserMetrics.sampledPixels,
       non_background_pixels: browserMetrics.nonBackgroundPixels,
       non_background_ratio:
@@ -267,6 +433,25 @@ export async function renderMapLibrePng(
         `rendered=${metrics.rendered_features} layers=${metrics.geometry_layers
           .map((layer) => `${layer.id}:${layer.rendered_features}`)
           .join(',')}`,
+      ),
+      check(
+        'render.labels-visible',
+        candidateLabels === 0 || (renderedLabels > 0 && browserMetrics.labelPixels > 0),
+        `candidates=${candidateLabels} rendered=${renderedLabels} pixels=${browserMetrics.labelPixels}`,
+      ),
+      check(
+        'render.labels-source-bounded',
+        browserMetrics.labelMetrics.every(
+          (layer) =>
+            layer.candidate_labels === null ||
+            layer.rendered_labels <= layer.candidate_labels,
+        ),
+        browserMetrics.labelMetrics
+          .map(
+            (layer) =>
+              `${layer.id}:${layer.rendered_labels}/${layer.candidate_labels ?? 'unresolved'}`,
+          )
+          .join(','),
       ),
       check(
         'render.canvas-nonempty',
@@ -346,7 +531,7 @@ interface HydratedMapLibreStyle {
   discoveredUrls: number;
   resolvedUrls: number;
   resolvedFeatures: number;
-  suppressedSymbolLayers: string[];
+  symbolLayers: string[];
 }
 
 export function hydrateMapLibreStyle(
@@ -380,17 +565,16 @@ export function hydrateMapLibreStyle(
     resolvedUrls += 1;
     resolvedFeatures += data.features.length;
   }
-  const suppressedSymbolLayers = hydrated.layers
+  const symbolLayers = hydrated.layers
     .filter((layer) => layer['type'] === 'symbol')
     .map((layer) => String(layer['id']));
-  hydrated.layers = hydrated.layers.filter((layer) => layer['type'] !== 'symbol');
   delete (hydrated as unknown as Record<string, unknown>)['glyphs'];
   return {
     style: hydrated,
     discoveredUrls,
     resolvedUrls,
     resolvedFeatures,
-    suppressedSymbolLayers,
+    symbolLayers,
   };
 }
 

@@ -11,7 +11,7 @@ import {
 } from './maplibre.js';
 
 describe('MapLibre browser render preparation', () => {
-  it('inlines preserved GeoJSON and removes network-dependent symbol layers', () => {
+  it('inlines preserved GeoJSON and switches symbol layers to local glyph generation', () => {
     const result = hydrateMapLibreStyle(style(), [
       input('data/points.geojson', [point(127, 37.5), point(129, 35.1)]),
     ]);
@@ -21,12 +21,13 @@ describe('MapLibre browser render preparation', () => {
         discoveredUrls: 1,
         resolvedUrls: 1,
         resolvedFeatures: 2,
-        suppressedSymbolLayers: ['labels'],
+        symbolLayers: ['labels'],
       }),
     );
     expect(result.style.layers.map((layer) => layer['id'])).toEqual([
       'background',
       'points',
+      'labels',
     ]);
     expect(result.style).not.toHaveProperty('glyphs');
     expect(result.style.sources['points']?.['data']).toEqual(

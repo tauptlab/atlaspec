@@ -29,6 +29,7 @@
     "atlasbench": "tsx benchmark/compare.ts",
     "benchmark:smoke": "tsx benchmark/run.ts --manifest benchmark/pilot.manifest.json --json",
     "benchmark:v02:dry-run": "tsx benchmark/v02/dry-run.ts",
+    "benchmark:v02:render:calibrate": "tsx benchmark/v02/render-calibration-cli.ts",
     "benchmark:v02:render": "tsx benchmark/v02/render-evidence-cli.ts",
     "benchmark:v02:run": "tsx benchmark/v02/run-cli.ts",
     "benchmark:v02:rnd:reference-layout": "tsx benchmark/v02/rnd/run-reference-layout-cli.ts",

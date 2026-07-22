@@ -447,6 +447,12 @@ geometry-only browser PNG evidence for MapLibre, but that does not substitute
 for human accuracy, expert review, hosted-model reproduction, label rendering,
 or comprehensive visual-quality evaluation.
 
+The current renderer can now generate MapLibre glyphs locally and measure label
+coverage, duplicates, label-only pixels, and viewport-edge pixels. Those metrics
+must be calibrated and locked on development references before they are used to
+reclassify model outputs; the published cross-renderer result below remains the
+earlier geometry-only run.
+
 ## Repository map
 
 ```text

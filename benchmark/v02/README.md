@@ -25,6 +25,7 @@ npm run corpus:v02:generate
 npm run corpus:v02:check
 npm run benchmark:v02:dry-run
 npm run benchmark:v02:run -- --help
+npm run benchmark:v02:render:calibrate -- --help
 npm run benchmark:v02:render -- --help
 ```
 

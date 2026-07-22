@@ -438,6 +438,7 @@ Start with:
 - [AtlasBench 0.2 compact-reference R&D](docs/V02_COMPACT_REFERENCE_RND_2026-07-21.md)
 - [AtlasBench 0.2 reference-layout A/B R&D](docs/V02_REFERENCE_LAYOUT_AB_RND_2026-07-21.md)
 - [AtlasBench render-evidence contract](docs/RENDER_EVIDENCE.md)
+- [AtlasBench 0.2 Vega-Lite render-health evidence](docs/V02_RENDER_HEALTH_2026-07-22.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can now export non-empty SVG health evidence for accepted
@@ -462,17 +463,21 @@ Atlaspec remains pre-alpha. Version 0.1 has a schema, MapLibre compiler,
 diagnostics, four map families, benchmark harness, and frozen corpus. Version
 0.2 now has an experimental layers schema, guarded migration, multi-layer
 MapLibre compiler, portable Vega-Lite subset, and capability inspection. The
-strongest current performance evidence remains the completed v0.1 local-agent
-holdout above.
+strongest current v0.2 evidence is the post-hardening development qualification:
+Claude passed every locked gate, while Codex failed only the total
+uncached-token gate. All 39 source-accepted Vega-Lite runs in that qualification
+also produced non-empty SVGs through the real Vega runtime. The v0.2 holdout
+remains sealed, so these results are qualification evidence rather than a final
+release claim.
 
 Work still required before a stable release includes:
 
 - hosted raw-API reproduction across pre-committed model strata;
-- rendered screenshot and viewport-level quality validation;
+- browser-backed MapLibre screenshots and geometry-level visual validation;
 - blind human map-reading and cartographer review;
-- edit-survival and ablation studies;
+- larger edit-survival and feature-ablation studies;
 - package publication and a stable compatibility policy;
-- execution of the fresh multi-layer and cross-renderer AtlasBench 0.2 corpus.
+- one-time execution of the sealed v0.2 holdout after development gates pass.
 
 Active v0.2 work is governed by the pre-implementation
 [v0.2 scope](docs/SCOPE_0.2.md) and

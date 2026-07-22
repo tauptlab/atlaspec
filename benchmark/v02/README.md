@@ -116,7 +116,7 @@ The controlling hypotheses, gates, and analysis rules are in
 matrix after model output has been inspected; create a new corpus version if a
 material task-design change is required.
 
-## Completed local qualification
+## Initial completed local qualification
 
 The locked 12-task, two-repetition local qualification completed 216/216 runs
 on 2026-07-21. Both agents received an overall fail. Claude passed reliability
@@ -136,3 +136,6 @@ Accepted Vega-Lite conditions can be executed through the real renderer and
 exported as immutable SVG evidence with `npm run benchmark:v02:render`. The
 [render-evidence contract](../../docs/RENDER_EVIDENCE.md) explains its checks
 and the remaining visual-quality boundary.
+The first clean post-hardening render run produced 39/39 healthy SVGs from the
+source-accepted Vega-Lite outputs; see the
+[render-health evidence](../../docs/V02_RENDER_HEALTH_2026-07-22.md).

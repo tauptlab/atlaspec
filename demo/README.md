@@ -37,7 +37,6 @@ Pushes to `main` that touch `demo/**` or
 `.github/workflows/pages.yml` run the Pages workflow. The expected public URL
 is <https://tauptlab.github.io/atlaspec/>.
 
-The workflow asks GitHub to enable Pages with **GitHub Actions** as its source
-when the site does not exist yet. If repository policy blocks automatic
-enablement, select that source once under **Settings → Pages** and rerun the
-workflow.
+This repository is configured to use **GitHub Actions** as its Pages source.
+Forks must select that source once under **Settings → Pages** before running
+the workflow.

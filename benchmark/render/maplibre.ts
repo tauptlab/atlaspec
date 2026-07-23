@@ -55,6 +55,15 @@ export interface MapLibreLabelGeometryMetric {
   forced_overlap_boxes: number;
 }
 
+export interface MapLibreLabelPointOcclusionMetric {
+  point_symbol_layers: string[];
+  point_symbol_pixels: number;
+  point_symbol_pixels_covered_by_label_boxes: number;
+  point_symbol_box_coverage_ratio: number | null;
+  point_symbol_pixels_covered_by_label_glyphs: number;
+  point_symbol_glyph_coverage_ratio: number | null;
+}
+
 export interface MapLibreRenderMetrics {
   requested_width: number;
   requested_height: number;
@@ -74,6 +83,7 @@ export interface MapLibreRenderMetrics {
   edge_label_pixels: number;
   edge_label_ratio: number | null;
   label_geometry: MapLibreLabelGeometryMetric;
+  label_point_occlusion: MapLibreLabelPointOcclusionMetric;
   sampled_pixels: number;
   non_background_pixels: number;
   non_background_ratio: number;
@@ -238,6 +248,9 @@ export async function renderMapLibrePng(
         const symbolLayers = styleValue.layers.filter(
           (layer) => layer['type'] === 'symbol' && hasTextField(layer['layout']),
         );
+        const pointSymbolLayers = styleValue.layers.filter(
+          (layer) => layer['type'] === 'circle',
+        );
         const layerMetrics = geometryLayers.map((layer) => ({
           id: String(layer['id']),
           type: String(layer['type']),
@@ -327,22 +340,73 @@ export async function renderMapLibrePng(
         context.clearRect(0, 0, sample.width, sample.height);
         context.drawImage(canvas, 0, 0, sample.width, sample.height);
         const geometryPixels = context.getImageData(0, 0, sample.width, sample.height).data;
+        const originalPointVisibility = pointSymbolLayers.map((layer) => ({
+          id: String(layer['id']),
+          visibility: map.getLayoutProperty(String(layer['id']), 'visibility'),
+        }));
+        if (pointSymbolLayers.length > 0) {
+          const idle = new Promise<void>((resolveIdle) => map.once('idle', resolveIdle));
+          for (const layer of pointSymbolLayers) {
+            map.setLayoutProperty(String(layer['id']), 'visibility', 'none');
+          }
+          await idle;
+        }
+        context.clearRect(0, 0, sample.width, sample.height);
+        context.drawImage(canvas, 0, 0, sample.width, sample.height);
+        const nonPointGeometryPixels = context.getImageData(
+          0,
+          0,
+          sample.width,
+          sample.height,
+        ).data;
         let labelPixels = 0;
         let edgeLabelPixels = 0;
+        let pointSymbolPixels = 0;
+        let pointSymbolPixelsCoveredByLabelBoxes = 0;
+        let pointSymbolPixelsCoveredByLabelGlyphs = 0;
         const edge = 4;
         for (let index = 0; index < fullPixels.length; index += 4) {
-          const difference =
-            Math.abs(fullPixels[index]! - geometryPixels[index]!) +
-            Math.abs(fullPixels[index + 1]! - geometryPixels[index + 1]!) +
-            Math.abs(fullPixels[index + 2]! - geometryPixels[index + 2]!);
-          if (difference < 24) continue;
-          labelPixels += 1;
           const pixel = index / 4;
           const x = pixel % sample.width;
           const y = Math.floor(pixel / sample.width);
-          if (x < edge || x >= sample.width - edge || y < edge || y >= sample.height - edge) {
-            edgeLabelPixels += 1;
+          const labelDifference = pixelDifference(fullPixels, geometryPixels, index);
+          const pointDifference = pixelDifference(
+            geometryPixels,
+            nonPointGeometryPixels,
+            index,
+          );
+          const isLabel = labelDifference >= 24;
+          const isPointSymbol = pointDifference >= 24;
+          if (isLabel) {
+            labelPixels += 1;
+            if (x < edge || x >= sample.width - edge || y < edge || y >= sample.height - edge) {
+              edgeLabelPixels += 1;
+            }
           }
+          if (isPointSymbol) {
+            pointSymbolPixels += 1;
+            const canvasX = ((x + 0.5) / sample.width) * canvas.width;
+            const canvasY = ((y + 0.5) / sample.height) * canvas.height;
+            if (
+              labelCollisionBoxes.boxes.some(
+                (box) =>
+                  canvasX >= box.x1 &&
+                  canvasX <= box.x2 &&
+                  canvasY >= box.y1 &&
+                  canvasY <= box.y2,
+              )
+            ) {
+              pointSymbolPixelsCoveredByLabelBoxes += 1;
+            }
+            if (isLabel) pointSymbolPixelsCoveredByLabelGlyphs += 1;
+          }
+        }
+        if (pointSymbolLayers.length > 0) {
+          const idle = new Promise<void>((resolveIdle) => map.once('idle', resolveIdle));
+          for (const layer of originalPointVisibility) {
+            map.setLayoutProperty(layer.id, 'visibility', layer.visibility ?? 'visible');
+          }
+          await idle;
         }
         if (symbolLayers.length > 0) {
           const idle = new Promise<void>((resolveIdle) => map.once('idle', resolveIdle));
@@ -361,8 +425,12 @@ export async function renderMapLibrePng(
           layerMetrics,
           labelMetrics,
           labelCollisionBoxes,
+          pointSymbolLayers: pointSymbolLayers.map((layer) => String(layer['id'])),
           labelPixels,
           edgeLabelPixels,
+          pointSymbolPixels,
+          pointSymbolPixelsCoveredByLabelBoxes,
+          pointSymbolPixelsCoveredByLabelGlyphs,
           sampledPixels,
           nonBackgroundPixels: sampledPixels - dominantPixels,
           colorBuckets: buckets.size,
@@ -446,6 +514,18 @@ export async function renderMapLibrePng(
           return boxes;
         }
 
+        function pixelDifference(
+          first: Uint8ClampedArray,
+          second: Uint8ClampedArray,
+          index: number,
+        ): number {
+          return (
+            Math.abs(first[index]! - second[index]!) +
+            Math.abs(first[index + 1]! - second[index + 1]!) +
+            Math.abs(first[index + 2]! - second[index + 2]!)
+          );
+        }
+
         function isObject(value: unknown): value is Record<string, unknown> {
           return typeof value === 'object' && value !== null && !Array.isArray(value);
         }
@@ -503,6 +583,24 @@ export async function renderMapLibrePng(
           ? null
           : browserMetrics.edgeLabelPixels / browserMetrics.labelPixels,
       label_geometry: labelGeometry,
+      label_point_occlusion: {
+        point_symbol_layers: browserMetrics.pointSymbolLayers,
+        point_symbol_pixels: browserMetrics.pointSymbolPixels,
+        point_symbol_pixels_covered_by_label_boxes:
+          browserMetrics.pointSymbolPixelsCoveredByLabelBoxes,
+        point_symbol_box_coverage_ratio:
+          browserMetrics.pointSymbolPixels === 0
+            ? null
+            : browserMetrics.pointSymbolPixelsCoveredByLabelBoxes /
+              browserMetrics.pointSymbolPixels,
+        point_symbol_pixels_covered_by_label_glyphs:
+          browserMetrics.pointSymbolPixelsCoveredByLabelGlyphs,
+        point_symbol_glyph_coverage_ratio:
+          browserMetrics.pointSymbolPixels === 0
+            ? null
+            : browserMetrics.pointSymbolPixelsCoveredByLabelGlyphs /
+              browserMetrics.pointSymbolPixels,
+      },
       sampled_pixels: browserMetrics.sampledPixels,
       non_background_pixels: browserMetrics.nonBackgroundPixels,
       non_background_ratio:
@@ -556,6 +654,12 @@ export async function renderMapLibrePng(
           (metrics.label_geometry.supported &&
             metrics.label_geometry.boxes.length >= renderedLabels),
         `supported=${metrics.label_geometry.supported} boxes=${metrics.label_geometry.boxes.length} rendered=${renderedLabels}`,
+      ),
+      check(
+        'render.point-symbol-mask',
+        metrics.label_point_occlusion.point_symbol_layers.length === 0 ||
+          metrics.label_point_occlusion.point_symbol_pixels > 0,
+        `layers=${metrics.label_point_occlusion.point_symbol_layers.length} pixels=${metrics.label_point_occlusion.point_symbol_pixels}`,
       ),
       check(
         'render.canvas-nonempty',

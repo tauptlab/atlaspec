@@ -65,6 +65,9 @@ export interface V02RenderCalibrationReport {
         maximum_overlapping_label_box_pairs: number;
         maximum_pair_overlap_ratio: number | null;
         maximum_forced_overlap_boxes: number;
+        minimum_point_symbol_pixels: number;
+        maximum_point_symbol_box_coverage_ratio: number | null;
+        maximum_point_symbol_glyph_coverage_ratio: number | null;
       }
     >;
   };
@@ -195,6 +198,12 @@ function summarizeVariant(
   const pairOverlap = selected
     .map((entry) => entry.metrics.label_geometry.maximum_pair_overlap_ratio)
     .filter((value): value is number => value !== null);
+  const boxCoverage = selected
+    .map((entry) => entry.metrics.label_point_occlusion.point_symbol_box_coverage_ratio)
+    .filter((value): value is number => value !== null);
+  const glyphCoverage = selected
+    .map((entry) => entry.metrics.label_point_occlusion.point_symbol_glyph_coverage_ratio)
+    .filter((value): value is number => value !== null);
   return {
     tasks: selected.length,
     minimum_label_coverage: coverage[0] ?? null,
@@ -213,6 +222,13 @@ function summarizeVariant(
     maximum_forced_overlap_boxes: Math.max(
       ...selected.map((entry) => entry.metrics.label_geometry.forced_overlap_boxes),
     ),
+    minimum_point_symbol_pixels: Math.min(
+      ...selected.map((entry) => entry.metrics.label_point_occlusion.point_symbol_pixels),
+    ),
+    maximum_point_symbol_box_coverage_ratio:
+      boxCoverage.length === 0 ? null : Math.max(...boxCoverage),
+    maximum_point_symbol_glyph_coverage_ratio:
+      glyphCoverage.length === 0 ? null : Math.max(...glyphCoverage),
   };
 }
 

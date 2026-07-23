@@ -63,6 +63,8 @@ into benchmark evidence. The report records:
 - placed-label collision boxes read from MapLibre's v5 placement index,
   including effective box height, viewport clipping, pairwise overlap, and
   forced-overlap placement;
+- point-symbol pixels isolated by hiding circle layers after labels, plus the
+  share covered by placed label boxes or actual label-glyph pixels;
 - all symbol-layer IDs and local-renderer warnings.
 
 The collision-box measurement deliberately uses a pinned MapLibre v5 private

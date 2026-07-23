@@ -161,3 +161,14 @@ The next model-output reclassification used the preregistered
 It found 16 additional failures and changed the balanced development result to
 68/72 for Atlaspec versus 40/72 for direct generation; see the
 [occlusion evidence](../../docs/V02_OCCLUSION_RENDER_2026-07-23.md).
+A controlled post-failure ablation then isolated declared range and
+maximum-radius label clearance. The compiler adopted the clearance policy and
+the preserved-output replay reached 72/72 Atlaspec outputs without changing
+the 40/72 direct result. This is remediation evidence rather than a fresh
+qualification estimate; see the
+[ablation report](../../docs/V02_OCCLUSION_ABLATION_RND_2026-07-23.md) and
+[post-fix replay](../../docs/V02_OCCLUSION_POSTFIX_2026-07-23.md).
+
+Atlaspec 0.2 is now the latest document version and package `0.2.0-rc.1` is the
+current research release candidate. Stable `0.2.0` remains blocked by the
+precommitted total uncached-token gate and the intentionally sealed holdout.

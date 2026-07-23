@@ -196,3 +196,10 @@ The repository may develop 0.2 features while the package version remains
 pre-release. `version: "0.2"` and package version `0.2.0` are release-ready only
 after compatibility, compiler, capability, fresh-corpus, and documentation
 gates in `BENCHMARK_0.2.md` pass. Partial work must stay labeled experimental.
+
+Current status on 2026-07-23: `version: "0.2"` is the latest recommended
+document contract and package `0.2.0-rc.1` is a research release candidate.
+Stable `0.2.0` is not declared because the Codex total uncached-token
+development gate remains failed and the one-time v0.2 holdout remains sealed.
+This status records the observed result without weakening the precommitted
+release boundary.

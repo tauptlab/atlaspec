@@ -8,6 +8,8 @@ Atlaspec lets an agent describe **what a map should communicate** while a
 deterministic compiler decides **how the renderer should implement it**.
 
 [![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-f59e0b)](#project-status)
+[![Package: 0.2.0-rc.1](https://img.shields.io/badge/package-0.2.0--rc.1-2563eb)](CHANGELOG.md)
+[![Latest document: 0.2](https://img.shields.io/badge/latest_document-0.2-0f766e)](#current-document-version-02)
 [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?logo=typescript&logoColor=white)](src)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
@@ -17,10 +19,10 @@ deterministic compiler decides **how the renderer should implement it**.
 </div>
 
 > [!IMPORTANT]
-> Atlaspec is pre-alpha research software. Version 0.1 supports four kinds of
-> two-dimensional thematic maps and compiles to MapLibre Style Specification
-> v8. Experimental version 0.2 adds ordered semantic layers and a portable
-> Vega-Lite subset. The package has not been published to a registry yet.
+> Atlaspec 0.2 is the latest document version and `0.2.0-rc.1` is the current
+> research package candidate. Version 0.1 remains fully supported for
+> compatibility. Stable `0.2.0` is intentionally withheld until the locked
+> release contract is complete; the package has not been published yet.
 
 ## Why Atlaspec exists
 
@@ -251,7 +253,7 @@ Complete runnable examples:
 - [Multi-layer operations overview](examples/operations-overview.atlas.yaml)
 - [Cross-renderer portable overview](examples/portable-overview.atlas.yaml)
 
-## Experimental version 0.2
+## Current document version 0.2
 
 Version 0.2 replaces the single top-level `family` and `encoding` with stable,
 ordered semantic layers. Each layer has an ID, purpose, family, encoding,
@@ -310,25 +312,38 @@ npm run atlaspec -- capabilities examples/operations-overview.atlas.yaml `
   --target vega-lite
 ```
 
-The v0.2 implementation is experimental. Its schema, migration, MapLibre
-composition, Vega-Lite subset, and compatibility fixtures are implemented. A
-locked 12-task, two-repetition local development qualification completed all
-216 expected runs. Both agents received an overall fail: Claude passed the
-reliability and token-efficiency gates but missed portability and capability
-fail-closed thresholds, while Codex also failed first-attempt reliability. See
-the full [multi-task qualification report](docs/V02_MULTI_TASK_QUALIFICATION_2026-07-21.md)
-and the locked
-[v0.2 scope](docs/SCOPE_0.2.md) and
-[evaluation contract](docs/BENCHMARK_0.2.md). The fresh 48-task
-[v0.2 matrix and 36 GeoJSON datasets](benchmark/v02/README.md) are locked;
-prompts, hard requirements, direct-renderer structural normalization, and
-development/holdout manifests are also locked. The deterministic 214-condition
-dry-run passes with zero model calls. The fresh holdout remains sealed and must
-not be opened under the failing development verdict. The latest
-[semantic-loss R&D report](docs/RND_0.2_2026-07-20.md) records hardened compiler
-paths and the remaining risks without treating them as performance evidence.
+The schema, migration, MapLibre composition, Vega-Lite subset, compatibility
+fixtures, and real-renderer evaluation path are implemented. In the latest
+post-hardening qualification, Claude passed every locked development gate.
+Codex passed reliability, output-token, edit-survival, portability, and
+capability fail-closed gates but missed the 25% total uncached-token reduction
+gate with a measured 3.21% reduction. The deterministic evaluator passes all
+214 declared conditions with zero model calls, and the latest locked visual
+result is 68/72 healthy Atlaspec outputs versus 40/72 direct outputs.
 
-## Supported in version 0.1
+Version 0.2 is therefore the recommended format for new multi-layer work, but
+the package remains a research release candidate. The fresh holdout stays
+sealed under the precommitted contract. See the
+[post-hardening qualification](docs/V02_POST_HARDENING_QUALIFICATION_2026-07-21.md),
+[v0.2 scope](docs/SCOPE_0.2.md),
+[evaluation contract](docs/BENCHMARK_0.2.md), and
+[48-task matrix](benchmark/v02/README.md).
+
+## Versioning and compatibility
+
+Atlaspec document versions and package versions are related but distinct:
+
+| Contract | Current value | Meaning |
+|---|---|---|
+| Latest document version | `0.2` | recommended for new documents |
+| Supported legacy document | `0.1` | validation and MapLibre compatibility retained |
+| Package version | `0.2.0-rc.1` | installable release candidate, not stable |
+
+The public API exports `LATEST_ATLASPEC_DOCUMENT_VERSION`,
+`SUPPORTED_ATLASPEC_DOCUMENT_VERSIONS`, and `ATLASPEC_PACKAGE_VERSION`.
+See the [changelog](CHANGELOG.md) for the current package boundary.
+
+## Legacy version 0.1 compatibility
 
 | Family | Geometry | Required encoding | Key semantic protection |
 |---|---|---|---|
@@ -344,8 +359,8 @@ delta, rank, capacity, uncertainty, identifier, or label.
 
 See the complete [0.1 scope](docs/SCOPE.md). Routing, spatial analysis, tile
 production, raster processing, navigation, 3D terrain, and application UI are
-deliberate non-goals. Atlaspec complements GeoJSON and MapLibre; it does not
-replace them.
+deliberate non-goals. Atlaspec complements GeoJSON, MapLibre, and Vega-Lite; it
+does not replace them.
 
 ## Validation and diagnostics
 
@@ -511,14 +526,17 @@ docs/                   scope, benchmark contracts, runbooks, and evidence
 
 ## Project status
 
-Atlaspec remains pre-alpha. Version 0.1 has a schema, MapLibre compiler,
-diagnostics, four map families, benchmark harness, and frozen corpus. Version
-0.2 now has an experimental layers schema, guarded migration, multi-layer
+Atlaspec remains pre-alpha research software. Document version 0.2 is now the
+latest supported format, and package `0.2.0-rc.1` is the current release
+candidate. It includes the layered schema, guarded migration, multi-layer
 MapLibre compiler, portable Vega-Lite subset, capability inspection, localized
-edit workflow, and browser-backed visual gates. The strongest current claims
-and their boundaries are summarized in [Evidence so far](#evidence-so-far).
-The v0.2 holdout remains sealed, so its current results are development
-qualification and remediation evidence rather than a final release claim.
+edit workflow, and browser-backed visual gates. Version 0.1 remains supported
+through explicit schema, type, migration, and frozen compiler contracts.
+
+The strongest current claims and their boundaries are summarized in
+[Evidence so far](#evidence-so-far). The v0.2 holdout remains sealed, so stable
+`0.2.0` has not been declared and current results remain development
+qualification and remediation evidence.
 
 Work still required before a stable release includes:
 

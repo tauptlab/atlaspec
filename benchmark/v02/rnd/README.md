@@ -45,3 +45,9 @@ missed both input-reduction gates. Claude authentication expired during its
 run, so transport failures remain in its reliability denominator and token
 comparisons are insufficient. See the
 [reference-layout A/B report](../../../docs/V02_REFERENCE_LAYOUT_AB_RND_2026-07-21.md).
+
+`benchmark:v02:rnd:occlusion-ablation` is a post-failure development diagnostic
+for the four preserved Atlaspec proportional-symbol occlusion failures. It
+crosses the observed document with a reference `[0, 10000]` capacity range and
+a 3 em label offset, rotating all four arms across execution positions. It
+never reads the holdout and writes immutable PNGs plus `ablation.json`.

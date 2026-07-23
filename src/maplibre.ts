@@ -121,7 +121,7 @@ function compileMapLibreV02(
     layers.push(
       ...compileThematicLayers(layerDocument, decisions, {
         strictMissing: true,
-        adaptiveProportionalLabelClearance: true,
+        maximumProportionalLabelClearance: true,
       }),
     );
     for (let decisionIndex = decisionStart; decisionIndex < decisions.length; decisionIndex += 1) {
@@ -346,12 +346,12 @@ function compileThematicLayers(
   decisions: CompilationDecision[],
   options: {
     strictMissing?: boolean;
-    adaptiveProportionalLabelClearance?: boolean;
+    maximumProportionalLabelClearance?: boolean;
   } = {},
 ): Array<Record<string, unknown>> {
   const {
     strictMissing = false,
-    adaptiveProportionalLabelClearance = false,
+    maximumProportionalLabelClearance = false,
   } = options;
   const layers: Array<Record<string, unknown>> = [];
   switch (document.family) {
@@ -364,7 +364,7 @@ function compileThematicLayers(
           document,
           decisions,
           strictMissing,
-          adaptiveProportionalLabelClearance,
+          maximumProportionalLabelClearance,
         ),
       );
       break;
@@ -470,7 +470,7 @@ function compileProportionalSymbols(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
   strictMissing = false,
-  adaptiveLabelClearance = false,
+  maximumLabelClearance = false,
 ): Array<Record<string, unknown>> {
   const sizeName = document.encoding.size!.field;
   const sizeField = document.data.fields[sizeName]!;
@@ -491,16 +491,8 @@ function compileProportionalSymbols(
     28,
   ];
   const labelOffset =
-    adaptiveLabelClearance && document.encoding.label !== undefined
-      ? [
-          'interpolate',
-          ['linear'],
-          ['sqrt', ['max', 0, ['to-number', ['get', sizeField.path]]]],
-          sqrtMin,
-          ['literal', [0, 1.2]],
-          sqrtMax,
-          ['literal', [0, 3]],
-        ]
+    maximumLabelClearance && document.encoding.label !== undefined
+      ? [0, 3]
       : [0, 1.2];
 
   decisions.push({
@@ -509,16 +501,16 @@ function compileProportionalSymbols(
     value: { domain: range, radius: [4, 28] },
     reason: 'Circle radius uses the square root of the quantitative value so area remains proportional.',
   });
-  if (adaptiveLabelClearance && document.encoding.label !== undefined) {
+  if (maximumLabelClearance && document.encoding.label !== undefined) {
     decisions.push({
       code: 'label.proportional-clearance',
       path: '/encoding/label',
       value: {
-        domain: range,
-        offset_em: [1.2, 3],
-        scale: 'sqrt',
+        offset_em: 3,
+        maximum_radius_px: 28,
+        text_size_px: 12,
       },
-      reason: 'Label offset tracks proportional-symbol radius so authored labels clear larger circles.',
+      reason: 'Labels use maximum-radius clearance so labels from smaller features do not occlude nearby larger circles.',
     });
   }
 

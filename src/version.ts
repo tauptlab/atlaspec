@@ -1,0 +1,8 @@
+export const ATLASPEC_PACKAGE_VERSION = '0.2.0-rc.1' as const;
+
+export const LATEST_ATLASPEC_DOCUMENT_VERSION = '0.2' as const;
+
+export const SUPPORTED_ATLASPEC_DOCUMENT_VERSIONS = [
+  '0.1',
+  LATEST_ATLASPEC_DOCUMENT_VERSION,
+] as const;

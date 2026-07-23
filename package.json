@@ -1,9 +1,25 @@
 {
   "name": "atlaspec",
-  "version": "0.0.0",
-  "description": "Intent-first cartographic intermediate representation for agents and humans",
+  "version": "0.2.0-rc.1",
+  "description": "Intent-first map specifications for reliable AI-generated cartography",
   "type": "module",
   "license": "MIT",
+  "sideEffects": false,
+  "keywords": [
+    "ai-agents",
+    "cartography",
+    "maplibre",
+    "semantic-ir",
+    "vega-lite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tauptlab/atlaspec.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tauptlab/atlaspec/issues"
+  },
+  "homepage": "https://github.com/tauptlab/atlaspec#readme",
   "engines": {
     "node": ">=20"
   },
@@ -19,6 +35,7 @@
   "files": [
     "dist",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {

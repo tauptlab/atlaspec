@@ -39,6 +39,11 @@ export {
   compileVegaLite,
   inspectVegaLiteCapabilities,
 } from './vega-lite.js';
+export {
+  ATLASPEC_PACKAGE_VERSION,
+  LATEST_ATLASPEC_DOCUMENT_VERSION,
+  SUPPORTED_ATLASPEC_DOCUMENT_VERSIONS,
+} from './version.js';
 
 export type {
   Diagnostic,

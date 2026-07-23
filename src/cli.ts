@@ -13,6 +13,7 @@ import { upgradeAtlaspec } from './migrate.js';
 import type { AtlaspecDocument } from './schema.js';
 import { validateAtlaspec } from './validate.js';
 import { compileVegaLite } from './vega-lite.js';
+import { ATLASPEC_PACKAGE_VERSION } from './version.js';
 
 interface OutputOptions {
   json?: boolean;
@@ -28,7 +29,7 @@ type CompileTarget = 'maplibre' | 'vega-lite';
 const program = new Command()
   .name('atlaspec')
   .description('Validate and compile Atlaspec cartographic intent documents.')
-  .version('0.0.0');
+  .version(ATLASPEC_PACKAGE_VERSION);
 
 program
   .command('validate')

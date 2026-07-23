@@ -118,7 +118,12 @@ function compileMapLibreV02(
   const legends: Array<Record<string, unknown>> = [];
   for (const [index, layerDocument] of layerDocuments.entries()) {
     const decisionStart = decisions.length;
-    layers.push(...compileThematicLayers(layerDocument, decisions, true));
+    layers.push(
+      ...compileThematicLayers(layerDocument, decisions, {
+        strictMissing: true,
+        adaptiveProportionalLabelClearance: true,
+      }),
+    );
     for (let decisionIndex = decisionStart; decisionIndex < decisions.length; decisionIndex += 1) {
       const decision = decisions[decisionIndex]!;
       decision.path = layerDecisionPath(index, decision.path);
@@ -339,15 +344,29 @@ function compileLayers(
 function compileThematicLayers(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
-  strictMissing = false,
+  options: {
+    strictMissing?: boolean;
+    adaptiveProportionalLabelClearance?: boolean;
+  } = {},
 ): Array<Record<string, unknown>> {
+  const {
+    strictMissing = false,
+    adaptiveProportionalLabelClearance = false,
+  } = options;
   const layers: Array<Record<string, unknown>> = [];
   switch (document.family) {
     case 'choropleth':
       layers.push(...compileChoropleth(document, decisions, strictMissing));
       break;
     case 'proportional-symbol':
-      layers.push(...compileProportionalSymbols(document, decisions, strictMissing));
+      layers.push(
+        ...compileProportionalSymbols(
+          document,
+          decisions,
+          strictMissing,
+          adaptiveProportionalLabelClearance,
+        ),
+      );
       break;
     case 'categorical-point':
       layers.push(...compileCategoricalPoints(document, decisions, strictMissing));
@@ -451,6 +470,7 @@ function compileProportionalSymbols(
   document: AtlaspecV01Document,
   decisions: CompilationDecision[],
   strictMissing = false,
+  adaptiveLabelClearance = false,
 ): Array<Record<string, unknown>> {
   const sizeName = document.encoding.size!.field;
   const sizeField = document.data.fields[sizeName]!;
@@ -470,6 +490,18 @@ function compileProportionalSymbols(
     sqrtMax,
     28,
   ];
+  const labelOffset =
+    adaptiveLabelClearance && document.encoding.label !== undefined
+      ? [
+          'interpolate',
+          ['linear'],
+          ['sqrt', ['max', 0, ['to-number', ['get', sizeField.path]]]],
+          sqrtMin,
+          ['literal', [0, 1.2]],
+          sqrtMax,
+          ['literal', [0, 3]],
+        ]
+      : [0, 1.2];
 
   decisions.push({
     code: 'size.area-proportional-scale',
@@ -477,6 +509,18 @@ function compileProportionalSymbols(
     value: { domain: range, radius: [4, 28] },
     reason: 'Circle radius uses the square root of the quantitative value so area remains proportional.',
   });
+  if (adaptiveLabelClearance && document.encoding.label !== undefined) {
+    decisions.push({
+      code: 'label.proportional-clearance',
+      path: '/encoding/label',
+      value: {
+        domain: range,
+        offset_em: [1.2, 3],
+        scale: 'sqrt',
+      },
+      reason: 'Label offset tracks proportional-symbol radius so authored labels clear larger circles.',
+    });
+  }
 
   const symbolLayer = applyZoomRules(document, 'symbols', {
     id: `${document.map}-symbols`,
@@ -544,6 +588,7 @@ function compileProportionalSymbols(
     document,
     clustered ? ['!', ['has', 'point_count']] : undefined,
     strictMissing,
+    labelOffset,
   );
   if (labels !== undefined) {
     layers.push(labels);
@@ -689,6 +734,7 @@ function compileLabels(
   document: AtlaspecV01Document,
   filter?: unknown,
   strictMissing = false,
+  textOffset: unknown = [0, 1.2],
 ): Record<string, unknown> | undefined {
   const labelName = document.encoding.label?.field;
   if (labelName === undefined) {
@@ -711,7 +757,7 @@ function compileLabels(
     layout: {
       'text-field': ['get', labelField.path],
       'text-size': 12,
-      'text-offset': [0, 1.2],
+      'text-offset': textOffset,
       'text-anchor': 'top',
       'text-allow-overlap': false,
       'text-ignore-placement': false,

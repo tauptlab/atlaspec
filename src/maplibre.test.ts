@@ -156,11 +156,44 @@ describe('compileMapLibre', () => {
           path: '/layers/1/encoding/size',
         }),
         expect.objectContaining({
+          code: 'label.proportional-clearance',
+          path: '/layers/1/encoding/label',
+          value: {
+            domain: [0, 1000],
+            offset_em: [1.2, 3],
+            scale: 'sqrt',
+          },
+        }),
+        expect.objectContaining({
           code: 'constraints.protected-layers',
           path: '/constraints/protected_layers',
         }),
       ]),
     );
+    expect(
+      validateStyleMin(result.style as unknown as StyleSpecification),
+    ).toEqual([]);
+  });
+
+  it('keeps v0.2 proportional labels clear of symbols with a size-driven offset', async () => {
+    const result = compileMapLibre(
+      await example('operations-overview.atlas.yaml'),
+    );
+    expect(result.ok, JSON.stringify(result.diagnostics)).toBe(true);
+    if (!result.ok) return;
+
+    const labels = result.style.layers.find(
+      (layer) => layer['id'] === 'operations-overview-shelters-labels',
+    )!;
+    expect((labels['layout'] as Record<string, unknown>)['text-offset']).toEqual([
+      'interpolate',
+      ['linear'],
+      ['sqrt', ['max', 0, ['to-number', ['get', 'capacity']]]],
+      0,
+      ['literal', [0, 1.2]],
+      Math.sqrt(1000),
+      ['literal', [0, 3]],
+    ]);
     expect(
       validateStyleMin(result.style as unknown as StyleSpecification),
     ).toEqual([]);

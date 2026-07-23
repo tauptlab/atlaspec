@@ -68,11 +68,12 @@
     "corpus:v02:check": "tsx benchmark/v02/generate.ts --check",
     "corpus:v02:generate": "tsx benchmark/v02/generate.ts",
     "corpus:prepare": "tsx benchmark/corpus/prepare-cli.ts",
+    "demo:test": "node --test demo/engine.test.js",
     "prepack": "npm run build",
     "reference:atlaspec:check": "tsx benchmark/references/generate-atlaspec.ts --check",
     "reference:atlaspec:generate": "tsx benchmark/references/generate-atlaspec.ts",
     "release:verify": "npm run check && npm run build && npm run benchmark:v02:dry-run && npm pack --dry-run",
-    "test": "vitest run src benchmark",
+    "test": "vitest run src benchmark && npm run demo:test",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

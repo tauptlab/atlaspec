@@ -1,0 +1,45 @@
+{
+  "schema_version": "1",
+  "updated_at": "2026-07-23",
+  "locked_development": {
+    "atlaspec": {
+      "passed": 68,
+      "assigned": 72,
+      "rate": 0.9444
+    },
+    "direct": {
+      "passed": 40,
+      "assigned": 72,
+      "rate": 0.5556
+    },
+    "difference_percentage_points": 38.89,
+    "source": "../docs/V02_OCCLUSION_RENDER_2026-07-23.md"
+  },
+  "post_selected_replay": {
+    "atlaspec": {
+      "passed": 72,
+      "assigned": 72,
+      "rate": 1
+    },
+    "direct": {
+      "passed": 40,
+      "assigned": 72,
+      "rate": 0.5556
+    },
+    "claim_boundary": "Repair verification on preserved development outputs, not a fresh benchmark estimate.",
+    "source": "../docs/V02_OCCLUSION_POSTFIX_2026-07-23.md"
+  },
+  "v01_holdout": {
+    "codex": {
+      "direct_yield": 0.9,
+      "atlaspec_yield": 1,
+      "output_token_reduction": 0.773
+    },
+    "claude": {
+      "direct_yield": 0.9,
+      "atlaspec_yield": 1,
+      "output_token_reduction": 0.594
+    },
+    "source": "../docs/LOCAL_HOLDOUT_2026-07-20.md"
+  }
+}

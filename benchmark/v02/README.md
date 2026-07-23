@@ -150,7 +150,9 @@ then applied without exposing the holdout. Atlaspec retained 72/72 healthy
 comparison outputs while direct generation changed from 53/72 geometry-only
 passes to 52/72 label-aware passes; see the
 [label-aware evidence](../../docs/V02_LABEL_AWARE_RENDER_2026-07-22.md).
-The next reclassification is governed by the preregistered
+The next reclassification was governed by the preregistered
 [placed-label geometry gate lock](../../docs/V02_PLACEMENT_GEOMETRY_GATE_LOCK_2026-07-23.md),
 which measures actual MapLibre placement boxes rather than inferring bounds
-from source coordinates.
+from source coordinates. It recovered placement geometry for all 88 MapLibre
+outputs and found no additional failures; see the
+[placed-label geometry evidence](../../docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md).

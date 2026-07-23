@@ -57,6 +57,16 @@ thresholds stay at the reference maximum of zero.
 These rules are fixed before inspecting preserved model-output placement
 metrics and must not be relaxed after reclassification.
 
+## Post-lock verification
+
+After the lock was committed, all 36 development references passed again at
+clean evaluator commit `d2c3d8a800ebc4740f6d4690640318d016c0ed7e`.
+The locked gate SHA-256 was
+`81943dc81c3c33c8fbe70ed3877724057bc000c7bae31a3c19f8e60263b1ab47`;
+the post-lock calibration report SHA-256 was
+`ffb967cc20756111430364eed257f29d115e8b1d1b68e074a709a129b5cc96ab`.
+The holdout remained unexposed.
+
 ## Method and claim boundary
 
 MapLibre's public query API exposes rendered features but not their final

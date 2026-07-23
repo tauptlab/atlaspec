@@ -443,6 +443,7 @@ Start with:
 - [AtlasBench 0.2 MapLibre label-gate lock](docs/V02_LABEL_GATE_LOCK_2026-07-22.md)
 - [AtlasBench 0.2 label-aware cross-renderer evidence](docs/V02_LABEL_AWARE_RENDER_2026-07-22.md)
 - [AtlasBench 0.2 placed-label geometry gate lock](docs/V02_PLACEMENT_GEOMETRY_GATE_LOCK_2026-07-23.md)
+- [AtlasBench 0.2 placed-label geometry evidence](docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can export non-empty SVG evidence for Vega-Lite and
@@ -485,10 +486,16 @@ The prior geometry-only result was 72/72 versus 53/72. The holdout remains
 sealed, so the observed 27.78 percentage-point development difference is not a
 final generalization claim.
 
+The next preregistered placement-geometry gate recovered MapLibre's actual
+placed label bounds for 88/88 source-accepted MapLibre outputs. Every visible
+label output had zero box overlap, forced overlap, and viewport clipping, so
+the overall result stayed 72/72 versus 52/72. This strengthens the placement
+hygiene evidence but does not create an additional performance separation.
+
 Work still required before a stable release includes:
 
 - hosted raw-API reproduction across pre-committed model strata;
-- deterministic label-overlap, symbol-occlusion, contrast, and priority gates;
+- deterministic label-to-symbol occlusion, contrast, and priority gates;
 - blind human map-reading and cartographer review;
 - larger edit-survival and feature-ablation studies;
 - package publication and a stable compatibility policy;

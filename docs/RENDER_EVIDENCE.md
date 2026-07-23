@@ -86,6 +86,8 @@ current behavior; it does not by itself prove that the behavior is good.
 The currently locked noninferiority thresholds and their rationale are in the
 [label-gate lock](V02_LABEL_GATE_LOCK_2026-07-22.md) and the
 [placed-label geometry gate lock](V02_PLACEMENT_GEOMETRY_GATE_LOCK_2026-07-23.md).
+The first locked model-output reclassification is reported in the
+[placed-label geometry evidence](V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md).
 
 ## Claim boundary
 

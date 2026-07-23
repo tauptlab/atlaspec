@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Atlaspec의 실제 에이전트 벤치마크와 텍스트 기반 공간분석 solver를 직접 비교하는 인터랙티브 실험실"
+      content="Compare Atlaspec's recorded agent benchmark and run deterministic text-driven spatial analysis directly in your browser."
     />
     <meta name="theme-color" content="#f2efe5" />
     <meta property="og:title" content="Atlaspec Evidence Lab" />
     <meta
       property="og:description"
-      content="3D 지도를 그리지 않고도 그림자, CCTV 사각지대, 접근성 경로를 구조화된 텍스트와 결정론적 solver로 계산합니다."
+      content="Use structured text and deterministic solvers to calculate shadows, CCTV blind spots, and accessible routes without a 3D scene."
     />
     <meta property="og:type" content="website" />
     <meta
@@ -31,14 +31,14 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Atlaspec Evidence Lab 홈">
+      <a class="brand" href="#top" aria-label="Atlaspec Evidence Lab home">
         <span class="brand-mark" aria-hidden="true">A·</span>
         <span>Atlaspec</span>
       </a>
-      <nav aria-label="주요 탐색">
+      <nav aria-label="Primary navigation">
         <a href="#evidence">Evidence</a>
         <a href="#lab">Live Lab</a>
         <a href="#method">Method</a>
@@ -58,32 +58,46 @@
         <div class="hero-copy">
           <p class="eyebrow">ATLASPEC 0.2 · LIVE EVIDENCE LAB</p>
           <h1>
-            공간을 이해하는 데
-            <span>3D 화면은 필요 없다.</span>
+            Spatial reasoning,
+            <span>without rendering guesswork.</span>
           </h1>
           <p class="hero-lede">
-            AI는 공간 의도를 구조화된 명세로 바꾸고, 검증 가능한 solver가
-            그림자·사각지대·경로를 계산합니다. 아래에서 기록된 에이전트
-            성능과 브라우저에서 실행되는 분석을 직접 확인하세요.
+            Turn spatial intent into structured text. Let deterministic solvers
+            handle shadows, blind spots, and constrained routes—then inspect
+            every assumption, metric, and checksum.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#lab">라이브 실험 실행</a>
+            <a class="button button-primary" href="#lab">Run the live lab</a>
             <a
               class="button button-secondary"
               href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_OCCLUSION_RENDER_2026-07-23.md"
               target="_blank"
               rel="noreferrer"
             >
-              측정 방법 읽기
+              Read the benchmark method
             </a>
           </div>
           <div class="hero-footnote">
             <span class="status-dot" aria-hidden="true"></span>
-            API 키 없음 · 모든 계산은 이 브라우저에서 실행
+            No API key · calculations stay in your browser
           </div>
+          <dl class="hero-proof" aria-label="Benchmark highlights">
+            <div>
+              <dt>Healthy renders</dt>
+              <dd>94.44%</dd>
+            </div>
+            <div>
+              <dt>Observed lift</dt>
+              <dd>+38.89pp</dd>
+            </div>
+            <div>
+              <dt>Evaluation</dt>
+              <dd>Sealed v0.2</dd>
+            </div>
+          </dl>
         </div>
 
-        <div class="hero-field" aria-label="구조화된 공간분석 흐름 미리보기">
+        <div class="hero-field" aria-label="Preview of the structured spatial-analysis flow">
           <div class="field-grid" aria-hidden="true"></div>
           <div class="field-label field-label-input">TEXT SPEC</div>
           <div class="field-label field-label-output">PROVEN OUTPUT</div>
@@ -109,11 +123,12 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">01 · RECORDED AGENT BENCHMARK</p>
-            <h2>같은 72개 과제, 다른 생성 경로</h2>
+            <h2>Same 72 tasks. Two authoring surfaces.</h2>
           </div>
           <p>
-            Claude와 Codex가 직접 renderer 코드를 작성한 조건과 Atlaspec
-            명세를 작성한 조건을 실제 MapLibre·Vega 런타임으로 평가했습니다.
+            Claude and Codex authored either renderer-native code or Atlaspec
+            documents. Every output was evaluated in real MapLibre and Vega
+            runtimes.
           </p>
         </div>
 
@@ -128,7 +143,10 @@
             <div class="score-track" aria-hidden="true">
               <span style="--score: 94.44%"></span>
             </div>
-            <p>에이전트는 의미와 제약을 작성하고 renderer 세부사항은 컴파일러가 결정합니다.</p>
+            <p>
+              The agent writes intent and constraints. The compiler owns
+              renderer-specific implementation details.
+            </p>
           </article>
 
           <article class="score-card score-direct">
@@ -141,7 +159,10 @@
             <div class="score-track" aria-hidden="true">
               <span style="--score: 55.56%"></span>
             </div>
-            <p>에이전트가 source, expression, layer, label 배치를 직접 작성합니다.</p>
+            <p>
+              The agent writes sources, expressions, layers, and label
+              placement directly.
+            </p>
           </article>
 
           <article class="delta-card">
@@ -149,16 +170,16 @@
             <strong data-evidence="difference">+38.89<span>pp</span></strong>
             <dl>
               <div>
-                <dt>평가 입력</dt>
+                <dt>Evaluated outputs</dt>
                 <dd>72 + 72</dd>
               </div>
               <div>
-                <dt>실제 runtime</dt>
+                <dt>Real runtimes</dt>
                 <dd>MapLibre / Vega</dd>
               </div>
               <div>
                 <dt>v0.2 holdout</dt>
-                <dd>sealed</dd>
+                <dd>Sealed</dd>
               </div>
             </dl>
           </article>
@@ -167,16 +188,17 @@
         <div class="evidence-note">
           <span class="note-index">R&amp;D</span>
           <p>
-            비례심볼 라벨 실패 4건을 본 뒤 수정한 재생 결과는
-            <strong>72/72</strong>입니다. 이는 수리 검증이지 새로운 독립
-            성능 추정치가 아니므로 위 잠금 점수와 분리합니다.
+            After inspecting four proportional-symbol label failures, the
+            repaired replay reached <strong>72/72</strong>. That result verifies
+            the fix; it is not a new independent performance estimate and
+            remains separate from the locked score above.
           </p>
           <a
             href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_OCCLUSION_POSTFIX_2026-07-23.md"
             target="_blank"
             rel="noreferrer"
           >
-            사후수정 보고서 ↗
+            Read the post-fix report ↗
           </a>
         </div>
       </section>
@@ -185,15 +207,15 @@
         <div class="section-heading lab-heading">
           <div>
             <p class="eyebrow">02 · DETERMINISTIC SPATIAL LAB</p>
-            <h2>텍스트 명세를 바꾸고 즉시 계산하세요</h2>
+            <h2>Change the spec. Watch the evidence update.</h2>
           </div>
           <p>
-            아래 결과는 LLM의 추측이 아닙니다. 동일한 입력은 동일한
-            폴리곤·가시성·경로와 checksum을 만듭니다.
+            These outputs are not LLM guesses. The same input produces the same
+            polygons, visibility cells, routes, and checksum.
           </p>
         </div>
 
-        <div class="lab-tabs" role="tablist" aria-label="공간분석 유형">
+        <div class="lab-tabs" role="tablist" aria-label="Spatial analysis type">
           <button
             id="tab-shadow"
             class="lab-tab is-active"
@@ -203,7 +225,7 @@
             aria-controls="panel-shadow"
             data-scenario="shadow"
           >
-            <span>01</span> 일조·그림자
+            <span>01</span> Solar shadow
           </button>
           <button
             id="tab-cctv"
@@ -214,7 +236,7 @@
             aria-controls="panel-cctv"
             data-scenario="cctv"
           >
-            <span>02</span> CCTV 사각지대
+            <span>02</span> CCTV coverage
           </button>
           <button
             id="tab-route"
@@ -225,7 +247,7 @@
             aria-controls="panel-route"
             data-scenario="route"
           >
-            <span>03</span> 제약 기반 경로
+            <span>03</span> Constrained route
           </button>
         </div>
 
@@ -242,9 +264,9 @@
               id="lab-canvas"
               width="640"
               height="400"
-              aria-label="공간분석 결과"
+              aria-label="Spatial analysis output"
             >
-              이 브라우저는 canvas를 지원하지 않습니다.
+              Your browser does not support canvas.
             </canvas>
             <div class="canvas-legend" id="canvas-legend"></div>
           </div>
@@ -262,7 +284,7 @@
                 <strong id="shadow-time-output">15:00</strong>
               </div>
               <label for="shadow-time">
-                관측 시간
+                Observation time
                 <input
                   id="shadow-time"
                   type="range"
@@ -272,7 +294,9 @@
                   step="0.25"
                 />
               </label>
-              <p class="control-hint">서울 · 동지 · 건물 높이 16–31m · 평탄 지면</p>
+              <p class="control-hint">
+                Seoul · winter solstice · 16–31m buildings · flat terrain
+              </p>
             </section>
 
             <section
@@ -288,7 +312,7 @@
                 <strong id="cctv-heading-output">320°</strong>
               </div>
               <label for="cctv-heading">
-                카메라 방향
+                Camera heading
                 <input
                   id="cctv-heading"
                   type="range"
@@ -299,7 +323,7 @@
                 />
               </label>
               <label for="cctv-fov">
-                수평 화각 <output id="cctv-fov-output">82°</output>
+                Horizontal FOV <output id="cctv-fov-output">82°</output>
                 <input
                   id="cctv-fov"
                   type="range"
@@ -310,7 +334,7 @@
                 />
               </label>
               <label for="cctv-range">
-                최대 거리 <output id="cctv-range-output">440px</output>
+                Maximum range <output id="cctv-range-output">440px</output>
                 <input
                   id="cctv-range"
                   type="range"
@@ -332,47 +356,49 @@
             >
               <div class="control-heading">
                 <span>Routing objective</span>
-                <strong>정문 → 의무실</strong>
+                <strong>Main gate → Clinic</strong>
               </div>
               <label for="route-mode">
-                최적화 기준
+                Optimization objective
                 <select id="route-mode">
-                  <option value="fastest">최단 거리</option>
-                  <option value="wheelchair">휠체어 접근성</option>
-                  <option value="low-risk">저위험 경로</option>
+                  <option value="fastest">Shortest distance</option>
+                  <option value="wheelchair">Wheelchair accessible</option>
+                  <option value="low-risk">Lowest risk</option>
                 </select>
               </label>
-              <p class="control-hint">계단 통행 가능 여부와 구간별 위험 비용을 적용합니다.</p>
+              <p class="control-hint">
+                Applies stair accessibility and segment-level risk costs.
+              </p>
             </section>
 
             <div class="metric-grid" aria-live="polite">
               <div>
-                <span id="metric-a-label">태양 고도</span>
+                <span id="metric-a-label">Solar elevation</span>
                 <strong id="metric-a">—</strong>
               </div>
               <div>
-                <span id="metric-b-label">최장 그림자</span>
+                <span id="metric-b-label">Longest shadow</span>
                 <strong id="metric-b">—</strong>
               </div>
               <div>
-                <span>단일 계산</span>
+                <span>Single run</span>
                 <strong id="metric-runtime">—</strong>
               </div>
             </div>
 
             <button class="benchmark-button" id="benchmark-button" type="button">
-              <span>재현성 벤치마크 실행</span>
-              <small>동일 분석 반복 + checksum</small>
+              <span>Run reproducibility benchmark</span>
+              <small>repeat analysis + checksum</small>
             </button>
             <p class="benchmark-result" id="benchmark-result" aria-live="polite">
-              아직 실행하지 않았습니다.
+              Not run yet.
             </p>
           </div>
 
           <div class="spec-panel">
             <div class="spec-toolbar">
               <span>analysis.atlas.yaml</span>
-              <button id="copy-spec" type="button">복사</button>
+              <button id="copy-spec" type="button">Copy</button>
             </div>
             <pre><code id="spec-output"></code></pre>
             <div class="spec-footer">
@@ -384,9 +410,9 @@
         </div>
 
         <p class="lab-boundary">
-          <strong>측정 경계:</strong> 라이브 벤치마크는 브라우저 공간 solver의
-          속도와 재현성을 측정합니다. LLM 응답시간이나 모델 정확도를 대신하지
-          않습니다.
+          <strong>Measurement boundary:</strong> the live benchmark measures the
+          speed and reproducibility of the in-browser spatial solver. It does
+          not measure LLM latency or model accuracy.
         </p>
       </section>
 
@@ -394,65 +420,86 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">03 · THE PRACTICAL ARCHITECTURE</p>
-            <h2>AI는 명세하고, solver는 증명한다</h2>
+            <h2>AI writes intent. Solvers produce evidence.</h2>
           </div>
           <p>
-            Atlaspec이 지도 렌더링의 중간언어라면, 다음 계층은 공간분석 의도와
-            계산 증거를 연결하는 중간언어입니다.
+            Atlaspec is an intermediate language for map rendering. The next
+            layer connects spatial-analysis intent to auditable computation.
           </p>
         </div>
 
-        <div class="pipeline" aria-label="공간분석 처리 단계">
+        <div class="pipeline" aria-label="Spatial analysis pipeline">
           <article>
             <span>01</span>
             <h3>Natural request</h3>
-            <p>“오후 3시에 그늘이 적고 휠체어로 접근 가능한 출입구를 찾아줘.”</p>
+            <p>
+              “Find an entrance with less shade at 3 PM that is wheelchair
+              accessible.”
+            </p>
           </article>
           <div class="pipeline-arrow" aria-hidden="true">→</div>
           <article>
             <span>02</span>
             <h3>Spatial spec</h3>
-            <p>좌표계, 단위, 시간, 장애물, 제약, 허용 오차를 명시합니다.</p>
+            <p>
+              Declare the coordinate system, units, time, obstacles,
+              constraints, and tolerances.
+            </p>
           </article>
           <div class="pipeline-arrow" aria-hidden="true">→</div>
           <article>
             <span>03</span>
             <h3>Deterministic solver</h3>
-            <p>태양 위치, 가시선, 그래프 비용을 버전 고정 알고리즘으로 계산합니다.</p>
+            <p>
+              Compute solar position, line of sight, and graph costs with
+              versioned algorithms.
+            </p>
           </article>
           <div class="pipeline-arrow" aria-hidden="true">→</div>
           <article>
             <span>04</span>
             <h3>Evidence + Atlaspec</h3>
-            <p>결과 폴리곤, 경로, 가정, checksum을 지도와 보고서로 남깁니다.</p>
+            <p>
+              Preserve result polygons, routes, assumptions, and checksums in
+              maps and reports.
+            </p>
           </article>
         </div>
 
         <div class="data-depth">
           <article>
             <span class="depth-level">2D</span>
-            <h3>좌표 + 속성</h3>
-            <p>부동산 입지, 상권, 포함관계, 거리, 네트워크 경로</p>
+            <h3>Coordinates + attributes</h3>
+            <p>
+              Property analysis, catchments, containment, distance, and network
+              routing
+            </p>
           </article>
           <article class="is-featured">
             <span class="depth-level">2.5D</span>
             <h3>footprint + height</h3>
-            <p>일조·그림자, CCTV 가시성, 조망, 간단한 전파 커버리지</p>
+            <p>
+              Solar access, shadows, CCTV visibility, viewsheds, and simple
+              signal coverage
+            </p>
           </article>
           <article>
             <span class="depth-level">3D</span>
-            <h3>면 + 메시 + 층</h3>
-            <p>처마, 발코니, 실내, 복잡한 지붕과 입체 장애물</p>
+            <h3>Surfaces + meshes + floors</h3>
+            <p>
+              Eaves, balconies, interiors, complex roofs, and volumetric
+              obstacles
+            </p>
           </article>
         </div>
       </section>
 
       <section class="cta section-shell">
         <p class="eyebrow">OPEN RESEARCH · REPRODUCIBLE BY DEFAULT</p>
-        <h2>숫자를 믿기 전에, 직접 실행하세요.</h2>
+        <h2>Do not take the headline on faith. Run it.</h2>
         <p>
-          전체 스키마, 컴파일러, 벤치마크 게이트와 실패 사례까지 공개되어
-          있습니다.
+          The full schema, compiler, benchmark gates, and failure cases are open
+          for inspection.
         </p>
         <div class="hero-actions">
           <a
@@ -461,7 +508,7 @@
             target="_blank"
             rel="noreferrer"
           >
-            GitHub에서 코드 보기
+            Explore the code on GitHub
           </a>
           <a
             class="button button-secondary"
@@ -469,7 +516,7 @@
             target="_blank"
             rel="noreferrer"
           >
-            최종 검증 보고서
+            Read the final verification
           </a>
         </div>
       </section>
@@ -481,12 +528,12 @@
         <strong>Atlaspec Evidence Lab</strong>
       </div>
       <p>Document 0.2 · Package 0.2.0-rc.1 · MIT</p>
-      <p>잠긴 결과와 사후수정 결과를 분리해 보고합니다.</p>
+      <p>Locked results and post-selected repairs are reported separately.</p>
     </footer>
 
     <noscript>
       <div class="noscript">
-        라이브 공간분석을 실행하려면 JavaScript를 활성화해 주세요.
+        Enable JavaScript to run the live spatial analysis.
       </div>
     </noscript>
     <script type="module" src="./app.js"></script>

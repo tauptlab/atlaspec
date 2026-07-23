@@ -32,9 +32,12 @@ body {
   margin: 0;
   background:
     radial-gradient(circle at 88% 4%, rgb(215 235 89 / 18%), transparent 22rem),
+    linear-gradient(90deg, transparent 49.9%, rgb(20 32 51 / 2.5%) 50%, transparent 50.1%),
     var(--paper);
   color: var(--ink);
   font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -85,7 +88,7 @@ select:focus-visible {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  min-height: 72px;
+  min-height: 78px;
   padding: 0 4vw;
   border-bottom: 1px solid rgb(20 32 51 / 12%);
   background: rgb(242 239 229 / 88%);
@@ -98,6 +101,7 @@ select:focus-visible {
   gap: 10px;
   width: fit-content;
   font-weight: 800;
+  font-size: 17px;
   letter-spacing: -0.02em;
 }
 
@@ -115,12 +119,21 @@ select:focus-visible {
 
 .site-header nav {
   display: flex;
-  gap: 28px;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid rgb(20 32 51 / 10%);
+  border-radius: 999px;
+  background: rgb(250 248 242 / 68%);
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.site-header nav a {
+  padding: 7px 12px;
+  border-radius: 999px;
 }
 
 .site-header nav a:hover,
@@ -128,9 +141,13 @@ select:focus-visible {
   color: var(--teal);
 }
 
+.site-header nav a:hover {
+  background: white;
+}
+
 .header-link {
   justify-self: end;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -139,8 +156,10 @@ select:focus-visible {
   grid-template-columns: minmax(0, 0.92fr) minmax(500px, 1.08fr);
   gap: clamp(40px, 7vw, 110px);
   align-items: center;
-  min-height: calc(100vh - 72px);
-  padding: 80px 4vw 96px;
+  width: min(1600px, 100%);
+  min-height: calc(100svh - 78px);
+  margin: 0 auto;
+  padding: 88px 4vw 110px;
   overflow: hidden;
 }
 
@@ -152,7 +171,7 @@ select:focus-visible {
   margin: 0 0 18px;
   color: var(--teal);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.12em;
 }
@@ -160,11 +179,10 @@ select:focus-visible {
 .hero h1 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(54px, 6.4vw, 104px);
+  font-size: clamp(60px, 6.4vw, 108px);
   font-weight: 820;
-  letter-spacing: -0.075em;
-  line-height: 0.93;
-  word-break: keep-all;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
 }
 
 .hero h1 span {
@@ -176,9 +194,8 @@ select:focus-visible {
   max-width: 640px;
   margin: 34px 0 0;
   color: var(--ink-soft);
-  font-size: clamp(17px, 1.5vw, 21px);
-  line-height: 1.78;
-  word-break: keep-all;
+  font-size: clamp(19px, 1.5vw, 22px);
+  line-height: 1.65;
 }
 
 .hero-actions {
@@ -192,11 +209,11 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
-  padding: 0 21px;
+  min-height: 54px;
+  padding: 0 24px;
   border: 1px solid var(--ink);
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   transition:
     transform 160ms ease,
@@ -233,7 +250,42 @@ select:focus-visible {
   margin-top: 24px;
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
+}
+
+.hero-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  max-width: 650px;
+  margin: 34px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--line);
+}
+
+.hero-proof div {
+  padding: 16px 18px;
+  background: rgb(250 248 242 / 82%);
+}
+
+.hero-proof dt,
+.hero-proof dd {
+  margin: 0;
+}
+
+.hero-proof dt {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.hero-proof dd {
+  margin-top: 7px;
+  font-size: 17px;
+  font-weight: 850;
+  letter-spacing: -0.025em;
 }
 
 .status-dot {
@@ -255,6 +307,16 @@ select:focus-visible {
   box-shadow: var(--shadow);
 }
 
+.hero-field::after {
+  position: absolute;
+  z-index: 9;
+  inset: 12px;
+  border: 1px solid rgb(20 32 51 / 7%);
+  border-radius: calc(var(--radius-lg) - 9px);
+  content: "";
+  pointer-events: none;
+}
+
 .field-grid {
   position: absolute;
   inset: 0;
@@ -272,7 +334,7 @@ select:focus-visible {
   background: var(--ink);
   color: white;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -298,7 +360,7 @@ select:focus-visible {
   border: 5px solid var(--paper-light);
   box-shadow: 0 0 0 1px var(--ink);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .building-one {
@@ -363,7 +425,7 @@ select:focus-visible {
   border-radius: 50%;
   background: var(--acid);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
 }
 
@@ -386,7 +448,7 @@ select:focus-visible {
   flex-direction: column;
   align-items: end;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .field-caption span {
@@ -421,9 +483,8 @@ select:focus-visible {
   max-width: 560px;
   margin: 0 0 5px;
   color: var(--ink-soft);
-  font-size: 16px;
-  line-height: 1.75;
-  word-break: keep-all;
+  font-size: 18px;
+  line-height: 1.65;
 }
 
 .evidence {
@@ -443,6 +504,16 @@ select:focus-visible {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--paper-light);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.score-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--teal);
+  box-shadow: 0 18px 42px rgb(20 32 51 / 8%);
 }
 
 .score-card-top {
@@ -452,7 +523,7 @@ select:focus-visible {
 }
 
 .score-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 850;
 }
 
@@ -462,7 +533,7 @@ select:focus-visible {
   color: var(--teal);
   border-radius: 6px;
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.1em;
 }
@@ -489,7 +560,7 @@ select:focus-visible {
   margin-top: 18px;
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .score-track {
@@ -516,7 +587,7 @@ select:focus-visible {
   max-width: 440px;
   margin: 24px 0 0;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.65;
 }
 
@@ -531,7 +602,7 @@ select:focus-visible {
   margin: 0;
   color: rgb(255 255 255 / 58%);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -567,7 +638,7 @@ select:focus-visible {
 .delta-card dt,
 .delta-card dd {
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .delta-card dt {
@@ -595,19 +666,19 @@ select:focus-visible {
   color: #843519;
   border-radius: 5px;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
 }
 
 .evidence-note p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.65;
 }
 
 .evidence-note a {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -634,19 +705,20 @@ select:focus-visible {
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 14px 18px;
+  min-height: 52px;
+  padding: 14px 20px;
   border: 1px solid rgb(255 255 255 / 17%);
   border-radius: 999px;
   background: transparent;
   color: rgb(255 255 255 / 62%);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 750;
 }
 
 .lab-tab span {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .lab-tab:hover,
@@ -658,11 +730,15 @@ select:focus-visible {
 
 .lab-workbench {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(290px, 0.65fr) minmax(310px, 0.72fr);
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(320px, 0.78fr)
+    minmax(340px, 0.82fr);
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 21%);
   border-radius: 22px;
   background: #0d1828;
+  box-shadow: 0 32px 90px rgb(0 0 0 / 25%);
 }
 
 .lab-visual {
@@ -677,7 +753,7 @@ select:focus-visible {
   margin: 0 2px 14px;
   color: rgb(255 255 255 / 56%);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
 }
 
@@ -703,7 +779,7 @@ select:focus-visible {
   margin: 14px 2px 0;
   min-height: 18px;
   color: rgb(255 255 255 / 64%);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .legend-item {
@@ -720,12 +796,12 @@ select:focus-visible {
 }
 
 .lab-controls {
-  padding: 24px;
+  padding: 30px;
   border-right: 1px solid rgb(255 255 255 / 15%);
 }
 
 .control-panel {
-  min-height: 222px;
+  min-height: 240px;
 }
 
 .control-heading {
@@ -734,7 +810,7 @@ select:focus-visible {
   align-items: baseline;
   margin-bottom: 24px;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
 }
 
@@ -744,7 +820,7 @@ select:focus-visible {
 
 .control-heading strong {
   color: var(--acid);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .control-panel label {
@@ -752,7 +828,7 @@ select:focus-visible {
   gap: 11px;
   margin-bottom: 20px;
   color: rgb(255 255 255 / 80%);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .control-panel label output {
@@ -794,7 +870,7 @@ select {
 .control-hint {
   margin: 12px 0 0;
   color: rgb(255 255 255 / 46%);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.55;
 }
 
@@ -807,7 +883,7 @@ select {
 }
 
 .metric-grid div {
-  padding: 16px 8px;
+  padding: 18px 10px;
 }
 
 .metric-grid div + div {
@@ -817,7 +893,7 @@ select {
 .metric-grid span {
   display: block;
   color: rgb(255 255 255 / 45%);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .metric-grid strong {
@@ -825,7 +901,7 @@ select {
   margin-top: 7px;
   color: white;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 17px;
 }
 
 .benchmark-button {
@@ -834,7 +910,8 @@ select {
   align-items: center;
   width: 100%;
   margin-top: 22px;
-  padding: 14px;
+  min-height: 58px;
+  padding: 14px 16px;
   border: 1px solid var(--acid);
   border-radius: 10px;
   background: transparent;
@@ -854,14 +931,14 @@ select {
 }
 
 .benchmark-button span {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .benchmark-button small {
   opacity: 0.65;
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 11px;
 }
 
 .benchmark-result {
@@ -869,7 +946,7 @@ select {
   margin: 12px 0 0;
   color: rgb(255 255 255 / 54%);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -882,33 +959,34 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 18px;
+  padding: 18px 20px;
   border-bottom: 1px solid rgb(255 255 255 / 12%);
   color: rgb(255 255 255 / 48%);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .spec-toolbar button {
-  padding: 5px 8px;
+  min-height: 34px;
+  padding: 6px 10px;
   border: 1px solid rgb(255 255 255 / 22%);
   border-radius: 5px;
   background: transparent;
   color: white;
   cursor: pointer;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .spec-panel pre {
   min-height: 350px;
   max-height: 465px;
   margin: 0;
-  padding: 24px 18px;
+  padding: 26px 22px;
   overflow: auto;
   color: #c7e2d7;
   font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.75;
   white-space: pre-wrap;
 }
 
@@ -926,14 +1004,14 @@ select {
   color: var(--acid);
   border-radius: 4px;
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 10px;
   text-transform: uppercase;
 }
 
 .lab-boundary {
   margin: 18px 0 0;
   color: rgb(255 255 255 / 52%);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -960,14 +1038,14 @@ select {
 .depth-level {
   color: var(--teal);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
 }
 
 .pipeline h3,
 .data-depth h3 {
   margin: 62px 0 12px;
-  font-size: 20px;
+  font-size: 22px;
   letter-spacing: -0.03em;
 }
 
@@ -975,7 +1053,7 @@ select {
 .data-depth p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.65;
   word-break: keep-all;
 }
@@ -1025,6 +1103,7 @@ select {
   max-width: 600px;
   margin: 28px auto 0;
   color: var(--ink-soft);
+  font-size: 18px;
   line-height: 1.7;
 }
 
@@ -1040,7 +1119,7 @@ footer {
   padding: 24px 4vw;
   border-top: 1px solid var(--line);
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 footer div {

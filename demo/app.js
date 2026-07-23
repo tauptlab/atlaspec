@@ -102,7 +102,7 @@ function bindInteractions() {
     controls.routeMode,
   ]) {
     input.addEventListener('input', () => {
-      benchmarkResult.textContent = '입력이 변경되었습니다. 다시 실행해 주세요.';
+      benchmarkResult.textContent = 'Input changed. Run the benchmark again.';
       render();
     });
   }
@@ -122,7 +122,7 @@ function setScenario(scenario) {
   for (const panel of panels) {
     panel.hidden = panel.dataset.panel !== scenario;
   }
-  benchmarkResult.textContent = '아직 실행하지 않았습니다.';
+  benchmarkResult.textContent = 'Not run yet.';
   render();
 }
 
@@ -165,14 +165,14 @@ function renderShadow() {
 
   const longest = Math.max(...shadows.map((shadow) => shadow.lengthM));
   controls.shadowTimeOutput.textContent = formatHour(hour);
-  metricALabel.textContent = '태양 고도';
+  metricALabel.textContent = 'Solar elevation';
   metricA.textContent = `${sun.elevation.toFixed(1)}°`;
-  metricBLabel.textContent = '최장 그림자';
+  metricBLabel.textContent = 'Longest shadow';
   metricB.textContent = `${longest.toFixed(1)}m`;
   canvasLegend.innerHTML = legend([
-    ['건물 footprint', colors.ink],
-    ['계산된 그림자', colors.orange],
-    ['태양 방향', colors.acid],
+    ['Building footprint', colors.ink],
+    ['Projected shadow', colors.orange],
+    ['Sun direction', colors.acid],
   ]);
   specOutput.textContent = shadowSpec(hour, sun);
 
@@ -210,14 +210,14 @@ function renderCctv() {
   controls.cctvHeadingOutput.textContent = `${headingDeg}°`;
   controls.cctvFovOutput.textContent = `${fieldOfViewDeg}°`;
   controls.cctvRangeOutput.textContent = `${range}px`;
-  metricALabel.textContent = '감시 커버리지';
+  metricALabel.textContent = 'Visible coverage';
   metricA.textContent = `${(coverage.coverageRatio * 100).toFixed(1)}%`;
-  metricBLabel.textContent = '사각 비율';
+  metricBLabel.textContent = 'Blind-spot ratio';
   metricB.textContent = `${((1 - coverage.coverageRatio) * 100).toFixed(1)}%`;
   canvasLegend.innerHTML = legend([
-    ['가시 셀', colors.teal],
-    ['차폐 건물', colors.ink],
-    ['카메라·화각', colors.orange],
+    ['Visible cells', colors.teal],
+    ['Occluding building', colors.ink],
+    ['Camera + FOV', colors.orange],
   ]);
   specOutput.textContent = cctvSpec(headingDeg, fieldOfViewDeg, range);
 
@@ -240,14 +240,14 @@ function renderRoute() {
   const route = findRoute(ROUTE_GRAPH, 'gate', 'clinic', mode);
   drawRouteGraph(ROUTE_GRAPH, route);
 
-  metricALabel.textContent = '경로 거리';
+  metricALabel.textContent = 'Route distance';
   metricA.textContent = `${route.distance.toFixed(1)}u`;
-  metricBLabel.textContent = '누적 위험';
+  metricBLabel.textContent = 'Accumulated risk';
   metricB.textContent = route.risk.toFixed(2);
   canvasLegend.innerHTML = legend([
-    ['선택 경로', colors.teal],
-    ['통행 가능', colors.muted],
-    ['계단 구간', colors.orange],
+    ['Selected route', colors.teal],
+    ['Traversable edge', colors.muted],
+    ['Stair segment', colors.orange],
   ]);
   specOutput.textContent = routeSpec(mode, route);
 
@@ -256,7 +256,7 @@ function renderRoute() {
 
 function runBenchmark() {
   benchmarkButton.disabled = true;
-  benchmarkResult.textContent = '반복 계산 중…';
+  benchmarkResult.textContent = 'Running repeated calculations…';
 
   requestAnimationFrame(() => {
     const iterations = activeScenario === 'cctv' ? 120 : 1500;
@@ -267,7 +267,7 @@ function runBenchmark() {
     }
     const duration = performance.now() - started;
     benchmarkResult.textContent =
-      `${iterations.toLocaleString()}회 · ${duration.toFixed(1)}ms · ` +
+      `${iterations.toLocaleString('en-US')} runs · ${duration.toFixed(1)}ms · ` +
       `${(duration / iterations).toFixed(4)}ms/run · checksum ${digest}`;
     benchmarkButton.disabled = false;
   });
@@ -314,12 +314,12 @@ async function copySpec() {
   const button = document.querySelector('#copy-spec');
   try {
     await navigator.clipboard.writeText(specOutput.textContent);
-    button.textContent = '복사됨';
+    button.textContent = 'Copied';
   } catch {
-    button.textContent = '선택해 복사';
+    button.textContent = 'Select to copy';
   }
   setTimeout(() => {
-    button.textContent = '복사';
+    button.textContent = 'Copy';
   }, 1400);
 }
 

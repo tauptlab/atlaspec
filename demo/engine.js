@@ -9,11 +9,11 @@ export const DEMO_BUILDINGS = [
 
 export const ROUTE_GRAPH = {
   nodes: {
-    gate: { x: 82, y: 326, label: '정문' },
-    plaza: { x: 190, y: 224, label: '광장' },
-    stairs: { x: 306, y: 132, label: '계단' },
-    clinic: { x: 520, y: 82, label: '의무실' },
-    ramp: { x: 492, y: 316, label: '경사로' },
+    gate: { x: 82, y: 326, label: 'Main gate' },
+    plaza: { x: 190, y: 224, label: 'Plaza' },
+    stairs: { x: 306, y: 132, label: 'Stairs' },
+    clinic: { x: 520, y: 82, label: 'Clinic' },
+    ramp: { x: 492, y: 316, label: 'Ramp' },
   },
   edges: [
     { from: 'gate', to: 'plaza', distance: 1.8, risk: 0.6, accessible: true },

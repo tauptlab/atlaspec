@@ -5,7 +5,7 @@ import {
   findRoute,
   shadowPolygons,
   solarPosition,
-} from './engine.js';
+} from './engine.js?v=0.2-en.1';
 
 const canvas = document.querySelector('#lab-canvas');
 const context = canvas.getContext('2d');
@@ -56,7 +56,7 @@ render();
 
 async function loadEvidence() {
   try {
-    const response = await fetch('./data/evidence.json');
+    const response = await fetch('./data/evidence.json?v=0.2-en.1');
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const evidence = await response.json();
     const locked = evidence.locked_development;

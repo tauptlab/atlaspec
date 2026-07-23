@@ -57,6 +57,16 @@ that locked semantic-zoom behavior.
 These thresholds are fixed before inspecting preserved model-output occlusion
 metrics and must not be relaxed after reclassification.
 
+## Post-lock verification
+
+After the lock was committed, all 36 development references passed again at
+clean evaluator commit `d478145d65fc1bd00c3b1911e927602c18569517`.
+The locked gate SHA-256 was
+`7be62df4efb0ddeacdc4dbc8c9763bc74f0c5b0a28a13ccc05052bf4d9558800`;
+the post-lock calibration report SHA-256 was
+`fe424dc1b060c722b978e5eeb33ddb2603010ff6690b4eea1e82b59a193e89e0`.
+The holdout remained unexposed.
+
 ## Claim boundary
 
 The gates prove a reference-relative visible point-symbol pixel floor and

@@ -156,5 +156,8 @@ which measures actual MapLibre placement boxes rather than inferring bounds
 from source coordinates. It recovered placement geometry for all 88 MapLibre
 outputs and found no additional failures; see the
 [placed-label geometry evidence](../../docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md).
-The next model-output reclassification is governed by the preregistered
+The next model-output reclassification used the preregistered
 [label-to-point-symbol occlusion gate lock](../../docs/V02_OCCLUSION_GATE_LOCK_2026-07-23.md).
+It found 16 additional failures and changed the balanced development result to
+68/72 for Atlaspec versus 40/72 for direct generation; see the
+[occlusion evidence](../../docs/V02_OCCLUSION_RENDER_2026-07-23.md).

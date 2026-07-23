@@ -446,6 +446,8 @@ Start with:
 - [AtlasBench 0.2 placed-label geometry evidence](docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md)
 - [AtlasBench 0.2 label-to-point-symbol occlusion gate lock](docs/V02_OCCLUSION_GATE_LOCK_2026-07-23.md)
 - [AtlasBench 0.2 label-to-point-symbol occlusion evidence](docs/V02_OCCLUSION_RENDER_2026-07-23.md)
+- [AtlasBench 0.2 proportional-label occlusion ablation R&D](docs/V02_OCCLUSION_ABLATION_RND_2026-07-23.md)
+- [AtlasBench 0.2 proportional-label post-fix evidence](docs/V02_OCCLUSION_POSTFIX_2026-07-23.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can export non-empty SVG evidence for Vega-Lite and
@@ -496,15 +498,17 @@ hygiene evidence but does not create an additional performance separation.
 
 The subsequent layer-isolated point-symbol occlusion gate found 16 additional
 failures, including four Atlaspec outputs. The latest locked development result
-is therefore 68/72 for Atlaspec versus 40/72 for direct generation, a 38.89
-percentage-point difference. The four Atlaspec failures share a proportional
-symbol range/label-clearance issue, so this result is evidence of a substantial
-advantage—not a guarantee that compiled maps are visually correct.
+is 68/72 for Atlaspec versus 40/72 for direct generation, a 38.89
+percentage-point difference. A controlled post-failure ablation then found
+that either a wider declared range or 3 em maximum-radius label clearance
+removed all four Atlaspec failures. The v0.2 compiler now uses the clearance
+policy without rewriting the authored range; post-fix development replay
+reached 72/72 versus 40/72. That replay is remediation evidence, not a new
+unbiased benchmark estimate.
 
 Work still required before a stable release includes:
 
 - hosted raw-API reproduction across pre-committed model strata;
-- proportional-symbol range and label-clearance hardening;
 - deterministic local-background contrast and label-priority gates;
 - blind human map-reading and cartographer review;
 - larger edit-survival and feature-ablation studies;

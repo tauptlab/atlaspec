@@ -54,3 +54,11 @@ execution positions. Both the 1.2 em baseline and 3 em treatment are injected
 explicitly, so the failed baseline remains reproducible after compiler
 hardening. It never reads the holdout and writes immutable PNGs plus
 `ablation.json`.
+
+The corrected four-arm run completed on 2026-07-23. The observed baseline
+failed 0/4, while reference range alone, 3 em maximum clearance alone, and
+their combination each passed 4/4. The v0.2 compiler adopted maximum clearance
+because it preserves the authored field domain. See the
+[occlusion ablation report](../../../docs/V02_OCCLUSION_ABLATION_RND_2026-07-23.md)
+and the
+[post-fix renderer report](../../../docs/V02_OCCLUSION_POSTFIX_2026-07-23.md).

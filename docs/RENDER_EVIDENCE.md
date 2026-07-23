@@ -84,7 +84,8 @@ The calibration command hard-codes `split: development` and records
 `holdout_exposed: false`. Reference calibration describes the compiler's
 current behavior; it does not by itself prove that the behavior is good.
 The currently locked noninferiority thresholds and their rationale are in the
-[label-gate lock](V02_LABEL_GATE_LOCK_2026-07-22.md).
+[label-gate lock](V02_LABEL_GATE_LOCK_2026-07-22.md) and the
+[placed-label geometry gate lock](V02_PLACEMENT_GEOMETRY_GATE_LOCK_2026-07-23.md).
 
 ## Claim boundary
 
@@ -92,11 +93,12 @@ A render-health pass proves only that preserved data produced visible geometry
 through the real MapLibre or Vega runtime. It does not prove:
 
 - correct cartographic interpretation;
-- acceptable label overlap or symbol occlusion;
+- exact glyph overlap or label-to-symbol occlusion;
 - perceptual quality, color contrast, or visual hierarchy;
 - equality between MapLibre and Vega-Lite pixels;
 - human map-reading accuracy or expert preference.
 
-Those stronger questions require preregistered label/symbol geometry thresholds
-and blinded human or cartographer review. Render health is a prerequisite and
-an artifact-generation layer for those later evaluations.
+Placed collision-box overlap and viewport clipping now have preregistered
+thresholds. The remaining stronger questions require symbol geometry, contrast
+measurement, and blinded human or cartographer review. Render health is a
+prerequisite and an artifact-generation layer for those later evaluations.

@@ -32,6 +32,11 @@ import {
   type V02VisualGateCheck,
   type V02VisualGateLock,
 } from './visual-gates.js';
+import {
+  evaluateMapLibrePlacementGates,
+  loadV02PlacementGateLock,
+  type V02PlacementGateLock,
+} from './placement-gates.js';
 
 const RENDERABLE_CONDITIONS = new Set([
   'direct-maplibre',
@@ -65,7 +70,7 @@ export interface V02RenderEvidenceEntry {
 }
 
 export interface V02RenderEvidenceReport {
-  schema_version: '0.3';
+  schema_version: '0.4';
   evidence_kind: 'renderer-health';
   generated_at: string;
   evaluator: {
@@ -73,6 +78,11 @@ export interface V02RenderEvidenceReport {
     dirty: boolean;
   };
   visual_gate_lock: {
+    path: string;
+    sha256: string;
+    gate_id: string;
+  };
+  placement_gate_lock: {
     path: string;
     sha256: string;
     gate_id: string;
@@ -128,6 +138,7 @@ export async function writeV02RenderEvidence(
     const sources: V02RenderEvidenceReport['source_reports'] = [];
     const evaluator = await readGitState();
     const visualGate = await loadV02VisualGateLock();
+    const placementGate = await loadV02PlacementGateLock();
     const taskVariants = new Map(
       buildV02CorpusMatrix().tasks.map((task) => [task.id, task.variant]),
     );
@@ -165,6 +176,7 @@ export async function writeV02RenderEvidence(
             attempt.request.inputs,
             variant,
             visualGate.lock,
+            placementGate.lock,
             async () => {
               maplibreSession ??= await createMapLibreRenderSession({
                 ...(options.browser_path === undefined
@@ -229,7 +241,7 @@ export async function writeV02RenderEvidence(
     );
     const vegaEntries = entries.filter((entry) => entry.renderer === 'vega-lite-svg');
     const result: V02RenderEvidenceReport = {
-      schema_version: '0.3',
+      schema_version: '0.4',
       evidence_kind: 'renderer-health',
       generated_at: new Date().toISOString(),
       evaluator,
@@ -237,6 +249,11 @@ export async function writeV02RenderEvidence(
         path: visualGate.path,
         sha256: visualGate.sha256,
         gate_id: visualGate.lock.gate_id,
+      },
+      placement_gate_lock: {
+        path: placementGate.path,
+        sha256: placementGate.sha256,
+        gate_id: placementGate.lock.gate_id,
       },
       source_reports: sources,
       summary: {
@@ -262,7 +279,7 @@ export async function writeV02RenderEvidence(
         },
       },
       claim_boundary:
-        'A pass proves that preserved inputs produced visible geometry through the real MapLibre or Vega runtime and that MapLibre labels met the preregistered development-calibrated coverage, pixel, edge, and duplicate gates. This does not prove semantic label priority, perceptual quality, or human task accuracy.',
+        'A pass proves that preserved inputs produced visible geometry through the real MapLibre or Vega runtime and that MapLibre labels met the preregistered coverage, pixel, edge, duplicate, placed-box size, clipping, and overlap gates. This does not prove glyph contrast, label-to-symbol occlusion, semantic priority, perceptual quality, or human task accuracy.',
       entries,
     };
     await writeFile(
@@ -343,18 +360,23 @@ async function renderAttempt(
   inputs: readonly InputArtifact[],
   variant: V02Variant,
   visualGateLock: V02VisualGateLock,
+  placementGateLock: V02PlacementGateLock,
   maplibreSession: () => Promise<MapLibreRenderSession>,
 ): Promise<RenderedArtifact> {
   if (condition === 'direct-maplibre' || condition === 'atlaspec-maplibre') {
     const style = maplibreStyle(condition, output);
     const rendered = await (await maplibreSession()).render(style, inputs);
     const visual = evaluateMapLibreVisualGates(rendered.metrics, variant, visualGateLock);
+    const placement = evaluateMapLibrePlacementGates(
+      rendered.metrics,
+      placementGateLock,
+    );
     return {
       renderer: 'maplibre-browser-png',
       extension: 'png',
       artifact: rendered.png,
-      accepted: rendered.accepted && visual.accepted,
-      checks: [...rendered.checks, ...visual.checks],
+      accepted: rendered.accepted && visual.accepted && placement.accepted,
+      checks: [...rendered.checks, ...visual.checks, ...placement.checks],
       metrics: rendered.metrics,
       warnings: rendered.warnings,
     };

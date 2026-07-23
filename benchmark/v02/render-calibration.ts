@@ -17,6 +17,10 @@ import {
   loadV02VisualGateLock,
   type V02VisualGateCheck,
 } from './visual-gates.js';
+import {
+  evaluateMapLibrePlacementGates,
+  loadV02PlacementGateLock,
+} from './placement-gates.js';
 
 const executeFile = promisify(execFile);
 
@@ -35,7 +39,7 @@ export interface V02RenderCalibrationEntry {
 }
 
 export interface V02RenderCalibrationReport {
-  schema_version: '0.1';
+  schema_version: '0.2';
   evidence_kind: 'maplibre-reference-label-calibration';
   generated_at: string;
   evaluator: { commit: string; dirty: boolean };
@@ -43,6 +47,7 @@ export interface V02RenderCalibrationReport {
   holdout_exposed: false;
   browser_version: string;
   visual_gate_lock: { path: string; sha256: string; gate_id: string };
+  placement_gate_lock: { path: string; sha256: string; gate_id: string };
   summary: {
     tasks: number;
     passed: number;
@@ -79,6 +84,7 @@ export async function writeV02RenderCalibration(
   const manifest = buildV02Manifests(matrix).development;
   const taskMetadata = new Map(matrix.tasks.map((task) => [task.id, task]));
   const visualGate = await loadV02VisualGateLock();
+  const placementGate = await loadV02PlacementGateLock();
   const session = await createMapLibreRenderSession({
     ...(options.browser_path === undefined ? {} : { browser_path: options.browser_path }),
   });
@@ -102,6 +108,10 @@ export async function writeV02RenderCalibration(
         metadata.variant,
         visualGate.lock,
       );
+      const placement = evaluateMapLibrePlacementGates(
+        rendered.metrics,
+        placementGate.lock,
+      );
       const artifact = `artifacts/${safeName(task.id)}.png`;
       await mkdir(join(temporary, 'artifacts'), { recursive: true });
       await writeFile(join(temporary, artifact), rendered.png);
@@ -110,8 +120,8 @@ export async function writeV02RenderCalibration(
         archetype: metadata.archetype,
         difficulty: metadata.difficulty,
         variant: metadata.variant,
-        accepted: rendered.accepted && visual.accepted,
-        checks: [...rendered.checks, ...visual.checks],
+        accepted: rendered.accepted && visual.accepted && placement.accepted,
+        checks: [...rendered.checks, ...visual.checks, ...placement.checks],
         metrics: rendered.metrics,
         warnings: rendered.warnings,
         artifact,
@@ -120,7 +130,7 @@ export async function writeV02RenderCalibration(
 
     const evaluator = await readGitState();
     const report: V02RenderCalibrationReport = {
-      schema_version: '0.1',
+      schema_version: '0.2',
       evidence_kind: 'maplibre-reference-label-calibration',
       generated_at: new Date().toISOString(),
       evaluator,
@@ -131,6 +141,11 @@ export async function writeV02RenderCalibration(
         path: visualGate.path,
         sha256: visualGate.sha256,
         gate_id: visualGate.lock.gate_id,
+      },
+      placement_gate_lock: {
+        path: placementGate.path,
+        sha256: placementGate.sha256,
+        gate_id: placementGate.lock.gate_id,
       },
       summary: {
         tasks: entries.length,

@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "gate_id": "atlasbench-v02-maplibre-placement-geometry-gates-v1",
+  "status": "locked-before-model-render-reclassification",
+  "scope": "development-qualification-maplibre-placed-label-geometry",
+  "method": "maplibre-private-placement-collision-index-v5",
+  "calibration": {
+    "split": "development",
+    "holdout_exposed": false,
+    "evaluator_commit": "675a687174c601942ccc2a048de3e51e1d6b0557",
+    "report_sha256": "8854220e390b4462c0c7ac93a4e9008737ceffd40bd23f6087356c16ec4f0995"
+  },
+  "thresholds": {
+    "minimum_label_box_height_px": 12,
+    "maximum_viewport_clipping_ratio": 0.02,
+    "maximum_overlapping_box_pairs": 0,
+    "maximum_pair_overlap_ratio": 0,
+    "maximum_forced_overlap_boxes": 0
+  },
+  "claim_boundary": "These gates establish recoverable placed-label bounds, a reference-relative minimum collision-box height, no pairwise box overlap, no forced-overlap placement, and at most minor viewport clipping. Collision boxes include layout padding and do not prove glyph contrast, semantic priority, or human readability."
+}

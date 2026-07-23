@@ -10,6 +10,7 @@ deterministic compiler decides **how the renderer should implement it**.
 [![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-f59e0b)](#project-status)
 [![Package: 0.2.0-rc.1](https://img.shields.io/badge/package-0.2.0--rc.1-2563eb)](CHANGELOG.md)
 [![Latest document: 0.2](https://img.shields.io/badge/latest_document-0.2-0f766e)](#current-document-version-02)
+[![Live demo](https://img.shields.io/badge/live-Evidence_Lab-c8e94c)](https://tauptlab.github.io/atlaspec/)
 [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?logo=typescript&logoColor=white)](src)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
@@ -23,6 +24,17 @@ deterministic compiler decides **how the renderer should implement it**.
 > research package candidate. Version 0.1 remains fully supported for
 > compatibility. Stable `0.2.0` is intentionally withheld until the locked
 > release contract is complete; the package has not been published yet.
+
+## Try the live Evidence Lab
+
+Open the [Atlaspec Evidence Lab](https://tauptlab.github.io/atlaspec/) to
+compare the locked v0.2 renderer result and directly manipulate deterministic
+shadow, CCTV visibility, and constrained-routing examples.
+
+The live timing panel measures the browser-side spatial solver only. It does
+not substitute for the recorded Claude/Codex benchmark or estimate LLM
+accuracy. See [`demo/README.md`](demo/README.md) for the evidence boundary and
+local reproduction steps.
 
 ## Why Atlaspec exists
 

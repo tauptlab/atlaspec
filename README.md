@@ -12,14 +12,15 @@ deterministic compiler decides **how the renderer should implement it**.
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?logo=typescript&logoColor=white)](src)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
 
-**Semantic YAML in. Valid MapLibre Style Specification out.**
+**Semantic YAML in. Deterministic, renderer-valid map artifacts out.**
 
 </div>
 
 > [!IMPORTANT]
 > Atlaspec is pre-alpha research software. Version 0.1 supports four kinds of
 > two-dimensional thematic maps and compiles to MapLibre Style Specification
-> v8. The package has not been published to a registry yet.
+> v8. Experimental version 0.2 adds ordered semantic layers and a portable
+> Vega-Lite subset. The package has not been published to a registry yet.
 
 ## Why Atlaspec exists
 
@@ -51,9 +52,14 @@ surfaces to the model, and all Atlaspec outputs compiled successfully.
 
 ## Evidence so far
 
-Atlaspec was evaluated once on a frozen holdout containing 12 tasks across four
-map families and three difficulty levels. Each task-condition-agent tuple was
-run five times with balanced condition order.
+Atlaspec has two complementary evidence tracks. They answer different
+questions and should not be combined into one headline score.
+
+### Frozen v0.1 holdout: generation reliability and efficiency
+
+The one-time local holdout contains 12 tasks across four map families and three
+difficulty levels. Each task-condition-agent tuple was run five times with
+balanced condition order.
 
 | Local agent | Direct MapLibre | Atlaspec | Yield delta | Output-token reduction |
 |---|---:|---:|---:|---:|
@@ -71,18 +77,52 @@ run five times with balanced condition order.
   accepted map was 51.6% lower. Codex latency was 63.9% lower, but its monetary
   charge was unavailable.
 
-These are strong local-agent results, not a completed universal claim. Codex
-uncached tokens per accepted map were 0.9% worse despite its much smaller
-output. Hosted model strata, human map-reading accuracy, blind cartographer
-review, edit survival, and comprehensive visual checks remain outstanding.
-Absolute token counts are not compared between Codex and Claude because their
-CLI accounting and cache semantics differ.
-
 Read the immutable evidence and limitations in the
 [holdout result](docs/LOCAL_HOLDOUT_2026-07-20.md), its
 [pre-execution lock](docs/LOCAL_HOLDOUT_LOCK_2026-07-20.md), and the
 [benchmark contract](docs/BENCHMARK.md). The holdout is consumed and must not
 be used to tune Atlaspec 0.1 or run a second confirmation.
+
+### Locked v0.2 development evaluation: real renderer health
+
+The v0.2 evaluation replays preserved Claude and Codex outputs through real
+MapLibre and Vega runtimes. Preregistered gates check visible geometry, label
+coverage and pixels, placement boxes, clipping, duplicates, and sampled
+label-to-point-symbol occlusion.
+
+| Development result | Direct renderer generation | Atlaspec | Difference |
+|---|---:|---:|---:|
+| Locked pre-fix verdict | 40/72 (55.56%) | **68/72 (94.44%)** | **+38.89 pp** |
+| Post-fix engineering replay | 40/72 (55.56%) | **72/72 (100%)** | **+44.44 pp** |
+
+The locked verdict found four real Atlaspec proportional-label failures. A
+post-failure 2 x 2 ablation reproduced all four and showed that either a wider
+declared range or 3 em maximum-radius label clearance removed the observed
+occlusion. Atlaspec adopted the clearance policy because it preserves the
+authored data domain. The 72/72 replay verifies the repair on these preserved
+outputs; it is **post-selected remediation evidence**, not a new unbiased
+benchmark estimate.
+
+Read the [locked occlusion result](docs/V02_OCCLUSION_RENDER_2026-07-23.md),
+the [controlled ablation](docs/V02_OCCLUSION_ABLATION_RND_2026-07-23.md), and
+the [post-fix replay](docs/V02_OCCLUSION_POSTFIX_2026-07-23.md). The fresh v0.2
+holdout remains sealed.
+
+### What the evidence supports
+
+> In the tested local-agent tasks, asking an agent to author a constrained
+> semantic map specification and delegating renderer details to a deterministic
+> compiler produced more accepted outputs, substantially fewer output tokens,
+> and more healthy real-renderer artifacts than direct renderer-native
+> generation.
+
+These results do not yet establish universal model generalization, human
+map-reading accuracy, blind cartographer preference, or production readiness.
+Codex uncached tokens per accepted v0.1 map were 0.9% worse despite its much
+smaller output, and absolute token counts are not compared between Codex and
+Claude because their CLI accounting and cache semantics differ. Hosted model
+strata, unseen v0.2 confirmation, semantic-priority checks, local-background
+contrast, and human evaluation remain open.
 
 ## How it works
 
@@ -90,11 +130,12 @@ be used to tune Atlaspec 0.1 or run a second confirmation.
 flowchart LR
     U["Natural-language map request"] --> A["AI agent or human author"]
     R["Schema-derived generation reference"] --> A
-    A --> D["Atlaspec 0.1 document"]
+    A --> D["Atlaspec semantic document"]
     D --> V["Strict schema validation"]
     V --> L["Cartographic semantic linting"]
     L --> C["Deterministic compiler"]
     C --> M["MapLibre Style v8"]
+    C --> G["Vega-Lite v6 portable subset"]
     C --> T["Decision trace and legend metadata"]
     V -.->|stable diagnostics| A
     L -.->|stable diagnostics| A
@@ -473,38 +514,11 @@ docs/                   scope, benchmark contracts, runbooks, and evidence
 Atlaspec remains pre-alpha. Version 0.1 has a schema, MapLibre compiler,
 diagnostics, four map families, benchmark harness, and frozen corpus. Version
 0.2 now has an experimental layers schema, guarded migration, multi-layer
-MapLibre compiler, portable Vega-Lite subset, and capability inspection. The
-strongest current v0.2 evidence is the post-hardening development qualification:
-Claude passed every locked gate, while Codex failed only the total
-uncached-token gate. All 39 source-accepted Vega-Lite runs in that qualification
-also produced non-empty SVGs through the real Vega runtime. The v0.2 holdout
-remains sealed, so these results are qualification evidence rather than a final
-release claim.
-
-The same frozen reports now have label-aware cross-renderer runtime evidence:
-all 72 Atlaspec MapLibre/Vega-Lite comparison outputs passed the locked gates,
-while direct generation produced 52/72 healthy outputs. Two direct MapLibre
-styles that passed static checks emitted numeric-`null` warnings only in the
-browser, and one additional direct style rendered geometry but zero labels.
-The prior geometry-only result was 72/72 versus 53/72. The holdout remains
-sealed, so the observed 27.78 percentage-point development difference is not a
-final generalization claim.
-
-The next preregistered placement-geometry gate recovered MapLibre's actual
-placed label bounds for 88/88 source-accepted MapLibre outputs. Every visible
-label output had zero box overlap, forced overlap, and viewport clipping, so
-the overall result stayed 72/72 versus 52/72. This strengthens the placement
-hygiene evidence but does not create an additional performance separation.
-
-The subsequent layer-isolated point-symbol occlusion gate found 16 additional
-failures, including four Atlaspec outputs. The latest locked development result
-is 68/72 for Atlaspec versus 40/72 for direct generation, a 38.89
-percentage-point difference. A controlled post-failure ablation then found
-that either a wider declared range or 3 em maximum-radius label clearance
-removed all four Atlaspec failures. The v0.2 compiler now uses the clearance
-policy without rewriting the authored range; post-fix development replay
-reached 72/72 versus 40/72. That replay is remediation evidence, not a new
-unbiased benchmark estimate.
+MapLibre compiler, portable Vega-Lite subset, capability inspection, localized
+edit workflow, and browser-backed visual gates. The strongest current claims
+and their boundaries are summarized in [Evidence so far](#evidence-so-far).
+The v0.2 holdout remains sealed, so its current results are development
+qualification and remediation evidence rather than a final release claim.
 
 Work still required before a stable release includes:
 

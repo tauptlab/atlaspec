@@ -3,13 +3,13 @@ import type { MapLibreStyle } from '../../../src/maplibre.js';
 export type OcclusionAblationArmId =
   | 'observed'
   | 'reference-range'
-  | 'adaptive-offset'
-  | 'reference-range-adaptive-offset';
+  | 'maximum-clearance'
+  | 'reference-range-maximum-clearance';
 
 export interface OcclusionAblationArm {
   id: OcclusionAblationArmId;
   capacity_range: [number, number] | null;
-  label_offset_em: number | null;
+  label_offset_em: number;
 }
 
 export interface OcclusionAblationCell {
@@ -22,20 +22,20 @@ export const OCCLUSION_ABLATION_ARMS: readonly OcclusionAblationArm[] = [
   {
     id: 'observed',
     capacity_range: null,
-    label_offset_em: null,
+    label_offset_em: 1.2,
   },
   {
     id: 'reference-range',
     capacity_range: [0, 10_000],
-    label_offset_em: null,
+    label_offset_em: 1.2,
   },
   {
-    id: 'adaptive-offset',
+    id: 'maximum-clearance',
     capacity_range: null,
     label_offset_em: 3,
   },
   {
-    id: 'reference-range-adaptive-offset',
+    id: 'reference-range-maximum-clearance',
     capacity_range: [0, 10_000],
     label_offset_em: 3,
   },
@@ -77,7 +77,6 @@ export function applyOcclusionAblationStyle(
   arm: OcclusionAblationArm,
 ): MapLibreStyle {
   const style = structuredClone(value);
-  if (arm.label_offset_em === null) return style;
   const labels = style.layers.filter(
     (layer) =>
       layer['type'] === 'symbol' &&

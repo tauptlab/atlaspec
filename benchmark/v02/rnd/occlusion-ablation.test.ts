@@ -41,6 +41,26 @@ describe('label-to-symbol occlusion ablation', () => {
       expect.objectContaining({ 'text-offset': [0, 1.2] }),
     );
   });
+
+  it('reinstates the observed 1.2 em baseline after compiler hardening', () => {
+    const hardened = fixtureStyle();
+    (hardened.layers[1]?.['layout'] as Record<string, unknown>)['text-offset'] = [
+      0,
+      3,
+    ];
+
+    const observed = applyOcclusionAblationStyle(
+      hardened,
+      OCCLUSION_ABLATION_ARMS[0]!,
+    );
+
+    expect(observed.layers[1]?.['layout']).toEqual(
+      expect.objectContaining({ 'text-offset': [0, 1.2] }),
+    );
+    expect(hardened.layers[1]?.['layout']).toEqual(
+      expect.objectContaining({ 'text-offset': [0, 3] }),
+    );
+  });
 });
 
 function fixtureStyle(): MapLibreStyle {

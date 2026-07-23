@@ -49,5 +49,8 @@ comparisons are insufficient. See the
 `benchmark:v02:rnd:occlusion-ablation` is a post-failure development diagnostic
 for the four preserved Atlaspec proportional-symbol occlusion failures. It
 crosses the observed document with a reference `[0, 10000]` capacity range and
-a 3 em label offset, rotating all four arms across execution positions. It
-never reads the holdout and writes immutable PNGs plus `ablation.json`.
+the compiler's 3 em maximum-radius clearance, rotating all four arms across
+execution positions. Both the 1.2 em baseline and 3 em treatment are injected
+explicitly, so the failed baseline remains reproducible after compiler
+hardening. It never reads the holdout and writes immutable PNGs plus
+`ablation.json`.

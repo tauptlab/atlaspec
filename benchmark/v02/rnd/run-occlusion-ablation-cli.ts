@@ -51,7 +51,7 @@ interface AblationEntry {
   arm: OcclusionAblationArmId;
   execution_position: number;
   capacity_range: [number, number] | null;
-  label_offset_em: number | null;
+  label_offset_em: number;
   accepted: boolean;
   checks: Array<MapLibreRenderCheck | V02VisualGateCheck>;
   metrics: MapLibreRenderMetrics;
@@ -129,7 +129,7 @@ program.action(async (options: { report: string[]; output: string }) => {
 
     const evaluator = await readGitState();
     const report = {
-      schema_version: '0.2-rnd.1',
+      schema_version: '0.2-rnd.2',
       evidence_kind: 'maplibre-label-point-occlusion-ablation',
       generated_at: new Date().toISOString(),
       evaluator,
@@ -151,7 +151,7 @@ program.action(async (options: { report: string[]; output: string }) => {
         },
       ])).values()],
       summary: Object.fromEntries(
-        ['observed', 'reference-range', 'adaptive-offset', 'reference-range-adaptive-offset'].map(
+        ['observed', 'reference-range', 'maximum-clearance', 'reference-range-maximum-clearance'].map(
           (arm) => {
             const selected = entries.filter((entry) => entry.arm === arm);
             return [

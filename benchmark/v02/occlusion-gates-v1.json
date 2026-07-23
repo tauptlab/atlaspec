@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "gate_id": "atlasbench-v02-maplibre-label-point-occlusion-gates-v1",
+  "status": "locked-before-model-render-reclassification",
+  "scope": "development-qualification-maplibre-label-point-symbol-occlusion",
+  "method": "layer-isolated-quarter-resolution-rgb-difference-v1",
+  "calibration": {
+    "split": "development",
+    "holdout_exposed": false,
+    "evaluator_commit": "d3081eb9fa0cc246fb46ead5f55d9209d245ee9f",
+    "report_sha256": "28d1e0a06676be3b07dbd08cfeb984a8d10f42a43ff78e8520e88c72d8e32854"
+  },
+  "thresholds": {
+    "minimum_point_symbol_pixels_by_variant": {
+      "canonical": 35,
+      "missing-and-skew": 36,
+      "dense-multilingual-mobile": 5,
+      "geographic-capability-boundary": 4
+    },
+    "maximum_point_symbol_box_coverage_ratio_by_variant": {
+      "canonical": 0.08,
+      "missing-and-skew": 0.1,
+      "dense-multilingual-mobile": 0.05,
+      "geographic-capability-boundary": 0.4
+    },
+    "maximum_point_symbol_glyph_coverage_ratio_by_variant": {
+      "canonical": 0.03,
+      "missing-and-skew": 0.06,
+      "dense-multilingual-mobile": 0.02,
+      "geographic-capability-boundary": 0.05
+    }
+  },
+  "claim_boundary": "These gates establish a reference-relative visible point-symbol pixel floor and bound the share covered by placed label boxes or label glyph pixels in a quarter-resolution layer-isolation mask. They do not identify semantic label-symbol pairs, prove full-resolution visibility, or measure human task accuracy."
+}

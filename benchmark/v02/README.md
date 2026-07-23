@@ -156,3 +156,5 @@ which measures actual MapLibre placement boxes rather than inferring bounds
 from source coordinates. It recovered placement geometry for all 88 MapLibre
 outputs and found no additional failures; see the
 [placed-label geometry evidence](../../docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md).
+The next model-output reclassification is governed by the preregistered
+[label-to-point-symbol occlusion gate lock](../../docs/V02_OCCLUSION_GATE_LOCK_2026-07-23.md).

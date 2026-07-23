@@ -21,6 +21,10 @@ import {
   evaluateMapLibrePlacementGates,
   loadV02PlacementGateLock,
 } from './placement-gates.js';
+import {
+  evaluateMapLibreOcclusionGates,
+  loadV02OcclusionGateLock,
+} from './occlusion-gates.js';
 
 const executeFile = promisify(execFile);
 
@@ -39,7 +43,7 @@ export interface V02RenderCalibrationEntry {
 }
 
 export interface V02RenderCalibrationReport {
-  schema_version: '0.2';
+  schema_version: '0.3';
   evidence_kind: 'maplibre-reference-label-calibration';
   generated_at: string;
   evaluator: { commit: string; dirty: boolean };
@@ -48,6 +52,7 @@ export interface V02RenderCalibrationReport {
   browser_version: string;
   visual_gate_lock: { path: string; sha256: string; gate_id: string };
   placement_gate_lock: { path: string; sha256: string; gate_id: string };
+  occlusion_gate_lock: { path: string; sha256: string; gate_id: string };
   summary: {
     tasks: number;
     passed: number;
@@ -88,6 +93,7 @@ export async function writeV02RenderCalibration(
   const taskMetadata = new Map(matrix.tasks.map((task) => [task.id, task]));
   const visualGate = await loadV02VisualGateLock();
   const placementGate = await loadV02PlacementGateLock();
+  const occlusionGate = await loadV02OcclusionGateLock();
   const session = await createMapLibreRenderSession({
     ...(options.browser_path === undefined ? {} : { browser_path: options.browser_path }),
   });
@@ -115,6 +121,11 @@ export async function writeV02RenderCalibration(
         rendered.metrics,
         placementGate.lock,
       );
+      const occlusion = evaluateMapLibreOcclusionGates(
+        rendered.metrics,
+        metadata.variant,
+        occlusionGate.lock,
+      );
       const artifact = `artifacts/${safeName(task.id)}.png`;
       await mkdir(join(temporary, 'artifacts'), { recursive: true });
       await writeFile(join(temporary, artifact), rendered.png);
@@ -123,8 +134,14 @@ export async function writeV02RenderCalibration(
         archetype: metadata.archetype,
         difficulty: metadata.difficulty,
         variant: metadata.variant,
-        accepted: rendered.accepted && visual.accepted && placement.accepted,
-        checks: [...rendered.checks, ...visual.checks, ...placement.checks],
+        accepted:
+          rendered.accepted && visual.accepted && placement.accepted && occlusion.accepted,
+        checks: [
+          ...rendered.checks,
+          ...visual.checks,
+          ...placement.checks,
+          ...occlusion.checks,
+        ],
         metrics: rendered.metrics,
         warnings: rendered.warnings,
         artifact,
@@ -133,7 +150,7 @@ export async function writeV02RenderCalibration(
 
     const evaluator = await readGitState();
     const report: V02RenderCalibrationReport = {
-      schema_version: '0.2',
+      schema_version: '0.3',
       evidence_kind: 'maplibre-reference-label-calibration',
       generated_at: new Date().toISOString(),
       evaluator,
@@ -149,6 +166,11 @@ export async function writeV02RenderCalibration(
         path: placementGate.path,
         sha256: placementGate.sha256,
         gate_id: placementGate.lock.gate_id,
+      },
+      occlusion_gate_lock: {
+        path: occlusionGate.path,
+        sha256: occlusionGate.sha256,
+        gate_id: occlusionGate.lock.gate_id,
       },
       summary: {
         tasks: entries.length,

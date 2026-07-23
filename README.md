@@ -444,6 +444,7 @@ Start with:
 - [AtlasBench 0.2 label-aware cross-renderer evidence](docs/V02_LABEL_AWARE_RENDER_2026-07-22.md)
 - [AtlasBench 0.2 placed-label geometry gate lock](docs/V02_PLACEMENT_GEOMETRY_GATE_LOCK_2026-07-23.md)
 - [AtlasBench 0.2 placed-label geometry evidence](docs/V02_PLACEMENT_GEOMETRY_RENDER_2026-07-23.md)
+- [AtlasBench 0.2 label-to-point-symbol occlusion gate lock](docs/V02_OCCLUSION_GATE_LOCK_2026-07-23.md)
 
 The local automated pass is intentionally narrower than the complete benchmark
 contract. AtlasBench can export non-empty SVG evidence for Vega-Lite and

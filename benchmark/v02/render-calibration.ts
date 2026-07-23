@@ -55,6 +55,11 @@ export interface V02RenderCalibrationReport {
         median_label_coverage: number | null;
         maximum_edge_label_ratio: number | null;
         minimum_label_pixels: number;
+        minimum_label_box_height_px: number | null;
+        maximum_label_box_clipping_ratio: number | null;
+        maximum_overlapping_label_box_pairs: number;
+        maximum_pair_overlap_ratio: number | null;
+        maximum_forced_overlap_boxes: number;
       }
     >;
   };
@@ -166,12 +171,33 @@ function summarizeVariant(
   const edge = selected
     .map((entry) => entry.metrics.edge_label_ratio)
     .filter((value): value is number => value !== null);
+  const boxHeights = selected
+    .map((entry) => entry.metrics.label_geometry.minimum_box_height_px)
+    .filter((value): value is number => value !== null);
+  const clipping = selected
+    .map((entry) => entry.metrics.label_geometry.maximum_viewport_clipping_ratio)
+    .filter((value): value is number => value !== null);
+  const pairOverlap = selected
+    .map((entry) => entry.metrics.label_geometry.maximum_pair_overlap_ratio)
+    .filter((value): value is number => value !== null);
   return {
     tasks: selected.length,
     minimum_label_coverage: coverage[0] ?? null,
     median_label_coverage: median(coverage),
     maximum_edge_label_ratio: edge.length === 0 ? null : Math.max(...edge),
     minimum_label_pixels: Math.min(...selected.map((entry) => entry.metrics.label_pixels)),
+    minimum_label_box_height_px:
+      boxHeights.length === 0 ? null : Math.min(...boxHeights),
+    maximum_label_box_clipping_ratio:
+      clipping.length === 0 ? null : Math.max(...clipping),
+    maximum_overlapping_label_box_pairs: Math.max(
+      ...selected.map((entry) => entry.metrics.label_geometry.overlapping_box_pairs),
+    ),
+    maximum_pair_overlap_ratio:
+      pairOverlap.length === 0 ? null : Math.max(...pairOverlap),
+    maximum_forced_overlap_boxes: Math.max(
+      ...selected.map((entry) => entry.metrics.label_geometry.forced_overlap_boxes),
+    ),
   };
 }
 

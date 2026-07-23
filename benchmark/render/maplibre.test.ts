@@ -8,6 +8,7 @@ import {
   actionableMapLibreWarnings,
   geoBounds,
   hydrateMapLibreStyle,
+  summarizeLabelCollisionBoxes,
 } from './maplibre.js';
 
 describe('MapLibre browser render preparation', () => {
@@ -59,7 +60,49 @@ describe('MapLibre browser render preparation', () => {
       ]),
     ).toEqual(['warning: Expected value to be of type number, but found null instead.']);
   });
+
+  it('summarizes visible label collision boxes and their overlap', () => {
+    const result = summarizeLabelCollisionBoxes(
+      [
+        box(10, 10, 60, 30),
+        box(50, 15, 90, 35, 'always'),
+        box(-20, 40, 20, 60),
+        box(120, 120, 140, 140),
+      ],
+      100,
+      100,
+    );
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        supported: true,
+        minimum_box_height_px: 20,
+        maximum_viewport_clipping_ratio: 0.5,
+        overlapping_box_pairs: 1,
+        maximum_pair_overlap_ratio: 0.1875,
+        forced_overlap_boxes: 1,
+      }),
+    );
+    expect(result.boxes).toHaveLength(3);
+  });
 });
+
+function box(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  overlapMode: string | null = 'never',
+) {
+  return {
+    x1,
+    y1,
+    x2,
+    y2,
+    overlap_mode: overlapMode,
+    ignored_placement: false,
+  };
+}
 
 function style(): MapLibreStyle {
   return {

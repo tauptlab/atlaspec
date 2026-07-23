@@ -35,6 +35,26 @@ export interface MapLibreLabelLayerMetric {
   coverage: number | null;
 }
 
+export interface MapLibreLabelCollisionBox {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  overlap_mode: string | null;
+  ignored_placement: boolean;
+}
+
+export interface MapLibreLabelGeometryMetric {
+  method: 'maplibre-private-placement-collision-index-v5';
+  supported: boolean;
+  boxes: MapLibreLabelCollisionBox[];
+  minimum_box_height_px: number | null;
+  maximum_viewport_clipping_ratio: number | null;
+  overlapping_box_pairs: number;
+  maximum_pair_overlap_ratio: number | null;
+  forced_overlap_boxes: number;
+}
+
 export interface MapLibreRenderMetrics {
   requested_width: number;
   requested_height: number;
@@ -53,6 +73,7 @@ export interface MapLibreRenderMetrics {
   label_pixels: number;
   edge_label_pixels: number;
   edge_label_ratio: number | null;
+  label_geometry: MapLibreLabelGeometryMetric;
   sampled_pixels: number;
   non_background_pixels: number;
   non_background_ratio: number;
@@ -162,6 +183,18 @@ export async function renderMapLibrePng(
           getCanvas(): HTMLCanvasElement;
           getLayoutProperty(layerId: string, name: string): unknown;
           setLayoutProperty(layerId: string, name: string, value: unknown): void;
+          style?: {
+            placement?: {
+              collisionIndex?: {
+                grid?: CollisionGrid;
+                ignoredGrid?: CollisionGrid;
+              };
+            };
+          };
+        }
+        interface CollisionGrid {
+          bboxes?: number[];
+          boxKeys?: Array<{ overlapMode?: string }>;
         }
         interface MapLibreGlobal {
           Map: new (options: Record<string, unknown>) => BrowserMap;
@@ -264,6 +297,7 @@ export async function renderMapLibrePng(
                 : rendered.length / candidateValues.length,
           };
         });
+        const labelCollisionBoxes = readLabelCollisionBoxes(map, symbolLayers);
         const sample = document.createElement('canvas');
         sample.width = Math.min(240, canvas.width);
         sample.height = Math.min(160, canvas.height);
@@ -326,6 +360,7 @@ export async function renderMapLibrePng(
           ),
           layerMetrics,
           labelMetrics,
+          labelCollisionBoxes,
           labelPixels,
           edgeLabelPixels,
           sampledPixels,
@@ -356,6 +391,61 @@ export async function renderMapLibrePng(
           return isObject(layout) && layout['text-field'] !== undefined;
         }
 
+        function readLabelCollisionBoxes(
+          mapValue: BrowserMap,
+          layers: Array<Record<string, unknown>>,
+        ): { supported: boolean; boxes: MapLibreLabelCollisionBox[] } {
+          const textOnly = layers.every(
+            (layer) => !isObject(layer['layout']) || layer['layout']['icon-image'] === undefined,
+          );
+          const collisionIndex = mapValue.style?.placement?.collisionIndex;
+          if (!textOnly || collisionIndex?.grid === undefined || collisionIndex.ignoredGrid === undefined) {
+            return { supported: false, boxes: [] };
+          }
+          return {
+            supported: true,
+            boxes: [
+              ...readGrid(collisionIndex.grid, false),
+              ...readGrid(collisionIndex.ignoredGrid, true),
+            ],
+          };
+        }
+
+        function readGrid(
+          grid: CollisionGrid,
+          ignoredPlacement: boolean,
+        ): MapLibreLabelCollisionBox[] {
+          if (!Array.isArray(grid.bboxes) || !Array.isArray(grid.boxKeys)) return [];
+          const boxes: MapLibreLabelCollisionBox[] = [];
+          for (let index = 0; index < grid.boxKeys.length; index += 1) {
+            const offset = index * 4;
+            const x1 = grid.bboxes[offset];
+            const y1 = grid.bboxes[offset + 1];
+            const x2 = grid.bboxes[offset + 2];
+            const y2 = grid.bboxes[offset + 3];
+            if (
+              typeof x1 !== 'number' ||
+              typeof y1 !== 'number' ||
+              typeof x2 !== 'number' ||
+              typeof y2 !== 'number'
+            ) {
+              continue;
+            }
+            boxes.push({
+              x1: x1 - 100,
+              y1: y1 - 100,
+              x2: x2 - 100,
+              y2: y2 - 100,
+              overlap_mode:
+                typeof grid.boxKeys[index]?.overlapMode === 'string'
+                  ? grid.boxKeys[index]!.overlapMode!
+                  : null,
+              ignored_placement: ignoredPlacement,
+            });
+          }
+          return boxes;
+        }
+
         function isObject(value: unknown): value is Record<string, unknown> {
           return typeof value === 'object' && value !== null && !Array.isArray(value);
         }
@@ -383,6 +473,12 @@ export async function renderMapLibrePng(
         total + (layer.candidate_labels === null ? 0 : layer.rendered_labels),
       0,
     );
+    const labelGeometry = summarizeLabelCollisionBoxes(
+      browserMetrics.labelCollisionBoxes.boxes,
+      width,
+      height,
+      browserMetrics.labelCollisionBoxes.supported,
+    );
 
     const metrics: MapLibreRenderMetrics = {
       requested_width: width,
@@ -406,6 +502,7 @@ export async function renderMapLibrePng(
         browserMetrics.labelPixels === 0
           ? null
           : browserMetrics.edgeLabelPixels / browserMetrics.labelPixels,
+      label_geometry: labelGeometry,
       sampled_pixels: browserMetrics.sampledPixels,
       non_background_pixels: browserMetrics.nonBackgroundPixels,
       non_background_ratio:
@@ -454,6 +551,13 @@ export async function renderMapLibrePng(
           .join(','),
       ),
       check(
+        'render.label-geometry-readable',
+        candidateLabels === 0 ||
+          (metrics.label_geometry.supported &&
+            metrics.label_geometry.boxes.length >= renderedLabels),
+        `supported=${metrics.label_geometry.supported} boxes=${metrics.label_geometry.boxes.length} rendered=${renderedLabels}`,
+      ),
+      check(
         'render.canvas-nonempty',
         metrics.non_background_pixels > 0 && metrics.color_buckets > 1,
         `non_background=${metrics.non_background_pixels}/${metrics.sampled_pixels} buckets=${metrics.color_buckets}`,
@@ -480,6 +584,59 @@ export async function renderMapLibrePng(
   } finally {
     if (ownsBrowser) await browser.close();
   }
+}
+
+export function summarizeLabelCollisionBoxes(
+  boxes: readonly MapLibreLabelCollisionBox[],
+  viewportWidth: number,
+  viewportHeight: number,
+  supported = true,
+): MapLibreLabelGeometryMetric {
+  const visible = boxes.filter(
+    (box) =>
+      box.x2 > 0 &&
+      box.y2 > 0 &&
+      box.x1 < viewportWidth &&
+      box.y1 < viewportHeight &&
+      box.x2 > box.x1 &&
+      box.y2 > box.y1,
+  );
+  const heights = visible.map((box) => box.y2 - box.y1);
+  const clipping = visible.map((box) => {
+    const area = (box.x2 - box.x1) * (box.y2 - box.y1);
+    const clippedWidth = Math.max(0, Math.min(viewportWidth, box.x2) - Math.max(0, box.x1));
+    const clippedHeight = Math.max(0, Math.min(viewportHeight, box.y2) - Math.max(0, box.y1));
+    return 1 - (clippedWidth * clippedHeight) / area;
+  });
+  let overlappingBoxPairs = 0;
+  let maximumPairOverlapRatio: number | null = null;
+  for (let left = 0; left < visible.length; left += 1) {
+    for (let right = left + 1; right < visible.length; right += 1) {
+      const first = visible[left]!;
+      const second = visible[right]!;
+      const width = Math.max(0, Math.min(first.x2, second.x2) - Math.max(first.x1, second.x1));
+      const height = Math.max(0, Math.min(first.y2, second.y2) - Math.max(first.y1, second.y1));
+      const intersection = width * height;
+      if (intersection === 0) continue;
+      overlappingBoxPairs += 1;
+      const firstArea = (first.x2 - first.x1) * (first.y2 - first.y1);
+      const secondArea = (second.x2 - second.x1) * (second.y2 - second.y1);
+      const ratio = intersection / Math.min(firstArea, secondArea);
+      maximumPairOverlapRatio = Math.max(maximumPairOverlapRatio ?? 0, ratio);
+    }
+  }
+  return {
+    method: 'maplibre-private-placement-collision-index-v5',
+    supported,
+    boxes: visible,
+    minimum_box_height_px: heights.length === 0 ? null : Math.min(...heights),
+    maximum_viewport_clipping_ratio: clipping.length === 0 ? null : Math.max(...clipping),
+    overlapping_box_pairs: overlappingBoxPairs,
+    maximum_pair_overlap_ratio: maximumPairOverlapRatio,
+    forced_overlap_boxes: visible.filter(
+      (box) => box.overlap_mode === 'always' || box.ignored_placement,
+    ).length,
+  };
 }
 
 export function actionableMapLibreWarnings(warnings: readonly string[]): string[] {

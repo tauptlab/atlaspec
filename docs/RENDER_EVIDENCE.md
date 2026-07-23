@@ -60,7 +60,17 @@ into benchmark evidence. The report records:
 - unique and duplicate rendered label counts;
 - label-only pixel count, measured by toggling symbol visibility;
 - label pixels touching a four-pixel sampled viewport edge;
+- placed-label collision boxes read from MapLibre's v5 placement index,
+  including effective box height, viewport clipping, pairwise overlap, and
+  forced-overlap placement;
 - all symbol-layer IDs and local-renderer warnings.
+
+The collision-box measurement deliberately uses a pinned MapLibre v5 private
+placement structure because the public API returns rendered features but not
+their placed screen bounds. The evaluator fails closed when that structure is
+unavailable or when it cannot account for every rendered label. This makes the
+version dependency explicit instead of silently estimating label bounds from
+source coordinates.
 
 Before applying visual thresholds to model outputs, calibrate these metrics on
 development-only compiler references:

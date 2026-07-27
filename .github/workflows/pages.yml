@@ -1,4 +1,4 @@
-name: Deploy Atlaspec evidence lab
+name: Deploy Atlaspec compiler lab
 
 on:
   push:

@@ -18,7 +18,7 @@ body:
         - MapLibre compiler
         - Vega-Lite compiler
         - CLI
-        - Evidence Lab
+        - Compiler Lab
         - Benchmark tooling
         - Documentation
         - Other
@@ -65,4 +65,3 @@ body:
       options:
         - label: This report does not disclose or use sealed holdout material.
           required: true
-

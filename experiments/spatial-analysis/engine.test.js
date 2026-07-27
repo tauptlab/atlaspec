@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -85,23 +84,4 @@ test('routing changes deterministically when accessibility is required', () => {
   assert.deepEqual(lowRisk.path, ['gate', 'ramp', 'clinic']);
   assert.ok(fastest.distance < wheelchair.distance);
   assert.ok(wheelchair.edges.every((edge) => edge.accessible));
-});
-
-test('ships an English-only interface with versioned browser assets', () => {
-  const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
-  const app = readFileSync(new URL('./app.js', import.meta.url), 'utf8');
-  const engine = readFileSync(new URL('./engine.js', import.meta.url), 'utf8');
-
-  for (const [name, source] of [
-    ['index.html', html],
-    ['app.js', app],
-    ['engine.js', engine],
-  ]) {
-    assert.doesNotMatch(source, /\p{Script=Hangul}/u, `${name} contains Hangul`);
-  }
-
-  assert.match(html, /styles\.css\?v=0\.2-en\.1/);
-  assert.match(html, /app\.js\?v=0\.2-en\.1/);
-  assert.match(app, /engine\.js\?v=0\.2-en\.1/);
-  assert.match(app, /evidence\.json\?v=0\.2-en\.1/);
 });

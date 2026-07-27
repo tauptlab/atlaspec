@@ -5,537 +5,357 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Compare Atlaspec's recorded agent benchmark and run deterministic text-driven spatial analysis directly in your browser."
+      content="Inspect how Atlaspec rejects misleading cartography and deterministically compiles semantic map intent into renderer artifacts."
     />
     <meta name="theme-color" content="#f2efe5" />
-    <meta property="og:title" content="Atlaspec Evidence Lab" />
+    <meta property="og:title" content="Atlaspec Compiler Lab" />
     <meta
       property="og:description"
-      content="Use structured text and deterministic solvers to calculate shadows, CCTV blind spots, and accessible routes without a 3D scene."
+      content="Semantic map intent, enforceable cartographic policy, and deterministic renderer artifacts."
     />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://tauptlab.github.io/atlaspec/"
-    />
-    <meta
-      property="og:image"
-      content="https://tauptlab.github.io/atlaspec/og.png"
-    />
+    <meta property="og:url" content="https://tauptlab.github.io/atlaspec/" />
+    <meta property="og:image" content="https://tauptlab.github.io/atlaspec/og.png" />
     <meta
       property="og:image:alt"
-      content="Atlaspec text specification connected to route, shadow, and CCTV coverage outputs"
+      content="Atlaspec semantic document flowing through cartographic validation into a renderer artifact"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <title>Atlaspec Evidence Lab</title>
-    <link rel="stylesheet" href="./styles.css?v=0.2-en.1" />
+    <title>Atlaspec · Compiler Lab</title>
+    <link rel="stylesheet" href="./styles.css?v=0.2-scope.1" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Atlaspec Evidence Lab home">
+      <a class="brand" href="#top" aria-label="Atlaspec Compiler Lab home">
         <span class="brand-mark" aria-hidden="true">A·</span>
         <span>Atlaspec</span>
       </a>
       <nav aria-label="Primary navigation">
+        <a href="#compiler">Compiler</a>
         <a href="#evidence">Evidence</a>
-        <a href="#lab">Live Lab</a>
-        <a href="#method">Method</a>
+        <a href="#boundary">Boundary</a>
       </nav>
       <a
         class="header-link"
         href="https://github.com/tauptlab/atlaspec"
         target="_blank"
         rel="noreferrer"
-      >
-        GitHub <span aria-hidden="true">↗</span>
-      </a>
+      >GitHub <span aria-hidden="true">↗</span></a>
     </header>
 
     <main id="main">
       <section class="hero" id="top">
         <div class="hero-copy">
-          <p class="eyebrow">ATLASPEC 0.2 · LIVE EVIDENCE LAB</p>
+          <p class="eyebrow">ATLASPEC 0.2 · RESEARCH CANDIDATE</p>
           <h1>
-            Spatial reasoning,
-            <span>without rendering guesswork.</span>
+            Cartographic intent,
+            <span>compiled with guardrails.</span>
           </h1>
           <p class="hero-lede">
-            Turn spatial intent into structured text. Let deterministic solvers
-            handle shadows, blind spots, and constrained routes—then inspect
-            every assumption, metric, and checksum.
+            Agents describe what a map must communicate. Atlaspec validates the
+            semantic contract, rejects unsafe choices, and deterministically
+            emits renderer artifacts.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#lab">Run the live lab</a>
-            <a
-              class="button button-secondary"
-              href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_OCCLUSION_RENDER_2026-07-23.md"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Read the benchmark method
-            </a>
+            <a class="button button-primary" href="#compiler">Inspect the compiler</a>
+            <a class="button button-secondary" href="#evidence">Read the limits</a>
           </div>
-          <div class="hero-footnote">
-            <span class="status-dot" aria-hidden="true"></span>
-            No API key · calculations stay in your browser
-          </div>
-          <dl class="hero-proof" aria-label="Benchmark highlights">
-            <div>
-              <dt>Healthy renders</dt>
-              <dd>94.44%</dd>
-            </div>
-            <div>
-              <dt>Observed lift</dt>
-              <dd>+38.89pp</dd>
-            </div>
-            <div>
-              <dt>Evaluation</dt>
-              <dd>Sealed v0.2</dd>
-            </div>
-          </dl>
+          <p class="hero-footnote">
+            No API key · generated from the repository compiler · no LLM runs in this page
+          </p>
         </div>
 
-        <div class="hero-field" aria-label="Preview of the structured spatial-analysis flow">
-          <div class="field-grid" aria-hidden="true"></div>
-          <div class="field-label field-label-input">TEXT SPEC</div>
-          <div class="field-label field-label-output">PROVEN OUTPUT</div>
-          <div class="field-building building-one">
-            <span>31m</span>
+        <div class="pipeline-card" aria-label="Atlaspec compilation pipeline">
+          <div class="pipeline-topline">
+            <span>SEMANTIC AUTHORING SURFACE</span>
+            <span>0.2.0-rc.1</span>
           </div>
-          <div class="field-building building-two">
-            <span>16m</span>
+          <div class="pipeline-stage stage-input">
+            <span class="stage-index">01</span>
+            <div>
+              <strong>Intent document</strong>
+              <code>semantic_type: probability</code>
+              <code>missing_data: explicit</code>
+            </div>
           </div>
-          <div class="field-shadow shadow-one"></div>
-          <div class="field-shadow shadow-two"></div>
-          <div class="field-route"></div>
-          <div class="field-point point-start">A</div>
-          <div class="field-point point-end">B</div>
-          <div class="field-caption">
-            <strong>2.5D geometry</strong>
-            <span>footprint + height + time</span>
+          <div class="pipeline-connector" aria-hidden="true">↓</div>
+          <div class="pipeline-stage stage-policy">
+            <span class="stage-index">02</span>
+            <div>
+              <strong>Enforceable policy</strong>
+              <span>schema · semantic lint · capability check</span>
+            </div>
           </div>
+          <div class="pipeline-connector" aria-hidden="true">↓</div>
+          <div class="pipeline-stage stage-output">
+            <span class="stage-index">03</span>
+            <div>
+              <strong>Renderer artifact</strong>
+              <span>MapLibre · portable Vega-Lite subset</span>
+            </div>
+          </div>
+          <div class="pipeline-seal">DETERMINISTIC</div>
         </div>
+      </section>
+
+      <section class="truth-strip" aria-label="Project status">
+        <div>
+          <span>STATUS</span>
+          <strong>Research candidate</strong>
+        </div>
+        <div>
+          <span>LOCAL HOLDOUT</span>
+          <strong>12 unique tasks</strong>
+        </div>
+        <div>
+          <span>V0.2 HOLDOUT</span>
+          <strong>Not run</strong>
+        </div>
+        <div>
+          <span>PRODUCTION CLAIM</span>
+          <strong>None</strong>
+        </div>
+      </section>
+
+      <section class="compiler section-shell" id="compiler">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 · COMPILER-GENERATED EXAMPLES</p>
+            <h2>Inspect the part a schema alone cannot guarantee.</h2>
+          </div>
+          <p>
+            These examples are generated from the checked-in Atlaspec compiler.
+            Select a case to inspect its semantic diagnostics, decisions, and
+            renderer artifact.
+          </p>
+        </div>
+
+        <div class="example-tabs" role="tablist" aria-label="Compiler examples">
+          <button
+            class="example-tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-example="unsafe-count"
+          ><span>01</span> Unsafe counts</button>
+          <button
+            class="example-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-example="flood-probability"
+          ><span>02</span> Probability map</button>
+          <button
+            class="example-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-example="shelter-capacity"
+          ><span>03</span> Proportional symbols</button>
+        </div>
+
+        <article class="compiler-card" aria-live="polite">
+          <header class="compiler-card-header">
+            <div>
+              <p id="example-eyebrow">SEMANTIC LINT</p>
+              <h3 id="example-title">Loading compiler examples…</h3>
+              <span id="example-summary"></span>
+            </div>
+            <strong class="verdict-chip" id="example-verdict">LOADING</strong>
+          </header>
+
+          <div class="workbench">
+            <section class="code-panel">
+              <div class="panel-toolbar">
+                <span>map.atlas.yaml</span>
+                <button id="copy-spec" type="button">Copy</button>
+              </div>
+              <pre><code id="spec-output"></code></pre>
+            </section>
+
+            <section class="inspection-panel">
+              <div class="inspection-block">
+                <div class="panel-label">
+                  <span>Diagnostics</span>
+                  <strong id="diagnostic-count">—</strong>
+                </div>
+                <div id="diagnostic-list"></div>
+              </div>
+              <div class="inspection-block">
+                <div class="panel-label">
+                  <span>Compiler decisions</span>
+                  <strong id="decision-count">—</strong>
+                </div>
+                <div id="decision-list"></div>
+              </div>
+            </section>
+
+            <section class="artifact-panel">
+              <div class="panel-toolbar">
+                <span id="artifact-label">Renderer artifact</span>
+                <span id="artifact-status">—</span>
+              </div>
+              <div class="layer-summary" id="layer-summary"></div>
+              <pre><code id="artifact-output"></code></pre>
+            </section>
+          </div>
+
+          <footer class="compiler-boundary">
+            <strong>Verification boundary</strong>
+            <span id="compiler-boundary">
+              The repository compiler is authoritative; this page displays its
+              checked generated snapshot.
+            </span>
+          </footer>
+        </article>
       </section>
 
       <section class="evidence section-shell" id="evidence">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">01 · RECORDED AGENT BENCHMARK</p>
-            <h2>Same 72 tasks. Two authoring surfaces.</h2>
+            <p class="eyebrow">02 · EARLY EVIDENCE</p>
+            <h2>Evidence, sized to what was actually tested.</h2>
           </div>
           <p>
-            Claude and Codex authored either renderer-native code or Atlaspec
-            documents. Every output was evaluated in real MapLibre and Vega
-            runtimes.
+            The current results motivate further research. They do not
+            establish universal model generalization, human map-reading
+            benefit, or production readiness.
           </p>
         </div>
 
-        <div class="evidence-grid">
-          <article class="score-card score-atlaspec">
-            <div class="score-card-top">
-              <span class="score-label">Atlaspec → compiler</span>
-              <span class="score-chip">LOCKED</span>
+        <div class="primary-result">
+          <div class="result-kicker">ONE-TIME LOCAL HOLDOUT · 12 TASKS × 5 REPETITIONS × 2 AGENTS</div>
+          <div class="yield-grid">
+            <div>
+              <span>Direct MapLibre</span>
+              <strong>108 / 120</strong>
+              <small>90% accepted</small>
             </div>
-            <strong class="score-value" data-evidence="atlaspec-rate">94.44%</strong>
-            <span class="score-fraction" data-evidence="atlaspec-fraction">68 / 72 healthy renders</span>
-            <div class="score-track" aria-hidden="true">
-              <span style="--score: 94.44%"></span>
+            <div class="yield-arrow" aria-hidden="true">→</div>
+            <div class="yield-atlaspec">
+              <span>Atlaspec</span>
+              <strong>120 / 120</strong>
+              <small>100% accepted</small>
             </div>
-            <p>
-              The agent writes intent and constraints. The compiler owns
-              renderer-specific implementation details.
-            </p>
-          </article>
-
-          <article class="score-card score-direct">
-            <div class="score-card-top">
-              <span class="score-label">Direct renderer code</span>
-              <span class="score-chip score-chip-muted">LOCKED</span>
+            <div class="yield-delta">
+              <strong>+10 pp</strong>
+              <span>95% CI: +3.3 to +18.3 pp</span>
             </div>
-            <strong class="score-value" data-evidence="direct-rate">55.56%</strong>
-            <span class="score-fraction" data-evidence="direct-fraction">40 / 72 healthy renders</span>
-            <div class="score-track" aria-hidden="true">
-              <span style="--score: 55.56%"></span>
-            </div>
-            <p>
-              The agent writes sources, expressions, layers, and label
-              placement directly.
-            </p>
-          </article>
-
-          <article class="delta-card">
-            <p>Observed difference</p>
-            <strong data-evidence="difference">+38.89<span>pp</span></strong>
-            <dl>
-              <div>
-                <dt>Evaluated outputs</dt>
-                <dd>72 + 72</dd>
-              </div>
-              <div>
-                <dt>Real runtimes</dt>
-                <dd>MapLibre / Vega</dd>
-              </div>
-              <div>
-                <dt>v0.2 holdout</dt>
-                <dd>Sealed</dd>
-              </div>
-            </dl>
-          </article>
-        </div>
-
-        <div class="evidence-note">
-          <span class="note-index">R&amp;D</span>
+          </div>
           <p>
-            After inspecting four proportional-symbol label failures, the
-            repaired replay reached <strong>72/72</strong>. That result verifies
-            the fix; it is not a new independent performance estimate and
-            remains separate from the locked score above.
+            Output tokens per accepted map were 77.3% lower for the tested
+            Codex CLI and 59.4% lower for the tested Claude Code version.
+            Provider token accounting is not comparable across agents.
           </p>
+        </div>
+
+        <div class="secondary-grid">
+          <article>
+            <span class="card-tag">DEVELOPMENT DIAGNOSTIC</span>
+            <h3>68/72 vs 40/72</h3>
+            <p>
+              Locked v0.2 renderer-health checks favored Atlaspec by 38.89
+              percentage points. The tasks and two local agents are correlated,
+              and project authors designed the gates.
+            </p>
+          </article>
+          <article class="missing-evidence">
+            <span class="card-tag">NOT YET MEASURED</span>
+            <h3>Stronger baseline</h3>
+            <p>
+              Direct renderer generation with official validation and a
+              symmetric diagnostic repair opportunity has not yet been run.
+            </p>
+          </article>
+          <article class="missing-evidence">
+            <span class="card-tag">NOT YET MEASURED</span>
+            <h3>Independent review</h3>
+            <p>
+              No external task designer, blind cartographer panel, or human
+              map-reading experiment has confirmed the result.
+            </p>
+          </article>
+        </div>
+
+        <div class="evidence-links">
           <a
-            href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_OCCLUSION_POSTFIX_2026-07-23.md"
+            href="https://github.com/tauptlab/atlaspec/blob/main/docs/LOCAL_HOLDOUT_2026-07-20.md"
             target="_blank"
             rel="noreferrer"
-          >
-            Read the post-fix report ↗
-          </a>
+          >Read the local holdout ↗</a>
+          <a
+            href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_OCCLUSION_RENDER_2026-07-23.md"
+            target="_blank"
+            rel="noreferrer"
+          >Read the development diagnostic ↗</a>
         </div>
       </section>
 
-      <section class="lab section-shell" id="lab">
-        <div class="section-heading lab-heading">
-          <div>
-            <p class="eyebrow">02 · DETERMINISTIC SPATIAL LAB</p>
-            <h2>Change the spec. Watch the evidence update.</h2>
-          </div>
-          <p>
-            These outputs are not LLM guesses. The same input produces the same
-            polygons, visibility cells, routes, and checksum.
-          </p>
-        </div>
-
-        <div class="lab-tabs" role="tablist" aria-label="Spatial analysis type">
-          <button
-            id="tab-shadow"
-            class="lab-tab is-active"
-            type="button"
-            role="tab"
-            aria-selected="true"
-            aria-controls="panel-shadow"
-            data-scenario="shadow"
-          >
-            <span>01</span> Solar shadow
-          </button>
-          <button
-            id="tab-cctv"
-            class="lab-tab"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-cctv"
-            data-scenario="cctv"
-          >
-            <span>02</span> CCTV coverage
-          </button>
-          <button
-            id="tab-route"
-            class="lab-tab"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-route"
-            data-scenario="route"
-          >
-            <span>03</span> Constrained route
-          </button>
-        </div>
-
-        <div class="lab-workbench">
-          <div class="lab-visual">
-            <div class="canvas-toolbar">
-              <div>
-                <span class="status-dot" aria-hidden="true"></span>
-                <span id="canvas-status">solver ready</span>
-              </div>
-              <span>EPSG:5179 · 640 × 400</span>
-            </div>
-            <canvas
-              id="lab-canvas"
-              width="640"
-              height="400"
-              aria-label="Spatial analysis output"
-            >
-              Your browser does not support canvas.
-            </canvas>
-            <div class="canvas-legend" id="canvas-legend"></div>
-          </div>
-
-          <div class="lab-controls">
-            <section
-              id="panel-shadow"
-              class="control-panel"
-              role="tabpanel"
-              aria-labelledby="tab-shadow"
-              data-panel="shadow"
-            >
-              <div class="control-heading">
-                <span>Shadow parameters</span>
-                <strong id="shadow-time-output">15:00</strong>
-              </div>
-              <label for="shadow-time">
-                Observation time
-                <input
-                  id="shadow-time"
-                  type="range"
-                  min="8"
-                  max="17"
-                  value="15"
-                  step="0.25"
-                />
-              </label>
-              <p class="control-hint">
-                Seoul · winter solstice · 16–31m buildings · flat terrain
-              </p>
-            </section>
-
-            <section
-              id="panel-cctv"
-              class="control-panel"
-              role="tabpanel"
-              aria-labelledby="tab-cctv"
-              data-panel="cctv"
-              hidden
-            >
-              <div class="control-heading">
-                <span>Camera parameters</span>
-                <strong id="cctv-heading-output">320°</strong>
-              </div>
-              <label for="cctv-heading">
-                Camera heading
-                <input
-                  id="cctv-heading"
-                  type="range"
-                  min="250"
-                  max="355"
-                  value="320"
-                  step="1"
-                />
-              </label>
-              <label for="cctv-fov">
-                Horizontal FOV <output id="cctv-fov-output">82°</output>
-                <input
-                  id="cctv-fov"
-                  type="range"
-                  min="40"
-                  max="120"
-                  value="82"
-                  step="2"
-                />
-              </label>
-              <label for="cctv-range">
-                Maximum range <output id="cctv-range-output">440px</output>
-                <input
-                  id="cctv-range"
-                  type="range"
-                  min="260"
-                  max="520"
-                  value="440"
-                  step="10"
-                />
-              </label>
-            </section>
-
-            <section
-              id="panel-route"
-              class="control-panel"
-              role="tabpanel"
-              aria-labelledby="tab-route"
-              data-panel="route"
-              hidden
-            >
-              <div class="control-heading">
-                <span>Routing objective</span>
-                <strong>Main gate → Clinic</strong>
-              </div>
-              <label for="route-mode">
-                Optimization objective
-                <select id="route-mode">
-                  <option value="fastest">Shortest distance</option>
-                  <option value="wheelchair">Wheelchair accessible</option>
-                  <option value="low-risk">Lowest risk</option>
-                </select>
-              </label>
-              <p class="control-hint">
-                Applies stair accessibility and segment-level risk costs.
-              </p>
-            </section>
-
-            <div class="metric-grid" aria-live="polite">
-              <div>
-                <span id="metric-a-label">Solar elevation</span>
-                <strong id="metric-a">—</strong>
-              </div>
-              <div>
-                <span id="metric-b-label">Longest shadow</span>
-                <strong id="metric-b">—</strong>
-              </div>
-              <div>
-                <span>Single run</span>
-                <strong id="metric-runtime">—</strong>
-              </div>
-            </div>
-
-            <button class="benchmark-button" id="benchmark-button" type="button">
-              <span>Run reproducibility benchmark</span>
-              <small>repeat analysis + checksum</small>
-            </button>
-            <p class="benchmark-result" id="benchmark-result" aria-live="polite">
-              Not run yet.
-            </p>
-          </div>
-
-          <div class="spec-panel">
-            <div class="spec-toolbar">
-              <span>analysis.atlas.yaml</span>
-              <button id="copy-spec" type="button">Copy</button>
-            </div>
-            <pre><code id="spec-output"></code></pre>
-            <div class="spec-footer">
-              <span>validated</span>
-              <span>deterministic</span>
-              <span>traceable</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="lab-boundary">
-          <strong>Measurement boundary:</strong> the live benchmark measures the
-          speed and reproducibility of the in-browser spatial solver. It does
-          not measure LLM latency or model accuracy.
-        </p>
-      </section>
-
-      <section class="method section-shell" id="method">
+      <section class="boundary section-shell" id="boundary">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">03 · THE PRACTICAL ARCHITECTURE</p>
-            <h2>AI writes intent. Solvers produce evidence.</h2>
+            <p class="eyebrow">03 · PRODUCT BOUNDARY</p>
+            <h2>An opinionated cartographic IR—not a general GIS.</h2>
           </div>
           <p>
-            Atlaspec is an intermediate language for map rendering. The next
-            layer connects spatial-analysis intent to auditable computation.
+            Deterministic compilation trades arbitrary renderer freedom for a
+            smaller, auditable, safety-oriented authoring surface.
           </p>
         </div>
 
-        <div class="pipeline" aria-label="Spatial analysis pipeline">
-          <article>
-            <span>01</span>
-            <h3>Natural request</h3>
-            <p>
-              “Find an entrance with less shade at 3 PM that is wheelchair
-              accessible.”
-            </p>
+        <div class="boundary-grid">
+          <article class="does-card">
+            <span>ATLASPEC 0.2 DOES</span>
+            <ul>
+              <li>Represent explicit map-reading intent and field semantics</li>
+              <li>Reject unsupported or misleading cartographic mappings</li>
+              <li>Compile deterministic MapLibre artifacts</li>
+              <li>Compile a fail-closed portable Vega-Lite subset</li>
+              <li>Record diagnostics and inferred decisions</li>
+            </ul>
           </article>
-          <div class="pipeline-arrow" aria-hidden="true">→</div>
-          <article>
-            <span>02</span>
-            <h3>Spatial spec</h3>
-            <p>
-              Declare the coordinate system, units, time, obstacles,
-              constraints, and tolerances.
-            </p>
-          </article>
-          <div class="pipeline-arrow" aria-hidden="true">→</div>
-          <article>
-            <span>03</span>
-            <h3>Deterministic solver</h3>
-            <p>
-              Compute solar position, line of sight, and graph costs with
-              versioned algorithms.
-            </p>
-          </article>
-          <div class="pipeline-arrow" aria-hidden="true">→</div>
-          <article>
-            <span>04</span>
-            <h3>Evidence + Atlaspec</h3>
-            <p>
-              Preserve result polygons, routes, assumptions, and checksums in
-              maps and reports.
-            </p>
+          <article class="does-not-card">
+            <span>ATLASPEC 0.2 DOES NOT</span>
+            <ul>
+              <li>Perform routing, visibility, shadows, or geoprocessing</li>
+              <li>Replace GIS, GeoJSON, MapLibre, or Vega-Lite</li>
+              <li>Support arbitrary renderer-native customization</li>
+              <li>Guarantee map-reading effectiveness or production safety</li>
+              <li>Turn the current development result into a sealed holdout</li>
+            </ul>
           </article>
         </div>
 
-        <div class="data-depth">
-          <article>
-            <span class="depth-level">2D</span>
-            <h3>Coordinates + attributes</h3>
+        <div class="final-cta">
+          <div>
+            <p class="eyebrow">OPEN RESEARCH · REPRODUCIBLE BY DEFAULT</p>
+            <h2>Find the first semantic failure we missed.</h2>
             <p>
-              Property analysis, catchments, containment, distance, and network
-              routing
+              Try a map request, inspect the compiler, and report the smallest
+              cartographic counterexample you can produce.
             </p>
-          </article>
-          <article class="is-featured">
-            <span class="depth-level">2.5D</span>
-            <h3>footprint + height</h3>
-            <p>
-              Solar access, shadows, CCTV visibility, viewsheds, and simple
-              signal coverage
-            </p>
-          </article>
-          <article>
-            <span class="depth-level">3D</span>
-            <h3>Surfaces + meshes + floors</h3>
-            <p>
-              Eaves, balconies, interiors, complex roofs, and volumetric
-              obstacles
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="cta section-shell">
-        <p class="eyebrow">OPEN RESEARCH · REPRODUCIBLE BY DEFAULT</p>
-        <h2>Do not take the headline on faith. Run it.</h2>
-        <p>
-          The full schema, compiler, benchmark gates, and failure cases are open
-          for inspection.
-        </p>
-        <div class="hero-actions">
+          </div>
           <a
             class="button button-primary"
             href="https://github.com/tauptlab/atlaspec"
             target="_blank"
             rel="noreferrer"
-          >
-            Explore the code on GitHub
-          </a>
-          <a
-            class="button button-secondary"
-            href="https://github.com/tauptlab/atlaspec/blob/main/docs/V02_RELEASE_CANDIDATE_VERIFICATION_2026-07-23.md"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Read the final verification
-          </a>
+          >Explore the repository ↗</a>
         </div>
       </section>
     </main>
 
     <footer>
-      <div>
+      <div class="brand">
         <span class="brand-mark" aria-hidden="true">A·</span>
-        <strong>Atlaspec Evidence Lab</strong>
+        <strong>Atlaspec Compiler Lab</strong>
       </div>
       <p>Document 0.2 · Package 0.2.0-rc.1 · MIT</p>
-      <p>Locked results and post-selected repairs are reported separately.</p>
+      <p>Research candidate · no production-readiness claim</p>
     </footer>
 
-    <noscript>
-      <div class="noscript">
-        Enable JavaScript to run the live spatial analysis.
-      </div>
-    </noscript>
-    <script type="module" src="./app.js?v=0.2-en.1"></script>
+    <script type="module" src="./app.js?v=0.2-scope.1"></script>
   </body>
 </html>

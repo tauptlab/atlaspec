@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "media"
 VIDEO = MEDIA / "atlaspec-60s-demo.mp4"
 POSTER = MEDIA / "atlaspec-60s-poster.png"
+OPEN_GRAPH = ROOT / "demo" / "og.png"
 
 WIDTH, HEIGHT = 1280, 720
 FPS = 24
@@ -274,117 +275,104 @@ def bar(draw: ImageDraw.ImageDraw, x: int, y: int, width: int, value: float, col
         text(draw, (x + fill_width - 22, y + 55), score, 28, WHITE, bold=True, anchor="rm")
 
 
-def scene_benchmark(draw: ImageDraw.ImageDraw, local: float) -> None:
-    stamp(draw, "LOCKED V0.2 DEVELOPMENT EVALUATION", 70, 108)
-    text(draw, (70, 180), "Healthy real-renderer outputs", 48, INK, bold=True)
+def scene_semantic_lint(draw: ImageDraw.ImageDraw, local: float) -> None:
+    stamp(draw, "SEMANTIC LINT", 70, 108)
+    text(draw, (70, 180), "A schema checks shape.", 44, INK, bold=True)
+    text(draw, (70, 235), "Atlaspec also checks meaning.", 48, TEAL, bold=True)
+    rounded(draw, (70, 310, 525, 585), 22, "#172235")
+    rows = [
+        ("family:", "choropleth"),
+        ("semantic_type:", "count"),
+        ("normalization:", "none"),
+        ("raw_count:", "reject"),
+    ]
+    for idx, (key, value) in enumerate(rows):
+        text(draw, (100, 355 + idx * 49), key, 20, "#D2DAE7", mono=True)
+        text(draw, (315, 355 + idx * 49), value, 20, ACID, mono=True)
+    progress = scene_progress(local, 0.6, 2.1)
+    rounded(draw, (590, 324, 1205, 465), 20, "#F7DDD4", outline=ORANGE, width=3)
+    if progress > 0.45:
+        text(draw, (625, 360), "REJECTED · choropleth.raw-count", 21, RED, bold=True, mono=True)
+        multiline(
+            draw,
+            (625, 402),
+            "Raw counts on unequal-area polygons require normalization or an explicit override.",
+            20,
+            INK,
+            width=52,
+            spacing=5,
+        )
+    rounded(draw, (590, 492, 1205, 585), 18, INK)
+    text(draw, (625, 539), "NO RENDERER ARTIFACT EMITTED", 21, WHITE, bold=True, mono=True, anchor="lm")
+
+
+def scene_compiler_policy(draw: ImageDraw.ImageDraw, local: float) -> None:
+    text(draw, (70, 110), "Policy becomes renderer code", 48, INK, bold=True)
+    text(draw, (72, 170), "Deterministically—and with a recorded reason.", 27, MUTED)
+    rounded(draw, (70, 230, 505, 592), 22, "#172235")
+    text(draw, (100, 270), "shelter-capacity.atlas.yaml", 17, TEAL_LIGHT, mono=True)
+    inputs = [
+        "family: proportional-symbol",
+        "size: capacity",
+        "range: [0, 1000]",
+        "missing_data: error",
+    ]
+    for idx, line in enumerate(inputs):
+        text(draw, (100, 325 + idx * 46), line, 19, WHITE if idx != 1 else ACID, mono=True)
+    draw.line((535, 410, 655, 410), fill=TEAL, width=5)
+    draw.polygon([(655, 400), (675, 410), (655, 420)], fill=TEAL)
+    rounded(draw, (700, 225, 1205, 592), 22, WHITE, outline=GRID, width=2)
+    stamp(draw, "AREA-PROPORTIONAL", 735, 255)
+    text(draw, (745, 335), "radius = √value", 36, TEAL, bold=True, mono=True)
+    text(draw, (745, 388), "so circle area ∝ capacity", 23, INK, bold=True)
+    for idx, radius in enumerate([14, 25, 40]):
+        x = 790 + idx * 145
+        draw.ellipse((x - radius, 500 - radius, x + radius, 500 + radius), fill=TEAL, outline=INK, width=2)
+        text(draw, (x, 565), str([100, 400, 1000][idx]), 16, MUTED, mono=True, anchor="mm")
+
+
+def scene_evidence(draw: ImageDraw.ImageDraw, local: float) -> None:
+    stamp(draw, "ONE-TIME LOCAL HOLDOUT", 70, 105)
+    text(draw, (70, 175), "12 tasks × 5 runs × 2 agents", 42, INK, bold=True)
     p = scene_progress(local, 0.6, 3.0)
-    bar(draw, 70, 300, 780, 68 / 72, TEAL, "Atlaspec", "68 / 72 · 94.44%", p)
-    bar(draw, 70, 440, 780, 40 / 72, ORANGE, "Direct renderer generation", "40 / 72 · 55.56%", p)
-    rounded(draw, (900, 285, 1205, 555), 24, INK)
-    text(draw, (1052, 352), "+38.89", 63, ACID, bold=True, anchor="mm")
-    text(draw, (1052, 408), "percentage points", 20, WHITE, bold=True, anchor="mm")
-    draw.line((940, 452, 1165, 452), fill="#4D596B", width=2)
+    bar(draw, 70, 295, 760, 1.0, TEAL, "Atlaspec", "120 / 120 · 100%", p)
+    bar(draw, 70, 430, 760, 0.9, ORANGE, "Direct MapLibre", "108 / 120 · 90%", p)
+    rounded(draw, (885, 272, 1205, 550), 24, INK)
+    text(draw, (1045, 340), "+10 pp", 61, ACID, bold=True, anchor="mm")
+    text(draw, (1045, 398), "accepted yield", 20, WHITE, bold=True, anchor="mm")
+    draw.line((925, 443, 1165, 443), fill="#4D596B", width=2)
     multiline(
         draw,
-        (934, 478),
-        "Locked pre-fix result.\nSealed holdout not run.",
+        (925, 470),
+        "95% CI: +3.3 to +18.3 pp\nLocal agents only",
         18,
         "#D2DAE7",
-        width=26,
+        width=28,
         spacing=7,
     )
 
 
-def scene_shadow(draw: ImageDraw.ImageDraw, local: float) -> None:
-    text(draw, (70, 115), "Explainable solar-shadow geometry", 44, INK, bold=True)
-    text(draw, (72, 174), "Input assumptions stay visible. Geometry stays inspectable.", 25, MUTED)
-    ground_y = 555
-    draw.line((90, ground_y, 1190, ground_y), fill=INK, width=4)
-    sun_x, sun_y = 180, 280
-    draw.ellipse((sun_x - 42, sun_y - 42, sun_x + 42, sun_y + 42), fill=ACID, outline=INK, width=3)
-    bx, bw, bh = 650, 180, 250
-    draw.rectangle((bx, ground_y - bh, bx + bw, ground_y), fill=TEAL, outline=INK, width=3)
-    for wx in range(bx + 25, bx + bw - 15, 45):
-        for wy in range(ground_y - bh + 35, ground_y - 35, 60):
-            draw.rectangle((wx, wy, wx + 20, wy + 28), fill=TEAL_LIGHT)
-    ray_progress = scene_progress(local, 0.7, 2.6)
-    top = (bx, ground_y - bh)
-    shadow_end_x = int(bx + bw + 270 * ray_progress)
-    draw.line((sun_x + 32, sun_y + 18, top[0], top[1]), fill=ORANGE, width=4)
-    polygon = [(bx + bw, ground_y), (shadow_end_x, ground_y), (bx, ground_y - bh)]
-    draw.polygon(polygon, fill="#A9B7AE")
-    draw.line((bx, ground_y - bh, shadow_end_x, ground_y), fill=ORANGE, width=4)
-    rounded(draw, (875, 300, 1185, 420), 18, WHITE, outline=GRID, width=2)
-    text(draw, (905, 337), "solar altitude", 18, MUTED)
-    text(draw, (1150, 337), "32.4°", 22, INK, bold=True, anchor="ra")
-    text(draw, (905, 380), "shadow length", 18, MUTED)
-    text(draw, (1150, 380), "18.7 m", 22, TEAL, bold=True, anchor="ra")
-
-
-def scene_cctv(draw: ImageDraw.ImageDraw, local: float) -> None:
-    text(draw, (70, 115), "Deterministic CCTV coverage", 44, INK, bold=True)
-    text(draw, (72, 174), "Coverage claims can expose both assumptions and blind spots.", 25, MUTED)
-    rounded(draw, (70, 225, 850, 610), 24, WHITE, outline=GRID, width=2)
-    obstacles = [(410, 285, 505, 500), (645, 410, 765, 535)]
-    for obstacle in obstacles:
-        draw.rectangle(obstacle, fill=INK)
-    camera_x, camera_y = 190, 420
-    sweep = 0.25 + 0.75 * scene_progress(local, 0.5, 2.8)
-    draw.pieslice(
-        (camera_x - 30, camera_y - 240, camera_x + int(580 * sweep), camera_y + 240),
-        start=-38,
-        end=38,
-        fill=TEAL_LIGHT,
-        outline=TEAL,
-        width=3,
-    )
-    for obstacle in obstacles:
-        draw.rectangle(obstacle, fill=INK)
-    draw.ellipse((camera_x - 18, camera_y - 18, camera_x + 18, camera_y + 18), fill=ORANGE, outline=INK, width=3)
-    text(draw, (875, 270), "VISIBLE", 18, TEAL, bold=True)
-    text(draw, (875, 310), "71.2%", 54, INK, bold=True)
-    text(draw, (875, 405), "BLIND SPOT", 18, ORANGE, bold=True)
-    text(draw, (875, 445), "28.8%", 54, INK, bold=True)
-    text(draw, (875, 535), "2 occluding structures", 19, MUTED)
-
-
-def scene_route(draw: ImageDraw.ImageDraw, local: float) -> None:
-    text(draw, (70, 115), "Constraint-aware route reasoning", 44, INK, bold=True)
-    text(draw, (72, 174), "A route is only useful when its constraints are explicit.", 25, MUTED)
-    nodes = {
-        "A": (150, 500),
-        "B": (360, 380),
-        "C": (570, 510),
-        "D": (760, 330),
-        "E": (1000, 470),
-        "F": (1130, 300),
-    }
-    edges = [("A", "B"), ("B", "C"), ("C", "D"), ("D", "E"), ("E", "F"), ("B", "D"), ("C", "E")]
-    for a, b in edges:
-        draw.line((*nodes[a], *nodes[b]), fill="#B9B4A8", width=9)
-    draw.line((*nodes["C"], *nodes["D"]), fill=RED, width=13)
-    text(draw, (660, 425), "STAIRS", 16, RED, bold=True, anchor="mm")
-    route = ["A", "B", "D", "E", "F"]
-    segments = list(zip(route, route[1:]))
-    progress = scene_progress(local, 0.6, 3.0) * len(segments)
-    for idx, (a, b) in enumerate(segments):
-        if progress <= idx:
-            continue
-        amount = min(1.0, progress - idx)
-        ax, ay = nodes[a]
-        bx, by = nodes[b]
-        end = (ax + (bx - ax) * amount, ay + (by - ay) * amount)
-        draw.line((ax, ay, *end), fill=TEAL, width=12)
-    for name, (x, y) in nodes.items():
-        draw.ellipse((x - 15, y - 15, x + 15, y + 15), fill=WHITE, outline=INK, width=4)
-        text(draw, (x, y - 28), name, 16, INK, bold=True, anchor="mm")
-    stamp(draw, "WHEELCHAIR ACCESSIBLE", 830, 570)
+def scene_open_work(draw: ImageDraw.ImageDraw, local: float) -> None:
+    stamp(draw, "NOT YET MEASURED", 70, 105, fill="#F4C4AE")
+    text(draw, (70, 178), "What the current result does not prove", 45, INK, bold=True)
+    cards = [
+        ("01", "Stronger baseline", "Validator + symmetric repair"),
+        ("02", "Independent review", "External tasks + cartographers"),
+        ("03", "Fresh confirmation", "v0.2 holdout not run"),
+    ]
+    for idx, (number, title, detail) in enumerate(cards):
+        x = 70 + idx * 390
+        y = 295
+        rounded(draw, (x, y, x + 350, y + 245), 20, WHITE, outline=GRID, width=2)
+        text(draw, (x + 28, y + 36), number, 18, TEAL, bold=True, mono=True)
+        text(draw, (x + 28, y + 94), title, 25, INK, bold=True)
+        multiline(draw, (x + 28, y + 140), detail, 20, MUTED, width=25, spacing=5)
 
 
 def scene_cta(draw: ImageDraw.ImageDraw, local: float) -> None:
     rounded(draw, (66, 108, 1214, 607), 32, INK)
-    text(draw, (640, 178), "Try the Evidence Lab.", 51, WHITE, bold=True, anchor="mm")
-    text(draw, (640, 241), "Inspect every claim.", 35, TEAL_LIGHT, bold=True, anchor="mm")
+    text(draw, (640, 178), "Try the Compiler Lab.", 51, WHITE, bold=True, anchor="mm")
+    text(draw, (640, 241), "Find the semantic failure we missed.", 31, TEAL_LIGHT, bold=True, anchor="mm")
     rounded(draw, (168, 307, 1112, 383), 16, ACID)
     text(draw, (640, 345), "tauptlab.github.io/atlaspec", 29, INK, bold=True, mono=True, anchor="mm")
     rounded(draw, (250, 413, 1030, 483), 16, "#263247", outline="#526078", width=2)
@@ -394,12 +382,12 @@ def scene_cta(draw: ImageDraw.ImageDraw, local: float) -> None:
 
 SCENES = [
     (0.0, 6.0, scene_title),
-    (6.0, 15.0, scene_problem),
-    (15.0, 25.0, scene_solution),
-    (25.0, 35.0, scene_benchmark),
-    (35.0, 43.0, scene_shadow),
-    (43.0, 51.0, scene_cctv),
-    (51.0, 57.0, scene_route),
+    (6.0, 14.0, scene_problem),
+    (14.0, 23.0, scene_solution),
+    (23.0, 32.0, scene_semantic_lint),
+    (32.0, 41.0, scene_compiler_policy),
+    (41.0, 51.0, scene_evidence),
+    (51.0, 57.0, scene_open_work),
     (57.0, 60.0, scene_cta),
 ]
 
@@ -423,8 +411,10 @@ def render_frame(t: float) -> Image.Image:
 
 def main() -> None:
     MEDIA.mkdir(parents=True, exist_ok=True)
-    poster = render_frame(29.0)
+    poster = render_frame(27.0)
     poster.save(POSTER, optimize=True)
+    open_graph = render_frame(3.0).crop((0, 24, WIDTH, 696)).resize((1200, 630))
+    open_graph.save(OPEN_GRAPH, optimize=True)
 
     writer = imageio_ffmpeg.write_frames(
         str(VIDEO),

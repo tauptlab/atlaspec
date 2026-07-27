@@ -3,29 +3,29 @@
 Agents should write map intent. Not renderer plumbing.
 
 2
-00:00:06,000 --> 00:00:15,000
-Direct renderer generation exposes a large failure surface.
+00:00:06,000 --> 00:00:14,000
+Direct renderer generation exposes syntax, semantics, and cartography at once.
 
 3
-00:00:15,000 --> 00:00:25,000
+00:00:14,000 --> 00:00:23,000
 Semantic YAML in. Deterministic map artifacts out.
 
 4
-00:00:25,000 --> 00:00:35,000
-Locked v0.2 development evaluation: 68/72 vs 40/72, +38.89 percentage points.
+00:00:23,000 --> 00:00:32,000
+A schema checks shape. Atlaspec also checks cartographic meaning.
 
 5
-00:00:35,000 --> 00:00:43,000
-Explainable solar-shadow geometry.
+00:00:32,000 --> 00:00:41,000
+Cartographic policy becomes deterministic renderer code with a recorded reason.
 
 6
-00:00:43,000 --> 00:00:51,000
-Deterministic CCTV coverage and blind spots.
+00:00:41,000 --> 00:00:51,000
+One-time local holdout: 120 of 120 accepted vs 108 of 120 direct, plus 10 percentage points.
 
 7
 00:00:51,000 --> 00:00:57,000
-Constraint-aware route reasoning.
+Stronger baselines, independent review, and fresh v0.2 confirmation remain open.
 
 8
 00:00:57,000 --> 00:01:00,000
-Try the Evidence Lab. Inspect every claim.
+Try the Compiler Lab. Find the semantic failure we missed.

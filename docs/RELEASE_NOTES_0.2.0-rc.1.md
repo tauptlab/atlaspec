@@ -7,7 +7,7 @@ visual evaluation while preserving explicit 0.1 compatibility.
 
 ## Start here
 
-- [Live Evidence Lab](https://tauptlab.github.io/atlaspec/)
+- [Live Compiler Lab](https://tauptlab.github.io/atlaspec/)
 - [60-second overview](https://github.com/tauptlab/atlaspec/blob/v0.2.0-rc.1/media/atlaspec-60s-demo.mp4)
 - [Quick start](https://github.com/tauptlab/atlaspec#quick-start)
 - [Roadmap](ROADMAP.md)
@@ -22,12 +22,16 @@ visual evaluation while preserving explicit 0.1 compatibility.
 - localized edit-survival and cross-renderer semantic evaluation;
 - real MapLibre and Vega execution with geometry, label, clipping, duplicate,
   placement, and point-symbol-occlusion gates;
-- English-only public Evidence Lab with deterministic solar-shadow, CCTV
-  coverage, and constrained-routing examples.
+- English-only public Compiler Lab generated from semantic-lint and compiler
+  outputs.
 
 ## Evidence, with boundaries
 
-The locked v0.2 **development** renderer evaluation produced:
+The one-time 12-task local holdout produced 120/120 accepted Atlaspec outputs
+and 108/120 direct MapLibre outputs: a 10 percentage-point difference with a
+95% interval from +3.3 to +18.3 points.
+
+The separate locked v0.2 **development** renderer evaluation produced:
 
 | Condition | Healthy outputs | Rate |
 |---|---:|---:|
@@ -44,13 +48,17 @@ map-reading tasks, blind cartographer review, and production-readiness evidence
 remain open. Do not present this candidate as stable `0.2.0` or as an npm
 publication.
 
+Official renderer validation followed by a symmetric direct-authoring repair
+opportunity has not yet been measured. The development renderer gates were
+authored by the project and are not an external cartographic gold standard.
+
 ## Verification
 
 The release source passed:
 
 ```text
 42 test files / 160 tests
-5 Evidence Lab tests
+Compiler Lab generation and interface tests
 48-task v0.1 corpus integrity
 48-task v0.2 corpus integrity
 3 generated-reference integrity checks

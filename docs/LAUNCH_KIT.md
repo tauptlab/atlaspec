@@ -1,145 +1,140 @@
 # Atlaspec Launch Kit
 
-This kit keeps launch messages concise, reproducible, and inside the evidence
-boundary. Update the release URL after publishing a new candidate.
+This kit is deliberately conservative. Atlaspec is an early research candidate
+with promising local evidence, not a proven universal solution for
+AI-generated maps.
 
 ## One-line positioning
 
-**Atlaspec is a semantic map language and deterministic compiler that lets AI
-agents specify cartographic intent instead of inventing renderer plumbing.**
+**Atlaspec is an opinionated semantic map IR and deterministic compiler that
+lets AI agents author enforceable cartographic intent instead of renderer
+plumbing.**
 
 ## Thirty-second explanation
 
-AI agents can generate MapLibre or Vega-Lite JSON, but those renderer-native
-surfaces are large and brittle. Atlaspec gives the agent a smaller, typed
-language for audience, fields, visual intent, zoom behavior, and constraints.
-Its compiler validates those choices and emits deterministic renderer
-artifacts. In a locked v0.2 development renderer evaluation, 68/72 Atlaspec
-outputs were healthy versus 40/72 direct outputs. The live Evidence Lab exposes
-the result and deterministic spatial examples without pretending that a
-browser timing panel is an LLM benchmark.
+AI agents can generate MapLibre or Vega-Lite configuration, but renderer
+validity does not guarantee sound cartography. Atlaspec gives the agent a
+smaller typed language for audience, fields, visual intent, zoom behavior, and
+constraints. Its semantic linter can reject choices such as unnormalized raw
+counts on unequal-area polygons, and its compiler records deterministic
+renderer decisions such as area-proportional symbol scaling.
 
-## Verified claims
+In a one-time 12-task local holdout, Atlaspec produced 120/120 accepted outputs
+versus 108/120 for direct MapLibre: a 10 percentage-point difference with a 95%
+interval from +3.3 to +18.3 points. A stronger direct baseline with official
+validation and symmetric repair, external tasks, human evaluation, and fresh
+v0.2 confirmation remain open.
 
-| Message | Safe public wording | Boundary to retain |
+## Claim table
+
+| Topic | Safe wording | Required boundary |
 |---|---|---|
-| v0.2 renderer health | 68/72 Atlaspec outputs vs 40/72 direct outputs in a locked development evaluation (+38.89 pp) | Development result, not the sealed v0.2 holdout |
-| Repaired replay | The compiler repair replay reached 72/72 | Post-selected remediation, not a fresh estimate |
-| v0.1 local agents | Both tested local agents improved accepted yield from 90% to 100% | Local Codex and Claude versions, consumed holdout |
-| Output size | Atlaspec used 77.3% fewer output tokens for Codex and 59.4% fewer for Claude | Provider token accounting is not cross-comparable |
-| Production readiness | Research candidate suitable for evaluation and prototyping | No production-readiness claim |
+| Local accepted yield | 120/120 Atlaspec vs 108/120 direct MapLibre in a one-time 12-task local holdout (+10 pp) | Two local agents, five repetitions, consumed holdout |
+| Output tokens | 77.3% lower for the tested Codex CLI and 59.4% lower for the tested Claude Code version | Provider accounting is not cross-comparable |
+| v0.2 renderer health | 68/72 Atlaspec vs 40/72 direct in a locked development diagnostic | Correlated runs and project-authored gates; not the sealed holdout |
+| Repaired replay | Post-selected compiler repair reached 72/72 | Remediation evidence, not a fresh estimate |
+| Production readiness | Research candidate for evaluation and prototyping | No production-readiness claim |
+
+Never shorten `94.44% healthy renderer outputs in a locked development
+diagnostic` to `94.44% accurate`. Do not headline the post-selected 72/72
+replay.
+
+## Product boundary
+
+Atlaspec 0.2 validates and compiles semantic cartographic documents. It does
+not perform routing, visibility, shadow simulation, spatial analysis,
+geoprocessing, 3D rendering, or arbitrary renderer-native design.
+
+The earlier browser solvers are isolated in
+`experiments/spatial-analysis` and must be described only as a separate future
+research exploration.
 
 ## Launch sequence
 
-1. Publish the GitHub prerelease with the tarball, 60-second video, poster, and
-   captions.
-2. Verify the live Evidence Lab and every README link from a signed-out browser.
-3. Post the technical launch to Hacker News and GeekNews.
-4. Post a shorter visual version to LinkedIn, X, Bluesky, and relevant
-   geospatial communities.
-5. Ask for one concrete action: reproduce a benchmark task, try a map request,
-   or report a renderer failure.
-6. Publish a follow-up only when new independent evidence or a meaningful
-   compiler capability exists.
+1. Verify the Compiler Lab and every README link from a signed-out browser.
+2. Publish a technical Show HN post that links directly to the runnable lab.
+3. Publish a Korean technical summary to GeekNews.
+4. Share the scope-aligned 60-second video in geospatial and agent communities.
+5. Ask for one concrete action: provide a cartographic counterexample or
+   reproduce a benchmark condition.
+6. Publish a follow-up only after a stronger baseline or independent result.
 
-## Hacker News draft
+## Hacker News author notes
 
-### Title
+Rewrite these points in the maintainer's own voice before posting:
 
-Show HN: Atlaspec – a semantic map language for reliable AI-generated cartography
+- Renderer-valid output can still be cartographically misleading.
+- Atlaspec represents explicit field semantics and enforces cartographic policy.
+- The live lab shows actual compiler-generated diagnostics and artifacts.
+- The local holdout improved accepted yield by 10 points, but it contains only
+  12 unique tasks and two local agents.
+- The direct validator-plus-repair baseline and independent review are not yet
+  complete.
+- Feedback is requested on counterexamples, the abstraction boundary, and the
+  fairest stronger baseline.
 
-### Body
+Suggested title:
 
-I built Atlaspec after repeatedly seeing AI agents produce plausible but invalid
-or misleading renderer-native map configurations.
-
-Instead of asking a model to author MapLibre or Vega-Lite plumbing directly,
-Atlaspec asks for cartographic intent in a smaller typed YAML language, then
-validates and deterministically compiles it.
-
-The current v0.2 research candidate includes multi-layer maps, MapLibre and a
-portable Vega-Lite subset, migration, decision traces, and browser-backed
-visual gates. In the locked development renderer evaluation, Atlaspec produced
-68/72 healthy outputs versus 40/72 for direct renderer generation (+38.89
-percentage points). A repair made after inspecting those failures reached
-72/72, and I keep that post-selected result separate.
-
-Live Evidence Lab: https://tauptlab.github.io/atlaspec/
-
-Source and reproducible evidence: https://github.com/tauptlab/atlaspec
-
-I would especially value feedback on the language boundary, missing
-cartographic failure modes, and independent reproductions.
+> Show HN: Atlaspec – an enforceable semantic IR for agent-authored maps
 
 ## GeekNews draft
 
-### Title
+### 제목
 
-Atlaspec – AI 에이전트를 위한 의도 중심 지도 언어와 결정론적 컴파일러
+Atlaspec – AI 에이전트가 지도 렌더러 코드 대신 검증 가능한 지도 의도를 작성하는 의미론적 IR
 
-### Body
+### 본문
 
-AI가 MapLibre/Vega-Lite 설정을 직접 만들 때 발생하는 큰 생성 표면과
-렌더러 오류를 줄이기 위해 Atlaspec을 만들었습니다. 에이전트는 YAML로
-지도 의도와 제약을 기술하고, 스키마 검증과 결정론적 컴파일러가
-렌더러별 구현을 담당합니다.
+MapLibre나 Vega-Lite 설정이 문법적으로 유효하더라도 잘못된 단계구분도,
+면적이 아닌 반지름에 비례한 심볼, 누락값 은폐 같은 카토그래피 오류가
+남을 수 있습니다. Atlaspec은 필드 의미와 지도 목적을 명시하고,
+semantic lint와 결정론적 컴파일러가 이러한 정책을 검사하도록 만든
+연구용 IR입니다.
 
-잠금된 v0.2 개발 렌더러 평가에서는 Atlaspec 68/72, 직접 생성 40/72의
-정상 출력이 확인됐습니다(+38.89%p). 실패를 본 뒤 적용한 수정 재실행
-72/72는 사후 선택된 결과로 별도 표기했습니다.
+12개 태스크를 5회 반복하고 두 로컬 에이전트로 실행한 일회성
+홀드아웃에서는 Atlaspec 120/120, 직접 MapLibre 108/120의 accepted
+output을 얻었습니다(+10%p, 95% CI +3.3~+18.3%p).
 
-라이브 Evidence Lab에서 결과와 그림자, CCTV 가시성, 제약 경로 예제를
-직접 확인할 수 있습니다.
+다만 공식 renderer validator와 동일한 1회 repair를 제공하는 더 강한
+직접 생성 기준선, 외부 태스크, 사람 대상 평가, 새 v0.2 확인 실험은
+아직 남아 있습니다. Compiler Lab은 이 한계와 실제 semantic lint 및
+compiler 결정을 함께 공개합니다.
 
 - Demo: https://tauptlab.github.io/atlaspec/
 - GitHub: https://github.com/tauptlab/atlaspec
 
-언어의 추상화 경계, 빠진 지도 실패 유형, 독립 재현에 대한 의견을
-받고 싶습니다.
-
 ## Short social post
 
-AI agents should describe what a map must communicate—not hand-author every
-renderer expression.
+Renderer-valid does not mean cartographically sound.
 
-Atlaspec turns semantic YAML into deterministic MapLibre and portable Vega-Lite
-artifacts. Locked v0.2 development evaluation: 68/72 healthy outputs vs 40/72
-direct (+38.89 pp).
+Atlaspec is an opinionated semantic map IR that rejects unsafe choices and
+deterministically compiles MapLibre and a portable Vega-Lite subset.
 
-Try the Evidence Lab: https://tauptlab.github.io/atlaspec/
+One-time local holdout: 120/120 accepted vs 108/120 direct MapLibre (+10 pp;
+12 tasks, two local agents). Stronger baselines and independent review remain
+open.
 
-Research candidate, source and evidence open:
-https://github.com/tauptlab/atlaspec
-
-## Suggested screenshots
-
-- Evidence Lab hero with the `94.44% vs 55.56%` comparison visible;
-- a side-by-side semantic YAML and compiled renderer artifact;
-- one deterministic analysis panel each for shadow, CCTV, and routing;
-- the benchmark methodology panel showing the locked/post-selected boundary.
-
-Use the generated poster in `media/atlaspec-60s-poster.png` for link previews
-when a platform does not produce a useful GitHub card.
+Compiler Lab: https://tauptlab.github.io/atlaspec/
 
 ## Response guide
 
-**“Is this just another JSON/YAML wrapper?”**  
-The research question is whether a smaller semantic authoring surface plus
-deterministic compilation improves valid cartographic outcomes. Atlaspec ships
-the compiler, validation rules, renderer adapters, and evaluation evidence
-together so that claim can be tested.
+**“Is this just another YAML wrapper?”**
+The testable contribution is enforceable cartographic semantics and
+deterministic policy, not YAML brevity.
 
-**“Why not tool-call MapLibre directly?”**  
-Tool calling changes transport, not the size or fragility of the authored
-renderer contract. Atlaspec moves renderer-specific decisions into versioned
-code while retaining explicit escape and capability boundaries.
+**“Would validator feedback and retry solve the direct baseline failures?”**
+It may solve many syntax failures. That symmetric comparison is now a required
+next experiment and should be reported even if it erases the current delta.
 
-**“Does the benchmark prove this works everywhere?”**  
-No. It establishes advantages in the reported local-agent and locked
-development conditions. Hosted models, a fresh v0.2 holdout, people, and blind
-cartographer review remain open.
+**“Why not use Vega-Lite?”**
+Vega-Lite is already a valuable abstraction and remains a direct baseline.
+Atlaspec investigates explicit cross-renderer cartographic semantics,
+fail-closed capability boundaries, and decision traces.
 
-**“Can it replace GIS or 3D simulation?”**  
-No. It can structure deterministic 2D spatial analyses and explanations, but
-physics-heavy shadow, surveillance, visibility, and routing decisions still
-depend on suitable geometry, models, uncertainty, and domain validation.
+**“Is the compiler too opinionated?”**
+Yes, intentionally. Atlaspec targets a constrained safety-oriented subset.
+Future theme profiles and explicit fallback reporting should expand design
+coverage without hiding when the compiler cannot represent a request.
+
+**“Does the benchmark prove general superiority?”**
+No. It motivates further research under the reported local conditions.

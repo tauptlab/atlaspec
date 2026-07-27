@@ -1,0 +1,43 @@
+name: Feature or schema proposal
+description: Propose a cartographic capability, language change, or integration.
+title: "[Proposal]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What real map-authoring or agent workflow is currently blocked?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Concrete example
+      description: Show the desired Atlaspec input and observable output.
+      render: yaml
+    validations:
+      required: true
+  - type: dropdown
+    id: ownership
+    attributes:
+      label: Where should the decision live?
+      options:
+        - Agent-authored intent
+        - Atlaspec validator
+        - Deterministic compiler
+        - Renderer adapter
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Compatibility and evaluation impact
+      description: Note schema, renderer, corpus, or benchmark implications.
+

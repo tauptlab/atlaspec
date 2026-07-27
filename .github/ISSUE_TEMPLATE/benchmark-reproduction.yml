@@ -1,0 +1,56 @@
+name: Benchmark reproduction
+description: Share an independent AtlasBench or renderer-evidence result.
+title: "[Reproduction]: "
+labels:
+  - benchmark
+body:
+  - type: input
+    id: revision
+    attributes:
+      label: Atlaspec revision
+      placeholder: Full commit SHA or release tag
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence-class
+    attributes:
+      label: Evidence class
+      options:
+        - Locked development replay
+        - Independent new evaluation
+        - Post-selected R&D
+        - Smoke or dry run
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and providers
+      description: Include OS, Node, renderer, model or CLI versions, and cache policy.
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Results and artifact hashes
+    validations:
+      required: true
+  - type: checkboxes
+    id: preregistration
+    attributes:
+      label: Reporting checks
+      options:
+        - label: I identified whether thresholds were locked before measurement.
+          required: true
+        - label: I separated post-selected repairs from independent results.
+          required: true
+        - label: I did not inspect a sealed holdout to tune the implementation.
+          required: true
+

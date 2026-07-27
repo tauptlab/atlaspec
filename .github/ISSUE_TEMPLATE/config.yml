@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and design discussion
+    url: https://github.com/tauptlab/atlaspec/discussions
+    about: Ask usage questions or discuss the language and compiler design.
+  - name: Live Evidence Lab
+    url: https://tauptlab.github.io/atlaspec/
+    about: Try the recorded benchmark and deterministic spatial-analysis demo.
+  - name: Private security report
+    url: https://github.com/tauptlab/atlaspec/security/advisories/new
+    about: Report a vulnerability without disclosing it publicly.
+

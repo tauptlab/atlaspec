@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use Atlaspec in research, please cite the software."
+title: "Atlaspec: Intent-first map specifications for reliable AI-generated cartography"
+type: software
+authors:
+  - name: "TauptLab"
+version: "0.2.0-rc.1"
+date-released: "2026-07-27"
+license: MIT
+repository-code: "https://github.com/tauptlab/atlaspec"
+url: "https://tauptlab.github.io/atlaspec/"
+keywords:
+  - cartography
+  - geospatial
+  - AI agents
+  - intermediate representation
+  - MapLibre
+  - Vega-Lite
+

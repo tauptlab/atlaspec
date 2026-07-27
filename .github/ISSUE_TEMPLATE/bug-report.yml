@@ -1,0 +1,68 @@
+name: Bug report
+description: Report a reproducible compiler, validator, CLI, or demo defect.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Do not include sealed holdout material
+        or security-sensitive details in a public issue.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Schema or validation
+        - MapLibre compiler
+        - Vega-Lite compiler
+        - CLI
+        - Evidence Lab
+        - Benchmark tooling
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Atlaspec version or commit
+      placeholder: 0.2.0-rc.1 or commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include the smallest safe document, data shape, and command.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and diagnostics
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: OS, Node.js version, renderer and browser if relevant
+    validations:
+      required: true
+  - type: checkboxes
+    id: integrity
+    attributes:
+      label: Evaluation integrity
+      options:
+        - label: This report does not disclose or use sealed holdout material.
+          required: true
+

@@ -61,7 +61,15 @@ jobs:
           cp media/atlaspec-60s-demo.mp4 release-assets/
           cp media/atlaspec-60s-poster.png release-assets/
           cp media/atlaspec-60s-demo.srt release-assets/
-          sha256sum release-assets/* > release-assets/SHA256SUMS.txt
+          (
+            cd release-assets
+            sha256sum \
+              atlaspec-*.tgz \
+              atlaspec-60s-demo.mp4 \
+              atlaspec-60s-demo.srt \
+              atlaspec-60s-poster.png \
+              > SHA256SUMS.txt
+          )
 
       - name: Publish GitHub prerelease
         shell: bash
@@ -69,10 +77,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
-          gh release create "$RELEASE_TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --prerelease \
-            --title "Atlaspec 0.2.0-rc.1 — research preview" \
-            --notes-file docs/RELEASE_NOTES_0.2.0-rc.1.md \
-            release-assets/*
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --prerelease \
+              --title "Atlaspec 0.2.0-rc.1 — research preview" \
+              --notes-file docs/RELEASE_NOTES_0.2.0-rc.1.md
+            gh release upload "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber \
+              release-assets/*
+          else
+            gh release create "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --prerelease \
+              --title "Atlaspec 0.2.0-rc.1 — research preview" \
+              --notes-file docs/RELEASE_NOTES_0.2.0-rc.1.md \
+              release-assets/*
+          fi

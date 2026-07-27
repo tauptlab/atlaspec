@@ -34,8 +34,10 @@ export function evaluateGeneratedOutput(
     case 'atlaspec-repair':
       return evaluateAtlaspec(output, requirements);
     case 'direct-maplibre':
+    case 'direct-maplibre-repair':
       return evaluateMapLibre(output, requirements);
     case 'direct-vega-lite':
+    case 'direct-vega-lite-repair':
       return evaluateVegaLite(output, requirements);
   }
 }

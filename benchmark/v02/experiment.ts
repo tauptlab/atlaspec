@@ -140,10 +140,7 @@ export async function runV02Experiment(
   for (let repetition = 1; repetition <= repetitions; repetition += 1) {
     for (const { task, manifestIndex } of tasks) {
       const dataInputs = await loadInputs(dirname(absoluteManifest), task.data_files, 'data');
-      const conditions = task.conditions.filter(
-        (condition) =>
-          options.conditions === undefined || options.conditions.includes(condition),
-      );
+      const conditions = selectConditions(task, options.conditions);
       if (conditions.length === 0) {
         throw new Error(`No selected conditions are declared for task ${task.id}.`);
       }
@@ -221,7 +218,7 @@ async function runCondition(
   attempts.push(await generateAttempt('initial', adapter, initial, task, condition));
 
   if (
-    condition === 'atlaspec-repair' &&
+    isRepairCondition(condition) &&
     attempts[0]?.response !== undefined &&
     !attempts[0].accepted
   ) {
@@ -436,9 +433,9 @@ function requestFor(
 
 function conditionPrompt(task: V02ManifestTask, condition: V02Condition): string {
   const output =
-    condition === 'direct-maplibre'
+    isDirectMapLibreCondition(condition)
       ? 'Return only a complete MapLibre Style Specification v8 JSON document.'
-      : condition === 'direct-vega-lite'
+      : isDirectVegaLiteCondition(condition)
         ? 'Return only a complete Vega-Lite v6 JSON document.'
         : 'Return only a complete Atlaspec 0.2 YAML document.';
   return `${task.prompt} Use every supplied GeoJSON input by its exact path. ${output}`;
@@ -543,15 +540,50 @@ async function referenceInput(
   atlaspecReferencePath?: string,
 ): Promise<InputArtifact> {
   const name =
-    condition === 'direct-maplibre'
+    isDirectMapLibreCondition(condition)
       ? 'maplibre.md'
-      : condition === 'direct-vega-lite'
+      : isDirectVegaLiteCondition(condition)
         ? 'vega-lite.md'
         : undefined;
   const path = name === undefined
     ? (atlaspecReferencePath ?? '../references/atlaspec-v02.md')
     : `../references/${name}`;
   return (await loadInputs(manifestDirectory, [path], 'reference'))[0]!;
+}
+
+function selectConditions(
+  task: V02ManifestTask,
+  requested?: readonly V02Condition[],
+): V02Condition[] {
+  if (requested === undefined) return [...task.conditions];
+  return requested.filter((condition) => {
+    if (task.conditions.includes(condition)) return true;
+    if (condition === 'direct-maplibre-repair') {
+      return task.conditions.includes('direct-maplibre');
+    }
+    if (condition === 'direct-vega-lite-repair') {
+      return task.conditions.includes('direct-vega-lite');
+    }
+    if (condition === 'atlaspec-maplibre-repair') {
+      return task.conditions.includes('atlaspec-maplibre');
+    }
+    if (condition === 'atlaspec-vega-lite-repair') {
+      return task.conditions.includes('atlaspec-vega-lite');
+    }
+    return false;
+  });
+}
+
+function isRepairCondition(condition: V02Condition): boolean {
+  return condition.endsWith('-repair');
+}
+
+function isDirectMapLibreCondition(condition: V02Condition): boolean {
+  return condition === 'direct-maplibre' || condition === 'direct-maplibre-repair';
+}
+
+function isDirectVegaLiteCondition(condition: V02Condition): boolean {
+  return condition === 'direct-vega-lite' || condition === 'direct-vega-lite-repair';
 }
 
 async function loadInputs(

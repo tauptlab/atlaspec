@@ -33,13 +33,17 @@ export function evaluateV02Output(
 ): V02OutputEvaluation {
   switch (condition) {
     case 'direct-maplibre':
+    case 'direct-maplibre-repair':
       return evaluateDirectMapLibre(output, task);
     case 'direct-vega-lite':
+    case 'direct-vega-lite-repair':
       return evaluateDirectVegaLite(output, task);
     case 'atlaspec-maplibre':
+    case 'atlaspec-maplibre-repair':
     case 'atlaspec-repair':
       return evaluateAtlaspecMapLibre(output, task);
     case 'atlaspec-vega-lite':
+    case 'atlaspec-vega-lite-repair':
       return evaluateAtlaspecVegaLite(output, task);
     case 'vega-capability-negative':
       return evaluateCapabilityNegative(output);

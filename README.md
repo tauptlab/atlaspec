@@ -11,7 +11,7 @@ deterministic compiler decides **how the renderer should implement it**.
 [![Package: 0.2.0-rc.1](https://img.shields.io/badge/package-0.2.0--rc.1-2563eb)](CHANGELOG.md)
 [![GitHub prerelease](https://img.shields.io/github/v/release/tauptlab/atlaspec?include_prereleases&sort=semver)](https://github.com/tauptlab/atlaspec/releases)
 [![Latest document: 0.2](https://img.shields.io/badge/latest_document-0.2-0f766e)](#current-document-version-02)
-[![Live demo](https://img.shields.io/badge/live-Evidence_Lab-c8e94c)](https://tauptlab.github.io/atlaspec/)
+[![Live demo](https://img.shields.io/badge/live-Compiler_Lab-c8e94c)](https://tauptlab.github.io/atlaspec/)
 [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178c6?logo=typescript&logoColor=white)](src)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22c55e)](LICENSE)
@@ -164,7 +164,9 @@ The current evidence also does **not** compare Atlaspec against the strongest
 practical direct-authoring baseline: official renderer validation followed by
 an equal diagnostic repair opportunity. That symmetric baseline and the
 precommitted component ablations remain required before attributing the
-observed improvement specifically to the language, linter, or compiler.
+observed improvement specifically to the language, linter, or compiler. An
+executable [symmetric repair protocol](docs/SYMMETRIC_REPAIR_BASELINE.md) is
+available for this R&D experiment; no result is claimed yet.
 
 ## How it works
 
@@ -406,6 +408,11 @@ Earlier deterministic routing, shadow, and visibility prototypes are preserved
 under [`experiments/spatial-analysis`](experiments/spatial-analysis) as a
 separate research exploration. They are not Atlaspec 0.2 capabilities and are
 not part of the public compiler demo or renderer benchmark.
+
+Atlaspec 0.2 also has no renderer-native escape hatch. If a map requires
+arbitrary style expressions or a design outside the supported policy surface,
+author the renderer artifact directly; silently passing unsupported options
+through the compiler would weaken its validation guarantee.
 
 ## Validation and diagnostics
 

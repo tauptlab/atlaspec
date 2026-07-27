@@ -5,7 +5,9 @@ const Strict = { additionalProperties: false } as const;
 
 export const BenchmarkConditionSchema = Type.Union([
   Type.Literal('direct-maplibre'),
+  Type.Literal('direct-maplibre-repair'),
   Type.Literal('direct-vega-lite'),
+  Type.Literal('direct-vega-lite-repair'),
   Type.Literal('atlaspec'),
   Type.Literal('atlaspec-repair'),
 ]);
@@ -13,7 +15,9 @@ export const BenchmarkConditionSchema = Type.Union([
 export const GenerationConditionSchema = Type.Union([
   BenchmarkConditionSchema,
   Type.Literal('atlaspec-maplibre'),
+  Type.Literal('atlaspec-maplibre-repair'),
   Type.Literal('atlaspec-vega-lite'),
+  Type.Literal('atlaspec-vega-lite-repair'),
   Type.Literal('vega-capability-negative'),
 ]);
 

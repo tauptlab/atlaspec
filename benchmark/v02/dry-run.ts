@@ -74,13 +74,17 @@ function referenceOutput(
 ): string {
   switch (condition) {
     case 'direct-maplibre':
+    case 'direct-maplibre-repair':
       if (!maplibre.ok) throw new Error('Reference MapLibre compilation failed.');
       return JSON.stringify(maplibre.style);
     case 'direct-vega-lite':
+    case 'direct-vega-lite-repair':
       if (!vegaLite.ok) throw new Error('Reference Vega-Lite compilation failed.');
       return JSON.stringify(vegaLite.spec);
     case 'atlaspec-maplibre':
+    case 'atlaspec-maplibre-repair':
     case 'atlaspec-vega-lite':
+    case 'atlaspec-vega-lite-repair':
     case 'atlaspec-repair':
     case 'vega-capability-negative':
       return atlaspec;

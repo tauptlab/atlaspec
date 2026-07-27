@@ -131,6 +131,64 @@ describe('AtlasBench comparison runner', () => {
     );
   });
 
+  it('offers the identical one-repair protocol to direct renderer baselines', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'atlasbench-direct-repair-'));
+    const manifestPath = join(directory, 'manifest.json');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        version: '0.1',
+        suite: 'direct-repair-pilot',
+        repetitions: 1,
+        model: { provider: 'fixture', model: 'replay', version: '1' },
+        sampling: { temperature: 0 },
+        tasks: [
+          {
+            id: 'renderer-repair',
+            family: 'choropleth',
+            data_files: [resolve('examples', 'data', 'districts.geojson')],
+            conditions: [
+              {
+                condition: 'direct-maplibre-repair',
+                prompt: 'Return MapLibre JSON and repair it once if required.',
+                requirements: {},
+              },
+            ],
+          },
+        ],
+      }),
+      'utf8',
+    );
+    const validStyle = JSON.stringify({ version: 8, sources: {}, layers: [] });
+    const report = await runExperiment(
+      manifestPath,
+      new ReplayGenerationAdapter([
+        response('direct-repair-pilot/renderer-repair/direct-maplibre-repair/1/1', '{}', 1),
+        response(
+          'direct-repair-pilot/renderer-repair/direct-maplibre-repair/1/2',
+          validStyle,
+          2,
+        ),
+      ]),
+    );
+
+    expect(report.runs[0]).toEqual(
+      expect.objectContaining({
+        first_attempt_accepted: false,
+        final_accepted: true,
+        repair_iterations: 1,
+      }),
+    );
+    expect(report.runs[0]?.attempts[1]?.request.diagnostics).not.toHaveLength(0);
+    expect(report.summaries[0]).toEqual(
+      expect.objectContaining({
+        condition: 'direct-maplibre-repair',
+        final_yield: 1,
+        charge_usd: 3,
+      }),
+    );
+  });
+
   it('counts transport failures without an undeclared retry', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'atlasbench-'));
     const manifestPath = join(directory, 'manifest.json');

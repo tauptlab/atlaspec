@@ -261,7 +261,12 @@ function renderInput(input: GenerationRequest['inputs'][number]): string {
 }
 
 function artifactOutputContract(condition: GenerationRequest['condition']): string {
-  if (condition === 'direct-maplibre' || condition === 'direct-vega-lite') {
+  if (
+    condition === 'direct-maplibre' ||
+    condition === 'direct-maplibre-repair' ||
+    condition === 'direct-vega-lite' ||
+    condition === 'direct-vega-lite-repair'
+  ) {
     return [
       'FINAL OUTPUT CONTRACT (mandatory):',
       '- Emit exactly one JSON document.',

@@ -263,7 +263,7 @@ async function runCondition(options: RunConditionOptions): Promise<RunRecord> {
   attempts.push(firstAttempt);
 
   if (
-    options.condition.condition === 'atlaspec-repair' &&
+    isRepairCondition(options.condition.condition) &&
     firstAttempt.response !== undefined &&
     !firstAttempt.accepted
   ) {
@@ -402,7 +402,9 @@ function buildRepairPrompt(
 export function summarizeRuns(runs: readonly RunRecord[]): ConditionSummary[] {
   const conditions: BenchmarkCondition[] = [
     'direct-maplibre',
+    'direct-maplibre-repair',
     'direct-vega-lite',
+    'direct-vega-lite-repair',
     'atlaspec',
     'atlaspec-repair',
   ];
@@ -450,6 +452,10 @@ export function summarizeRuns(runs: readonly RunRecord[]): ConditionSummary[] {
     });
   }
   return summaries;
+}
+
+function isRepairCondition(condition: BenchmarkCondition): boolean {
+  return condition.endsWith('-repair');
 }
 
 async function loadInputs(

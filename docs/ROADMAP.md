@@ -16,6 +16,8 @@ delivery dates.
 ## Next — test generalization and usefulness
 
 - reproduce generation results with precommitted hosted-model strata;
+- run the paired
+  [symmetric validator-and-repair baseline](SYMMETRIC_REPAIR_BASELINE.md);
 - run blind map-reading tasks with people, including completion time and error
   rate;
 - obtain structured cartographer review of usefulness and failure severity;

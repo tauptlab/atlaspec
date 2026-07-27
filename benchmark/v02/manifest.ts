@@ -10,9 +10,13 @@ import type {
 
 export type V02Condition =
   | 'direct-maplibre'
+  | 'direct-maplibre-repair'
   | 'direct-vega-lite'
+  | 'direct-vega-lite-repair'
   | 'atlaspec-maplibre'
+  | 'atlaspec-maplibre-repair'
   | 'atlaspec-vega-lite'
+  | 'atlaspec-vega-lite-repair'
   | 'atlaspec-repair'
   | 'vega-capability-negative';
 

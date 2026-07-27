@@ -51,6 +51,7 @@
     "benchmark:v02:run": "tsx benchmark/v02/run-cli.ts",
     "benchmark:v02:rnd:reference-layout": "tsx benchmark/v02/rnd/run-reference-layout-cli.ts",
     "benchmark:v02:rnd:occlusion-ablation": "tsx benchmark/v02/rnd/run-occlusion-ablation-cli.ts",
+    "benchmark:v02:rnd:analyze-repair": "tsx benchmark/v02/rnd/analyze-symmetric-repair-cli.ts",
     "benchmark:v02:local:prepare": "tsx benchmark/v02/local/prepare-cli.ts",
     "benchmark:v02:local:run-job": "tsx benchmark/v02/local/run-job-cli.ts",
     "benchmark:v02:local:status": "tsx benchmark/v02/local/status-cli.ts",

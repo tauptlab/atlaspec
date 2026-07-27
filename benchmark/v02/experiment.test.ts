@@ -17,6 +17,7 @@ import {
   type V02EvaluationManifest,
   type V02ManifestTask,
 } from './manifest.js';
+import { analyzeSymmetricRepair } from './rnd/symmetric-repair.js';
 
 describe('AtlasBench 0.2 model runner', () => {
   it('preserves attempts, repairs once, and evaluates localized edits', async () => {
@@ -104,6 +105,62 @@ describe('AtlasBench 0.2 model runner', () => {
     ]);
   });
 
+  it('runs symmetric one-repair R&D conditions without changing the locked manifest', async () => {
+    const manifest = await developmentManifest();
+    const task = manifest.tasks.find(
+      (candidate) => candidate.portability === 'representable',
+    )!;
+    const adapter = new ReferenceAdapter(new Map([[task.id, task]]), true);
+    const conditions = [
+      'direct-maplibre-repair',
+      'atlaspec-maplibre-repair',
+      'direct-vega-lite-repair',
+      'atlaspec-vega-lite-repair',
+    ] as const;
+    const report = await runV02Experiment(
+      resolve('benchmark/v02/development.manifest.json'),
+      adapter,
+      {
+        model: { provider: 'fixture', model: 'reference', version: '1' },
+        sampling: { temperature: 0, max_output_tokens: 8000 },
+        repetitions: 1,
+        task_ids: [task.id],
+        conditions,
+        run_variant: 'symmetric-repair-test',
+      },
+    );
+
+    expect(report.runs.map((run) => run.condition).sort()).toEqual(
+      [...conditions].sort(),
+    );
+    expect(report.runs.every((run) => !run.first_attempt_accepted)).toBe(true);
+    expect(report.runs.every((run) => run.final_accepted)).toBe(true);
+    expect(report.runs.every((run) => run.repair_iterations === 1)).toBe(true);
+    expect(report.runs.every((run) => run.edit === null)).toBe(true);
+    expect(report.runs.flatMap((run) => run.attempts).every(
+      (attempt) => attempt.stage === 'initial' || attempt.request.diagnostics!.length > 0,
+    )).toBe(true);
+    expect(adapter.calls).toBe(8);
+    const analysis = analyzeSymmetricRepair(report);
+    expect(analysis.status).toBe('research-diagnostic-not-release-evidence');
+    expect(analysis.comparisons).toEqual([
+      expect.objectContaining({
+        renderer: 'maplibre',
+        paired_runs: 1,
+        direct_final_yield: 1,
+        atlaspec_final_yield: 1,
+        final_yield_delta: 0,
+      }),
+      expect.objectContaining({
+        renderer: 'vega-lite',
+        paired_runs: 1,
+        direct_final_yield: 1,
+        atlaspec_final_yield: 1,
+        final_yield_delta: 0,
+      }),
+    ]);
+  });
+
   it('can select a compact Atlaspec reference for an explicit R&D run', async () => {
     const manifest = await developmentManifest();
     const task = manifest.tasks[0]!;
@@ -186,7 +243,7 @@ class ReferenceAdapter implements GenerationAdapter {
     const task = this.tasks.get(request.task_id)!;
     if (
       this.failFirstRepair &&
-      request.condition === 'atlaspec-repair' &&
+      request.condition.endsWith('-repair') &&
       request.attempt === 1
     ) {
       return response(request, 'not: valid: atlaspec');
@@ -199,12 +256,18 @@ class ReferenceAdapter implements GenerationAdapter {
         missing_data: 'hide',
       };
     }
-    if (request.condition === 'direct-maplibre') {
+    if (
+      request.condition === 'direct-maplibre' ||
+      request.condition === 'direct-maplibre-repair'
+    ) {
       const result = compileMapLibre(document);
       if (!result.ok) throw new Error('reference MapLibre compilation failed');
       return response(request, JSON.stringify(result.style));
     }
-    if (request.condition === 'direct-vega-lite') {
+    if (
+      request.condition === 'direct-vega-lite' ||
+      request.condition === 'direct-vega-lite-repair'
+    ) {
       const result = compileVegaLite(document);
       if (!result.ok) throw new Error('reference Vega-Lite compilation failed');
       return response(request, JSON.stringify(result.spec));

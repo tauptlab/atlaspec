@@ -160,13 +160,16 @@ Claude because their CLI accounting and cache semantics differ. Hosted model
 strata, unseen v0.2 confirmation, semantic-priority checks, local-background
 contrast, and human evaluation remain open.
 
-The current evidence also does **not** compare Atlaspec against the strongest
-practical direct-authoring baseline: official renderer validation followed by
-an equal diagnostic repair opportunity. That symmetric baseline and the
-precommitted component ablations remain required before attributing the
-observed improvement specifically to the language, linter, or compiler. An
-executable [symmetric repair protocol](docs/SYMMETRIC_REPAIR_BASELINE.md) is
-available for this R&D experiment; no result is claimed yet.
+A small six-task development
+[symmetric-repair pilot](docs/V02_SYMMETRIC_REPAIR_PILOT_2026-07-27.md) now
+compares official renderer validation plus one equal diagnostic repair
+opportunity. Direct MapLibre recovered to the same 6/6 final yield as Atlaspec
+for both tested agents, while Atlaspec retained a large output-token advantage.
+The Vega-Lite stratum favored Atlaspec, but had only three pairs per agent and
+95% intervals spanning zero to the maximum possible delta. This is exploratory
+R&D, not evidence that the stronger baseline has been decisively beaten. The
+executable [protocol](docs/SYMMETRIC_REPAIR_BASELINE.md), an adequately powered
+precommitted run, and component ablations remain required.
 
 ## How it works
 

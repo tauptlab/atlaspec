@@ -5,6 +5,11 @@ renderer workflow equipped with deterministic validation and retry. This R&D
 protocol exists to measure that stronger practical baseline without changing
 the frozen v0.2 manifests or retroactively changing published results.
 
+A six-task development
+[pilot](V02_SYMMETRIC_REPAIR_PILOT_2026-07-27.md) has exercised this protocol.
+It is exploratory and does not replace the adequately powered, precommitted
+experiment described below.
+
 ## Conditions
 
 The runner supports four opt-in conditions:
@@ -57,7 +62,8 @@ npm run benchmark:v02:rnd:analyze-repair -- `
 
 The analysis pairs by task and repetition and reports first-attempt yield,
 post-repair yield, repair rate, output tokens per run, the paired final-yield
-delta, and a deterministic paired-bootstrap 95% interval.
+delta, a deterministic paired-bootstrap 95% interval, latency, and observed
+provider charge when the CLI exposes it.
 
 ## Interpretation rules
 

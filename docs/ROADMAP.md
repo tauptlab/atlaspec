@@ -16,8 +16,9 @@ delivery dates.
 ## Next — test generalization and usefulness
 
 - reproduce generation results with precommitted hosted-model strata;
-- run the paired
-  [symmetric validator-and-repair baseline](SYMMETRIC_REPAIR_BASELINE.md);
+- freeze and run an adequately powered version of the paired
+  [symmetric validator-and-repair baseline](SYMMETRIC_REPAIR_BASELINE.md),
+  following the six-task development pilot;
 - run blind map-reading tasks with people, including completion time and error
   rate;
 - obtain structured cartographer review of usefulness and failure severity;
@@ -49,9 +50,10 @@ These results support continued research and practical prototyping. They do not
 yet establish production readiness, universal model generalization, human
 map-reading benefit, or blind cartographer preference.
 
-The next comparison must include direct renderer authoring with official
-validation and a symmetric diagnostic repair opportunity, followed by the
-precommitted schema/linter/compiler ablations.
+The next comparison must expand the six-task development
+[symmetric-repair pilot](V02_SYMMETRIC_REPAIR_PILOT_2026-07-27.md) into an
+adequately powered precommitted run, followed by schema/linter/compiler
+ablations.
 
 See [BENCHMARK_0.2.md](BENCHMARK_0.2.md) and
 [V02_RELEASE_CANDIDATE_VERIFICATION_2026-07-23.md](V02_RELEASE_CANDIDATE_VERIFICATION_2026-07-23.md)

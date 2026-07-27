@@ -14,7 +14,8 @@ test('ships a scope-aligned English compiler lab', () => {
   assert.match(html, /<html lang="en">/);
   assert.match(html, /12 unique tasks/);
   assert.match(html, /V0\.2 HOLDOUT[\s\S]*Not run/);
-  assert.match(html, /Stronger baseline/);
+  assert.match(html, /Symmetric repair baseline/);
+  assert.match(html, /R&amp;D PILOT · 6 DEV TASKS/);
   assert.match(html, /An opinionated cartographic IR—not a general GIS/);
   assert.doesNotMatch(html, /Sealed v0\.2/);
   assert.doesNotMatch(html, /Solar shadow|CCTV coverage|Constrained route/);

@@ -24,7 +24,7 @@ One-time local holdout: 120 of 120 accepted vs 108 of 120 direct, plus 10 percen
 
 7
 00:00:51,000 --> 00:00:57,000
-Stronger baselines, independent review, and fresh v0.2 confirmation remain open.
+A full repair benchmark, independent review, and fresh v0.2 confirmation remain open.
 
 8
 00:00:57,000 --> 00:01:00,000

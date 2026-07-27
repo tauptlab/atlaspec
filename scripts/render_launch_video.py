@@ -356,7 +356,7 @@ def scene_open_work(draw: ImageDraw.ImageDraw, local: float) -> None:
     stamp(draw, "NOT YET MEASURED", 70, 105, fill="#F4C4AE")
     text(draw, (70, 178), "What the current result does not prove", 45, INK, bold=True)
     cards = [
-        ("01", "Stronger baseline", "Validator + symmetric repair"),
+        ("01", "Full repair benchmark", "Precommitted + powered"),
         ("02", "Independent review", "External tasks + cartographers"),
         ("03", "Fresh confirmation", "v0.2 holdout not run"),
     ]

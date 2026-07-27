@@ -48,9 +48,12 @@ map-reading tasks, blind cartographer review, and production-readiness evidence
 remain open. Do not present this candidate as stable `0.2.0` or as an npm
 publication.
 
-Official renderer validation followed by a symmetric direct-authoring repair
-opportunity has not yet been measured. The development renderer gates were
-authored by the project and are not an external cartographic gold standard.
+A post-release six-task development pilot gave official renderer validation
+and direct authoring the same one-repair opportunity. Direct MapLibre then tied
+Atlaspec at 6/6 final accepted outputs for each tested agent while Atlaspec used
+fewer output tokens. The sample was selected after a runner smoke test and is
+not release evidence. The development renderer gates were authored by the
+project and are not an external cartographic gold standard.
 
 ## Verification
 

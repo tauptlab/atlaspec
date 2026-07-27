@@ -21,9 +21,10 @@ renderer decisions such as area-proportional symbol scaling.
 
 In a one-time 12-task local holdout, Atlaspec produced 120/120 accepted outputs
 versus 108/120 for direct MapLibre: a 10 percentage-point difference with a 95%
-interval from +3.3 to +18.3 points. A stronger direct baseline with official
-validation and symmetric repair, external tasks, human evaluation, and fresh
-v0.2 confirmation remain open.
+interval from +3.3 to +18.3 points. A six-task development pilot with official
+validation and symmetric repair erased the final MapLibre yield difference but
+retained an Atlaspec output-token advantage. An adequately powered precommitted
+run, external tasks, human evaluation, and fresh v0.2 confirmation remain open.
 
 ## Claim table
 
@@ -33,6 +34,7 @@ v0.2 confirmation remain open.
 | Output tokens | 77.3% lower for the tested Codex CLI and 59.4% lower for the tested Claude Code version | Provider accounting is not cross-comparable |
 | v0.2 renderer health | 68/72 Atlaspec vs 40/72 direct in a locked development diagnostic | Correlated runs and project-authored gates; not the sealed holdout |
 | Repaired replay | Post-selected compiler repair reached 72/72 | Remediation evidence, not a fresh estimate |
+| Symmetric-repair pilot | Direct MapLibre and Atlaspec both reached 6/6 final yield per agent; Atlaspec used fewer output tokens | Six selected development tasks, one repetition, exploratory |
 | Production readiness | Research candidate for evaluation and prototyping | No production-readiness claim |
 
 Never shorten `94.44% healthy renderer outputs in a locked development
@@ -111,8 +113,8 @@ Atlaspec is an opinionated semantic map IR that rejects unsafe choices and
 deterministically compiles MapLibre and a portable Vega-Lite subset.
 
 One-time local holdout: 120/120 accepted vs 108/120 direct MapLibre (+10 pp;
-12 tasks, two local agents). Stronger baselines and independent review remain
-open.
+12 tasks, two local agents). A six-task symmetric-repair pilot tied on final
+MapLibre yield; a powered comparison and independent review remain open.
 
 Compiler Lab: https://tauptlab.github.io/atlaspec/
 
@@ -123,8 +125,10 @@ The testable contribution is enforceable cartographic semantics and
 deterministic policy, not YAML brevity.
 
 **“Would validator feedback and retry solve the direct baseline failures?”**
-It may solve many syntax failures. That symmetric comparison is now a required
-next experiment and should be reported even if it erases the current delta.
+It did solve the observed direct MapLibre failures in a six-task development
+pilot, erasing the final-yield delta there. The pilot retained an Atlaspec
+output-token advantage, but a precommitted, adequately powered comparison is
+still required.
 
 **“Why not use Vega-Lite?”**
 Vega-Lite is already a valuable abstraction and remains a direct baseline.

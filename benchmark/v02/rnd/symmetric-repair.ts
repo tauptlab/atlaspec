@@ -22,6 +22,13 @@ export interface SymmetricRepairComparison {
   atlaspec_repair_rate: number;
   direct_output_tokens_per_run: number;
   atlaspec_output_tokens_per_run: number;
+  output_token_reduction: number;
+  direct_latency_ms_per_run: number;
+  atlaspec_latency_ms_per_run: number;
+  latency_reduction: number;
+  direct_charge_usd_per_run: number | null;
+  atlaspec_charge_usd_per_run: number | null;
+  charge_reduction: number | null;
 }
 
 export interface SymmetricRepairAnalysis {
@@ -95,6 +102,12 @@ function comparison(
 ): SymmetricRepairComparison {
   const directRuns = pairs.map((pair) => pair.direct);
   const atlaspecRuns = pairs.map((pair) => pair.atlaspec);
+  const directOutputTokens = mean(directRuns.map(outputTokens));
+  const atlaspecOutputTokens = mean(atlaspecRuns.map(outputTokens));
+  const directLatency = mean(directRuns.map(latency));
+  const atlaspecLatency = mean(atlaspecRuns.map(latency));
+  const directCharge = observedChargePerRun(directRuns);
+  const atlaspecCharge = observedChargePerRun(atlaspecRuns);
   const deltas = pairs.map(
     (pair) => Number(pair.atlaspec.final_accepted) - Number(pair.direct.final_accepted),
   );
@@ -111,18 +124,57 @@ function comparison(
     final_yield_delta_ci_95: bootstrapMeanInterval(deltas, 10_000, 0x41544c41),
     direct_repair_rate: rate(directRuns, (run) => run.repair_iterations > 0),
     atlaspec_repair_rate: rate(atlaspecRuns, (run) => run.repair_iterations > 0),
-    direct_output_tokens_per_run: mean(directRuns.map(outputTokens)),
-    atlaspec_output_tokens_per_run: mean(atlaspecRuns.map(outputTokens)),
+    direct_output_tokens_per_run: directOutputTokens,
+    atlaspec_output_tokens_per_run: atlaspecOutputTokens,
+    output_token_reduction: reduction(directOutputTokens, atlaspecOutputTokens),
+    direct_latency_ms_per_run: directLatency,
+    atlaspec_latency_ms_per_run: atlaspecLatency,
+    latency_reduction: reduction(directLatency, atlaspecLatency),
+    direct_charge_usd_per_run: directCharge,
+    atlaspec_charge_usd_per_run: atlaspecCharge,
+    charge_reduction:
+      directCharge === null || atlaspecCharge === null
+        ? null
+        : reduction(directCharge, atlaspecCharge),
   };
 }
 
 function outputTokens(run: V02RunRecord): number {
-  return run.attempts
-    .filter((attempt) => attempt.stage !== 'edit')
+  return generationResponses(run)
     .reduce(
-      (total, attempt) => total + (attempt.response?.usage.output_tokens ?? 0),
+      (total, response) => total + response.usage.output_tokens,
       0,
     );
+}
+
+function latency(run: V02RunRecord): number {
+  return generationResponses(run).reduce(
+    (total, response) => total + response.latency_ms,
+    0,
+  );
+}
+
+function observedChargePerRun(runs: readonly V02RunRecord[]): number | null {
+  const responses = runs.flatMap(generationResponses);
+  if (responses.some((response) => !response.cost_observed)) return null;
+  return (
+    responses.reduce((total, response) => total + response.charge_usd, 0) /
+    runs.length
+  );
+}
+
+function generationResponses(
+  run: V02RunRecord,
+): NonNullable<V02RunRecord['attempts'][number]['response']>[] {
+  return run.attempts.flatMap((attempt) =>
+    attempt.stage === 'edit' || attempt.response === undefined
+      ? []
+      : [attempt.response],
+  );
+}
+
+function reduction(direct: number, atlaspec: number): number {
+  return direct === 0 ? 0 : 1 - atlaspec / direct;
 }
 
 function rate(

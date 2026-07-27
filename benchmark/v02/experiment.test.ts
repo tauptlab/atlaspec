@@ -150,6 +150,8 @@ describe('AtlasBench 0.2 model runner', () => {
         direct_final_yield: 1,
         atlaspec_final_yield: 1,
         final_yield_delta: 0,
+        output_token_reduction: 0,
+        charge_reduction: null,
       }),
       expect.objectContaining({
         renderer: 'vega-lite',
@@ -157,6 +159,8 @@ describe('AtlasBench 0.2 model runner', () => {
         direct_final_yield: 1,
         atlaspec_final_yield: 1,
         final_yield_delta: 0,
+        output_token_reduction: 0,
+        charge_reduction: null,
       }),
     ]);
   });

@@ -14,7 +14,7 @@ file can be uploaded separately.
 | 23–32 s | Unsafe raw-count choropleth rejected | A schema checks shape; Atlaspec also checks meaning. |
 | 32–41 s | Capacity values converted to square-root radii | Policy becomes deterministic renderer code. |
 | 41–51 s | One-time local holdout bars and interval | 120/120 vs 108/120, +10 pp; 95% CI +3.3 to +18.3 pp |
-| 51–57 s | Three open-evidence cards | Stronger baseline, independent review, and fresh confirmation remain open. |
+| 51–57 s | Three open-evidence cards | A full repair benchmark, independent review, and fresh confirmation remain open. |
 | 57–60 s | Demo and GitHub URLs | Try the Compiler Lab. Find the semantic failure we missed. |
 
 The earlier video used routing, shadow, and CCTV examples that are outside the

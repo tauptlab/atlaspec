@@ -7,8 +7,9 @@
 Atlaspec lets an agent describe **what a map should communicate** while a
 deterministic compiler decides **how the renderer should implement it**.
 
-[![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-f59e0b)](#project-status)
+[![Status: research candidate](https://img.shields.io/badge/status-research_candidate-f59e0b)](#project-status)
 [![Package: 0.2.0-rc.1](https://img.shields.io/badge/package-0.2.0--rc.1-2563eb)](CHANGELOG.md)
+[![GitHub prerelease](https://img.shields.io/github/v/release/tauptlab/atlaspec?include_prereleases&sort=semver)](https://github.com/tauptlab/atlaspec/releases)
 [![Latest document: 0.2](https://img.shields.io/badge/latest_document-0.2-0f766e)](#current-document-version-02)
 [![Live demo](https://img.shields.io/badge/live-Evidence_Lab-c8e94c)](https://tauptlab.github.io/atlaspec/)
 [![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](package.json)
@@ -17,13 +18,21 @@ deterministic compiler decides **how the renderer should implement it**.
 
 **Semantic YAML in. Deterministic, renderer-valid map artifacts out.**
 
+[Live Evidence Lab](https://tauptlab.github.io/atlaspec/) ·
+[60-second demo](media/atlaspec-60s-demo.mp4) ·
+[Getting started](#quick-start) ·
+[Evidence](#evidence-so-far) ·
+[Roadmap](docs/ROADMAP.md) ·
+[Contributing](CONTRIBUTING.md)
+
 </div>
 
 > [!IMPORTANT]
 > Atlaspec 0.2 is the latest document version and `0.2.0-rc.1` is the current
 > research package candidate. Version 0.1 remains fully supported for
 > compatibility. Stable `0.2.0` is intentionally withheld until the locked
-> release contract is complete; the package has not been published yet.
+> release contract is complete. The candidate is distributed as a GitHub
+> prerelease and has not been published to npm.
 
 ## Try the live Evidence Lab
 
@@ -35,6 +44,16 @@ The live timing panel measures the browser-side spatial solver only. It does
 not substitute for the recorded Claude/Codex benchmark or estimate LLM
 accuracy. See [`demo/README.md`](demo/README.md) for the evidence boundary and
 local reproduction steps.
+
+## Watch the 60-second overview
+
+[![Atlaspec 60-second demo: locked renderer evidence and deterministic spatial-analysis examples](media/atlaspec-60s-poster.png)](media/atlaspec-60s-demo.mp4)
+
+The video is designed for silent autoplay and ships with a separate
+[caption track](media/atlaspec-60s-demo.srt). Its `68/72 vs 40/72` comparison
+is the locked v0.2 **development** renderer evaluation, not the still-sealed
+v0.2 holdout. See the [launch-video notes](docs/LAUNCH_VIDEO.md) for the
+storyboard and reproducible renderer.
 
 ## Why Atlaspec exists
 
@@ -571,6 +590,11 @@ Atlaspec welcomes focused issues and pull requests, especially around semantic
 validation, cartographic failure cases, compiler determinism, renderer-valid
 output, and reproducible evaluation.
 
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete workflow,
+[SECURITY.md](SECURITY.md) for private vulnerability reporting, and
+[SUPPORT.md](SUPPORT.md) for support routing. Research users can cite the
+software using [CITATION.cff](CITATION.cff).
+
 Before submitting a change:
 
 ```powershell
@@ -583,6 +607,9 @@ npm run build
 and generated-reference freshness. Benchmark thresholds and holdout results are
 project contracts: changes must be explicit and must never be made merely to
 fit an observed result.
+
+See the public [roadmap](docs/ROADMAP.md) for the evidence required before a
+stable release and production-shaped adoption.
 
 ## License
 

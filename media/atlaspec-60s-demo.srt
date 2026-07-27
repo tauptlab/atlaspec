@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:06,000
+Agents should write map intent. Not renderer plumbing.
+
+2
+00:00:06,000 --> 00:00:15,000
+Direct renderer generation exposes a large failure surface.
+
+3
+00:00:15,000 --> 00:00:25,000
+Semantic YAML in. Deterministic map artifacts out.
+
+4
+00:00:25,000 --> 00:00:35,000
+Locked v0.2 development evaluation: 68/72 vs 40/72, +38.89 percentage points.
+
+5
+00:00:35,000 --> 00:00:43,000
+Explainable solar-shadow geometry.
+
+6
+00:00:43,000 --> 00:00:51,000
+Deterministic CCTV coverage and blind spots.
+
+7
+00:00:51,000 --> 00:00:57,000
+Constraint-aware route reasoning.
+
+8
+00:00:57,000 --> 00:01:00,000
+Try the Evidence Lab. Inspect every claim.
